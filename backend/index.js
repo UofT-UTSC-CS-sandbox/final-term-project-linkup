@@ -1,26 +1,38 @@
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster20901";
+const express = require('express');
+const router = new express.Router();
+const mongoose = require('mongoose');
+const cors = require('cors');
+const Movies = require('./user');
+require('dotenv').config();
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
+const MONGO_DB = "mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/sample-mflix?retryWrites=true&w=majority&appName=Cluster20901";
+const PORT = 3000;
 
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
+const app = express();
+const port = PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+const mongooseOptions = {
+  serverSelectionTimeoutMS: 5000 // Timeout after 5s instead of 30s
+};
+
+
+// MongoDB connection
+mongoose.connect(MONGO_DB, {dbName: "sample_mflix"})
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+const query = Movies.find();
+
+query.exec()
+  .then(result => {
+    console.log('Query result:', result);
+  })
+  .catch(error => {
+    console.error('Error executing query:', error);
+  });
+ 
