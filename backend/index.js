@@ -7,7 +7,7 @@ const User = require('./user');
 require('dotenv').config();
 
 const MONGO_DB = "mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/sample-analytics?retryWrites=true&w=majority&appName=Cluster20901";
-const PORT = 3001;
+// const PORT = 3001;
 
 const app = express();
 //const port = PORT || 3000;
@@ -38,3 +38,6 @@ mongoose.connect(MONGO_DB, {dbName: "sample-analytics"})
         res.status(500).json({ message: error.message });
     }
 });
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
