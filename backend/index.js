@@ -3,14 +3,14 @@ const express = require('express');
 const router = new express.Router();
 const mongoose = require('mongoose');
 const cors = require('cors');
-const Movies = require('./user');
+const User = require('./user');
 require('dotenv').config();
 
-const MONGO_DB = "mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/sample-mflix?retryWrites=true&w=majority&appName=Cluster20901";
-const PORT = 3000;
+const MONGO_DB = "mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/sample-analytics?retryWrites=true&w=majority&appName=Cluster20901";
+const PORT = 3001;
 
 const app = express();
-const port = PORT || 3000;
+//const port = PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -22,17 +22,19 @@ const mongooseOptions = {
 
 
 // MongoDB connection
-mongoose.connect(MONGO_DB, {dbName: "sample_mflix"})
+mongoose.connect(MONGO_DB, {dbName: "sample-analytics"})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-const query = Movies.find();
-
-query.exec()
-  .then(result => {
-    console.log('Query result:', result);
-  })
-  .catch(error => {
-    console.error('Error executing query:', error);
-  });
- 
+  app.get('/api/user', async (req, res) => {
+    try {
+        const user = await User.findOne(); // Make sure this model exists and is correctly imported
+        if (!user) {
+            return res.status(404).json({ message: "No user found" });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ message: error.message });
+    }
+});

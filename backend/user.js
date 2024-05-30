@@ -2,88 +2,11 @@
 const mongoose = require('mongoose')
 //const mongoose = require('mongoose)
 
-const moveiesSchema = new mongoose.Schema({
-    plot:{
-        type:String
-    } ,
-    genres:[{
-        type:String
-    }],
-    runtime:{
-        type:Number
-    },
-    cast:[{
-        type: String
-    }],
-    num_mflix_comments:{
-        type: Number
-    },
-    title:{
-        type: String
-    },
-    countries:[{
-        type: String
-    }],
-    released:{
-        type: Date
-    },
-    directors:[{
-        type: String
-    }],
-    rated:{
-        type: String
-    },
-    awards:{
-        wins:{
-            type: Number
-        },
-        nominations: {
-            type: Number
-        },
-        text: {
-            type: String
-        }
-    },
-    lastupdated:{
-        type: String
-    },
-    year: {
-        type: Number
-    },
-    imdb:{
-        rating: {
-            type: Number
-        },
-        votes:{
-            type: Number
-        },
-        id:{
-            type: Number
-        }
-    },
-    type: {
-        type: String
-    },
-    tomatoes:{
-        viewer:{
-            rating: {
-                type: Number
-            },
-            numReviews:{
-                type: Number
-            },
-            meter:{
-                type: Number
-            }
-        },
-        lastupdated: {
-            type:Date
-        }
-    }
+const UserSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    age: Number,
+  }, { collection: 'customers' });
 
-
-}, {collection: 'movies'});
-
-const Movies = mongoose.model('movies', moveiesSchema)
-
-module.exports = Movies;
+const User = mongoose.model('User', UserSchema);
+module.exports = User;
