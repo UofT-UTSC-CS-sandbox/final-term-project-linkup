@@ -81,14 +81,14 @@ Linkup utilises a range of technologies to deliver a smooth and engaging user ex
 - **JavaScript:** The primary language for both frontend and backend development.
 - **HTML:** Used to structure and present content on the web pages.
 - **CSS:** Used for styling and layout of the application.
-- **MongoDB:** A NoSQL database to store user profiles, resume reviews, and connection data.
+- **MongoDB:** A NoSQL database to store user profiles, resume reviews, direct messages, public comments, and document metrics.
 - **Node.js:** A JavaScript runtime for server-side execution.
 - **Express.js:** A web application framework for Node.js, used to build the backend API.
 - **React:** A JavaScript library for building user interfaces, used in the frontend.
 
 This combination of technologies provides a strong and efficient foundation for Linkup, ensuring a seamless user experience and reliable performance.
 
-Thank you for your interest in LinkUp. We hope our application helps to enhance professional networking journey!
+Thank you for your interest in LinkUp. We hope to create an application that transforms the professional networking experience!
 
 Figma link 
 ``` plain text 
