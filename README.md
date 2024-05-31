@@ -7,7 +7,6 @@ LinkUp is a dynamic web application designed to transform how job seekers refine
 
 When mutual right swipes occur, signaling a match, LinkUp allows users to initiate direct messaging, fostering deeper connections and potential professional collaborations. This system not only enhances resume quality through direct community feedback but also builds a network of professionals who can support each other’s career growth. LinkUp is committed to helping job seekers improve their employment prospects in a competitive market while nurturing a supportive professional community.
 
-![Readme Image 1](src/images/readme1.png "Screenshot for Readme")
 
 ![Readme Image 2](src/images/readme2.png "Screenshot for Readme")
 
@@ -36,18 +35,16 @@ To build and run the LinkUp project, follow these steps after setting up the pre
    ```
 
 4. **Configure the MongoDB connection.** Accessing MongoDB Atlas for Database
-If you need access to the MongoDB Atlas cluster for this project, please follow these steps:
+   To gain access to our MongoDB Atlas cluster for this project, please follow these outlined steps:
 
-To gain access to our MongoDB Atlas cluster for this project, please follow these outlined steps:
+   1. **Create an Account**:
+   - If you do not already have an account, sign up for MongoDB Atlas by visiting the [MongoDB Atlas website](https://www.mongodb.com/atlas).
 
-    1. **Create an Account**:
-        - If you do not already have an account, sign up for MongoDB Atlas by visiting the [MongoDB Atlas website](https://www.mongodb.com/atlas).
+   2. **Submit Your Account Email**:
+   - Please email your MongoDB Atlas account email address to [vaibhav.santhanam@mail.utoronto.ca]. This step is necessary to proceed with the access grant.
 
-    2. **Submit Your Account Email**:
-        - Please email your MongoDB Atlas account email address to [vaibhav.santhanam@mail.utoronto.ca]. This step is necessary to proceed with the access grant.
-
-    3. **Await Access Grant**:
-        - Once we receive your email, we will proceed to add you to the MongoDB Atlas cluster. An email confirmation will be sent once access has been granted.
+   3. **Await Access Grant**:
+   - Once we receive your email, we will proceed to add you to the MongoDB Atlas cluster. An email confirmation will be sent once access has been granted.
 
 
 5. **Start the application:**
@@ -58,9 +55,9 @@ To gain access to our MongoDB Atlas cluster for this project, please follow thes
 6. **Open your browser and visit the following URL to access the Linkup web application:**
 Once you have started the server, Visual Studio Code or your terminal should automatically open your browser. If it does not, you can manually open your browser and visit the following URL to access the Linkup web application:
 
-```plaintext
-http://localhost:3001
-```
+   ```plaintext
+   http://localhost:3001
+   ```
 
 ## Contribution
 
