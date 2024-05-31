@@ -34,29 +34,16 @@ To build and run the LinkUp project, follow these steps after setting up the pre
    npm install
    ```
 
-4. **Configure the MongoDB connection.** Accessing MongoDB Atlas for Database
-   To gain access to our MongoDB Atlas cluster for this project, please follow these outlined steps:
-
-   1. **Create an Account**:
-   - If you do not already have an account, sign up for MongoDB Atlas by visiting the [MongoDB Atlas website](https://www.mongodb.com/atlas).
-
-   2. **Submit Your Account Email**:
-   - Please email your MongoDB Atlas account email address to [vaibhav.santhanam@mail.utoronto.ca]. This step is necessary to proceed with the access grant.
-
-   3. **Await Access Grant**:
-   - Once we receive your email, we will proceed to add you to the MongoDB Atlas cluster. An email confirmation will be sent once access has been granted.
-
-
-5. **Start the application:**
+4. **Start the application:**
    ```bash
    npm start
    ```
 
-6. **Open your browser and visit the following URL to access the Linkup web application:**
+5. **Open your browser and visit the following URL to access the Linkup web application:**
 Once you have started the server, Visual Studio Code or your terminal should automatically open your browser. If it does not, you can manually open your browser and visit the following URL to access the Linkup web application:
 
    ```plaintext
-   http://localhost:3001
+   http://localhost:3000
    ```
 
 ## Contribution
