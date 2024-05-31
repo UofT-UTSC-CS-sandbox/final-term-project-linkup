@@ -1,5 +1,5 @@
 
-# LinkUp: Transforming Resume Reviews into Opportunities!
+# LinkUp: *Transforming Resume Reviews into Opportunities!*
 
 ## Overview
 
@@ -50,27 +50,25 @@ Once you have started the server, Visual Studio Code or your terminal should aut
 
 We appreciate contributions to LinkUp and value your efforts in enhancing the application. Here are the guidelines for contributing:
 
-### Git Flow Strategy
+- ### Git Flow Strategy
 
-We will employ the Git Flow strategy, which utilizes a two-branch system, *main* and *develop*, to manage the project's codebase. The *main* branch will contain stable releases, while *develop* will hold all completed features.
+  - We will employ the Git Flow strategy, which utilizes a two-branch system, `main` and `develop`, to manage the project's codebase. The `main` branch will contain stable releases, while `develop` will hold all completed features. New features should branch from `develop`, and upon completion, a Pull Request **(PR)** should merge back into `develop`.
 
-New features should branch from *develop*, and upon completion, a Pull Request (PR) should merge back into *develop*.
+  - #### Branch Naming and Commit Guidelines
 
-#### Branch Naming and Commit Guidelines
+    - We will categorize branches as feature, bugfix, hotfix, or chore. Commits should follow the Conventional Commits structure to simplify change tracking.
 
-We will categorize branches as feature, bugfix, hotfix, or chore. Commits should follow the Conventional Commits structure to simplify change tracking.
+  - #### Testing and Documentation
 
-#### Testing and Documentation
+    - Ensure thorough testing of new features to maintain stability. Documentation should be updated accordingly.
 
-Ensure thorough testing of new features to maintain stability. Documentation should be updated accordingly.
+  - #### Issue Tracking
 
-### Issue Tracking
-
-We utilize GitHub Issues to manage bugs, feature requests, and other tasks. Check existing issues or create a new one before starting your work.
-
-### Pull Requests
-
-After completing your changes, submit a pull request to the *develop* branch. A team member will review and provide feedback before merging.
+    - We utilize GitHub Issues to manage bugs, feature requests, and other tasks. Check existing issues or create a new one before starting your work.
+      
+  - #### Pull Requests
+    
+    - After completing your changes, submit a pull request to the **`develop`** branch. A team member will review and provide feedback before merging.
 
 We believe in the power of collaboration to build the best product possible and look forward to your contributions to make Linkup better.
 
@@ -88,15 +86,12 @@ Linkup utilises a range of technologies to deliver a smooth and engaging user ex
 
 This combination of technologies provides a strong and efficient foundation for Linkup, ensuring a seamless user experience and reliable performance.
 
-Thank you for your interest in LinkUp. We hope to create an application that transforms the professional networking experience!
+Thank you for your interest in LinkUp! We hope to create an application that transforms the professional networking experience! 
 
-Figma link 
-``` plain text 
-https://www.figma.com/design/0iETezP6dJLcd5efMPoop3/CSCC01-%7C-Link-Up-Prototype
+#### Check out the early design of our application:
+- <ins>**[Figma Mockup](https://www.figma.com/design/0iETezP6dJLcd5efMPoop3/CSCC01-%7C-Link-Up-Prototype?node-id=0-1&t=hAfJGcwDgsPLW2RY-1)**</ins>
 
-```
-
-Acknowledgements
+#### Acknowledgements
 1) Ashtian Dela Cruz
 2) Bahar Chidem 
 3) Keerthiha Baskaran
