@@ -14,29 +14,8 @@ import logo from './images/linkup_logo.png';
 import './App.css';
 
 // Page imports
-import TestPage from './TestPage.js';
-
-function HomePage() {
-  return (
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-        Edit <code>src/App.js</code> and save to reload.
-      </p>
-      
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-
-      <Button component={Link} to="/test-page" variant="contained">Go to TestPage</Button>
-    </header>
-  );
-}
+import TestPage from './pages/TestPage.js';
+import HomePage from './pages/HomePage.js';
 
 function App() {
   return (
