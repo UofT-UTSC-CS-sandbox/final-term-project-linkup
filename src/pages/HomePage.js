@@ -9,31 +9,31 @@ import logo from '../images/linkup_logo.png';
 
 function HomePage() {
 
-    const addObjectToDatabase = async () => {
-      const newObject = {
-        name: "Another Jane Doe",
-        email: "anotherjanedoe@linkup.com",
-        age: 35
-      };
+    // const addObjectToDatabase = async () => {
+    //   const newObject = {
+    //     name: "Another Jane Doe",
+    //     email: "anotherjanedoe@linkup.com",
+    //     age: 35
+    //   };
   
-      try {
-        const response = await fetch('http://localhost:3001/test-page', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(newObject)
-        });
+    //   try {
+    //     const response = await fetch('http://localhost:3001/test-page', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify(newObject)
+    //     });
   
-        if (response.ok) {
-          console.log('Object added successfully');
-        } else {
-          console.error('Error adding object');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
+    //     if (response.ok) {
+    //       console.log('Object added successfully');
+    //     } else {
+    //       console.error('Error adding object');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //   }
+    // };
     
     return (
       <header className="App-header">
@@ -50,10 +50,10 @@ function HomePage() {
         >
           Learn React
         </a>
+
+        <Button component={Link} to="/login-page" variant="contained">Go to Login Page</Button>
   
-        <Button component={Link} to="/test-page" variant="contained">Go to TestPage</Button>
-  
-        <Button variant="contained" onClick={addObjectToDatabase}>Add Object to Database</Button>
+        {/* <Button variant="contained" onClick={addObjectToDatabase}>Add Object to Database</Button> */}
       </header>
     );
 }

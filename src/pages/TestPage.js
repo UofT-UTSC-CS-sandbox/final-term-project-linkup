@@ -38,9 +38,8 @@ function TestPage() {
       ) : users ? (
         (users.map((user) => (
           <div>
-            <p>Name: {user.name}</p>
             <p>Email: {user.email}</p>
-            <p>Age: {user.age}</p>
+            <p>Password: {user.password}</p>
           </div>
         )))
       ) : (

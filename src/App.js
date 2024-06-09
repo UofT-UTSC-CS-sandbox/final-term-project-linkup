@@ -16,6 +16,9 @@ import './App.css';
 // Page imports
 import TestPage from './pages/TestPage.js';
 import HomePage from './pages/HomePage.js';
+import LoginPage from './pages/Login.js';
+import SignUpPage from './pages/SignUp.js';
+import VerificationPage from "./pages/VerificationPage.js";
 
 function App() {
   return (
@@ -24,6 +27,9 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage/>} />
             <Route path="/test-page" element={<TestPage/>} />
+            <Route path="/login-page" element={<LoginPage/>} />
+            <Route path="/signup-page" element={<SignUpPage/>} />
+            <Route path="/verification/:token" element={<VerificationPage/>} />
           </Routes>
       </div>
     </BrowserRouter>
