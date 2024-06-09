@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Outlet, Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Outlet, useNavigate, Link } from "react-router-dom";
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import Button from '@mui/material/Button';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 
 const Login = () => {
   const [txtEmail, setTxtEmail] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
+  const signIn = useSignIn();
+  const navigate = useNavigate();
+  const isAuthenticated = useIsAuthenticated();
+  
+  // Redirecting if already authenticated
+  useEffect(() => {
+    if(isAuthenticated) {
+      navigate('/test-page');
+    }
+  });
+
 
   // Communicating Email and password to server
   const attemptLogin = async () => {
@@ -25,7 +38,27 @@ const Login = () => {
         });
   
         if (response.ok) {
-          window.location.href = '/test-page';
+          const data = await response.json();
+
+          console.log(data);
+
+          if (data.accessToken && data.user.email) {
+            if (signIn({
+              auth: {
+                token: data.accessToken,
+                type: 'Bearer'},
+              userState: {
+                  email: data.user.email
+              }
+            })) {
+              // Redirect or perform other actions upon successful login
+              navigate('/test-page');
+            } else {
+              console.error('Authentication failed');
+            }
+          } else {
+            console.log('Invalid data received from backend');
+          }
         } else {
           console.error('Error logging in');
         }

@@ -1,52 +1,58 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 
 function TestPage() {
-  const [users, setUsers] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const signOut = useSignOut();
+  const isAuthenticated = useIsAuthenticated();
+  const auth = useAuthUser();
 
+  // Redirecting to home page if NOT authenticated
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-          const url = 'http://localhost:3001/test-page';
-          const response = await fetch(url);
-          if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const data = await response.json(); // This line throws if response is not valid JSON
-          setUsers(data);
-          setError('');
-      } catch (error) {
-          console.error('Failed to fetch user data:', error);
-          setError(error.message || 'Failed to fetch data');
-      } finally {
-          setLoading(false);
-      }
-  };
-  
-    
-    fetchUserData();
-  }, []);
+    if(!isAuthenticated) {
+      navigate('/');
+    }
+  });
 
-  return (
-    <div>
-      <h1>User Information</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : users ? (
-        (users.map((user) => (
-          <div>
-            <p>Email: {user.email}</p>
-            <p>Password: {user.password}</p>
-          </div>
-        )))
-      ) : (
-        <p>No user data found</p>
-      )}
-    </div>
-  );
+  const signOutAndRedirect = () => {
+    signOut();
+    navigate('/');
+  };
+
+  // Showing nothing if the user isn't authenticated
+  if (!isAuthenticated) {
+    return null;
+  } else {
+    return(
+      <div>
+          <p>Hello {auth.email}</p>
+          <button onClick={signOutAndRedirect}>Sign Out</button>
+      </div>
+    ) 
+  }
+
+  // return (
+  //   <div>
+  //     <h1>User Information</h1>
+  //     {loading ? (
+  //       <p>Loading...</p>
+  //     ) : error ? (
+  //       <p>Error: {error}</p>
+  //     ) : users ? (
+  //       (users.map((user) => (
+  //         <div>
+  //           <p>Email: {user.email}</p>
+  //           <p>Password: {user.password}</p>
+  //         </div>
+  //       )))
+  //     ) : (
+  //       <p>No user data found</p>
+  //     )}
+  //   </div>
+  // );
 }
 
 export default TestPage;

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Outlet, Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Outlet, useNavigate, Link } from "react-router-dom";
 import Button from '@mui/material/Button';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 
 const SignUp = () => {
   const [txtEmail, setTxtEmail] = useState('');
@@ -8,7 +9,15 @@ const SignUp = () => {
   const [passwordErrors, setPasswordErrors] = useState([]);
   const [existsErrors, setThereExistsErrors] = useState(false);
 
-  // Validating email exists
+  const navigate = useNavigate();
+  const isAuthenticated = useIsAuthenticated();
+  
+  // Redirecting if already authenticated
+  useEffect(() => {
+    if(isAuthenticated) {
+      navigate('/test-page');
+    }
+  });
 
   // Validating password input
   const validatePassword = (val) => {

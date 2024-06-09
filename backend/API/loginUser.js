@@ -6,10 +6,21 @@ const cors = require('cors');
 // Bcrypt for hashing
 const bcryptjs = require('bcryptjs');
 
+// Jwt for creating web tokens (refresh and access)
+const jwt = require('jsonwebtoken');
+
 // Middleware
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+require('dotenv').config();
+
+// Function to create an access token
+const createAccessToken = (user) => {
+  return jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN_SECRET_FORJWT, { expiresIn: '2h' });
+};
+
 
 // API call to create new object
 const loginUser = async (req, res) => {
@@ -32,8 +43,16 @@ const loginUser = async (req, res) => {
         return res.status(401).send('Authentication failed: Incorrect password');
       }
       
-      res.status(200).send('User logged in successfully');
-  
+      // Create tokens
+      const accessToken = createAccessToken(user);
+
+      // Send tokens to the frontend
+      res.status(200).json({
+        accessToken: accessToken,
+        user: {
+          email: user.email
+        },
+      });
   
     } catch (error) {
       res.status(500).send('Error logging in user: ' + error.message);
