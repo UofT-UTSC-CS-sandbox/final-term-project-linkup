@@ -30,6 +30,7 @@ const loginUser = async (req, res) => {
   
       const user = await User.findOne({
         "email": passedUser.email,
+        "verified": true
       });
 
       if (!user) {
