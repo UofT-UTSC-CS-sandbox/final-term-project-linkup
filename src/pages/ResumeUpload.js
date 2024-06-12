@@ -5,27 +5,33 @@ import logo from '../images/linkup_logo.png';
 import uploadIcon from '../images/Upload_icon.png';
 import deleteIcon from '../images/DeleteIcon.png';
 import cancelIcon from '../images/Vector.png';
-import '../App.css'; // Make sure to import the CSS file
+import './ResumeUpload.css'; // Import the CSS file
 
 const ResumeUpload = () => {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [publicFlag, setPublicFlag] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
+  const [isUploading, setIsUploading] = useState(false); // State to track if uploading
   const userId = "6668b379930f4bfc3a165935";
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];  
-    if (selectedFile) {
+    if (isUploading) return; // Prevent file selection if already uploading
+    const selectedFile = event.target.files[0];
+    if (selectedFile && selectedFile.type === 'application/pdf') {
       setFile(selectedFile);
       simulateUpload(selectedFile);
+    } else {
+      setUploadStatus('Only PDF files are accepted');
     }
   };
 
   const simulateUpload = (file) => {
-    const uploadTime = 4000; 
-    const stepTime = 20;
+    setIsUploading(true); // Start uploading
+    setUploadProgress(0); // Initialize progress to 0 at the start of upload
+    const uploadTime = 4000; // Total time for 'fake' upload
+    const stepTime = 20; // Time between each progress update
 
     let currentProgress = 0;
     const interval = setInterval(() => {
@@ -33,6 +39,8 @@ const ResumeUpload = () => {
       setUploadProgress(currentProgress);
       if (currentProgress >= 100) {
         clearInterval(interval);
+        setIsUploading(false); // End uploading
+        //setUploadStatus('Upload complete');
       }
     }, stepTime);
   };
@@ -40,6 +48,9 @@ const ResumeUpload = () => {
   const removeFile = () => {
     setFile(null);
     setUploadProgress(0);
+    setUploadStatus('');
+    setIsUploading(false);
+    document.getElementById('file-upload').value = null; // Reset the file input
   };
 
   const handlePublicFlagChange = (e) => {
@@ -48,7 +59,6 @@ const ResumeUpload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!file || file.type !== 'application/pdf') {
       setUploadStatus('Must be of PDF format');
       return;
@@ -65,6 +75,9 @@ const ResumeUpload = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        onUploadProgress: progressEvent => {
+          setUploadProgress((progressEvent.loaded / progressEvent.total) * 100);
+        }
       });
       setUploadStatus(response.data.message);
       navigate('/profile'); // Navigate to Profile page after upload
@@ -81,7 +94,7 @@ const ResumeUpload = () => {
       </div>
       <img src={logo} className="logo" alt="LinkUp Logo" />
       <h2 className="instruction-text">
-        To start swiping, <br /> please upload your first resume
+        To start swiping, <br />please upload your first resume
       </h2>
       <div className="content-box">
         <h3 className="upload-header">Upload</h3>
@@ -90,21 +103,21 @@ const ResumeUpload = () => {
           <p className="upload-instructions">
             Drag & drop files or <label htmlFor="file-upload" className="file-input-label">Browse</label>
           </p>
-          <input type="file" id="file-upload" className="file-input" onChange={handleFileChange} style={{ display: 'none' }} />
-          <span className="supported-formats">Supported formats: PDF </span>
+          <input type="file" id="file-upload" className="file-input" onChange={handleFileChange} disabled={isUploading} style={{ display: 'none' }} />
+          <span className="supported-formats">Supported formats: PDF</span>
         </div>
         {file && (
           <>
             <h4 className="uploading-header">{uploadProgress < 100 ? "Uploading" : "Uploaded"}</h4>
             <div className={`uploading-section ${uploadProgress === 100 ? 'upload-complete' : ''}`}>
-              <span className="file-name">{file.name}</span>
+              <span className="file-info">{file.name}</span>
               <button onClick={removeFile} className="cancel-button">
                 <img src={uploadProgress === 100 ? deleteIcon : cancelIcon} alt="Icon" />
               </button>
               {uploadProgress < 100 ? (
-                <div className="progress-bar">
-                  <div className="progress" style={{ width: `${uploadProgress}%` }}></div>
-                </div>
+              <div className="progress-bar">
+              <div className="progress" style={{ width: `${uploadProgress}%` }}></div>
+              </div>
               ) : null}
             </div>
           </>
@@ -113,7 +126,7 @@ const ResumeUpload = () => {
           <input type="checkbox" id="publicFlag" checked={publicFlag} onChange={handlePublicFlagChange} />
           Make Public
         </label>
-        <button className="upload-btn" onClick={handleSubmit}>UPLOAD FILE</button>
+        <button className="upload-btn" onClick={handleSubmit} disabled={isUploading}>UPLOAD FILE</button>
       </div>
       {uploadStatus && <p>{uploadStatus}</p>}
     </div>

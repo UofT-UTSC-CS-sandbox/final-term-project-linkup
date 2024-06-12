@@ -1,0 +1,106 @@
+/* ProfilePage.css */
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    width: 100%;
+    background-color: #bfe7f6;
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+
+.profile-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.profile-logo {
+    width: 200px;  /* Logo size can be adjusted as needed */
+}
+
+.profile-content {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.profile-icon-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.profile-icon-placeholder {
+    width: 50px;
+    height: 50px;
+    background-color: #ccc;  /* Placeholder for an icon */
+}
+
+.username {
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+.settings-button {
+    display: flex;
+    align-items: center;
+    background-color: #f1f1f1;
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.horizontal-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.vertical-line {
+    height: 100px;
+    width: 2px;
+    background-color: #ccc;
+    margin-right: 20px;
+}
+
+.fields-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-label {
+    font-size: 16px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.uploads-container {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.uploads-info {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.uploads-divider {
+    width: 100%;
+    border-top: 1px solid #ccc;
+}
+
+/* Additional styling for other needed elements */
