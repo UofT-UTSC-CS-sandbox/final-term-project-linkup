@@ -1,21 +1,12 @@
-/* 
-  Try to organize imports by category
-*/
-
-// Component imports
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, Outlet, Link } from "react-router-dom";
-import Button from '@mui/material/Button';
-
-
-// Image imports
-import logo from './images/linkup_logo.png';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 
-// Page imports
 import TestPage from './pages/TestPage.js';
 import HomePage from './pages/HomePage.js';
+import ResumeUpload from './pages/ResumeUpload';
+import Profile from './pages/ProfilePage';
 
 function App() {
   return (
@@ -24,6 +15,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage/>} />
             <Route path="/test-page" element={<TestPage/>} />
+            <Route path="/upload" element={<ResumeUpload/>} />
+            <Route path="/profile" element={<Profile/>} />
           </Routes>
       </div>
     </BrowserRouter>

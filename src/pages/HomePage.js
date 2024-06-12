@@ -54,6 +54,7 @@ function HomePage() {
         <Button component={Link} to="/test-page" variant="contained">Go to TestPage</Button>
   
         <Button variant="contained" onClick={addObjectToDatabase}>Add Object to Database</Button>
+        <Link to="/upload"><button>Go to Resume Upload</button></Link>
       </header>
     );
 }
