@@ -107,6 +107,22 @@ const sendEmailVerification = async({passedEmail}, res) => {
  
 }
 
+const animalNames = ['Cat', 'Dog', 'Moose', 'Eagle', 'Tiger', 'Lion', 'Bear', 'Wolf', 'Fox'];
+
+const generateAnonUsername = async () => {
+  let username;
+  let usernameExists = true;
+
+  while (usernameExists) {
+    const animal = animalNames[Math.floor(Math.random() * animalNames.length)];
+    const randomNumber = Math.floor(1000 + Math.random() * 9000).toString();
+    username = 'Anonymous' + animal + randomNumber;
+    usernameExists = await User.findOne({ anon_username: username });
+  }
+
+  return username;
+};
+
 // API call to create new object
 const newUser = async (req, res) => {
   try {
@@ -122,16 +138,19 @@ const newUser = async (req, res) => {
       return res.status(401).send('Account creation failed: email is already used by an existing account');
     }
 
+    // Generate anonymous username
+    const anonUsername = await generateAnonUsername();
+
     // Hashing the password
     var generatedSalt = bcryptjs.genSaltSync(10);
     var hashedPassword = bcryptjs.hashSync(passedUser.password, generatedSalt);
 
     const newUser = new User({
-      anon_username: "",
+      anon_username: anonUsername,
       email: passedUser.email,
       password: hashedPassword,
       field_of_interest: "",
-      work_experience_level: 0,
+      work_experience_level: "",
       education: "",
       location: "",
       avatar: "",

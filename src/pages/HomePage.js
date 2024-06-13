@@ -1,6 +1,5 @@
 // Component imports
 import React, { useEffect, useState } from 'react';
-import * as ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Outlet, useNavigate, Link } from "react-router-dom";
 import Button from '@mui/material/Button';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
