@@ -7,6 +7,8 @@ const getUser = require('./API/getUser');
 const loginUser = require('./API/loginUser');
 const newUser = require('./API/newUser');
 const verifyUser = require('./API/EmailVerification');
+const updatePreferences = require('./API/UpdatePreferences'); // Adjust path as necessary
+
 
 require('dotenv').config();
 
@@ -45,3 +47,4 @@ app.post('/new-user', newUser);
 app.post('/verify-user', verifyUser);
 
 app.post('/login', loginUser);
+app.post('/api/updatePreferences', updatePreferences);
