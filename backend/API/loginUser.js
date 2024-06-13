@@ -30,10 +30,11 @@ const loginUser = async (req, res) => {
   
       const user = await User.findOne({
         "email": passedUser.email,
+        "verified": true
       });
 
       if (!user) {
-        return res.status(401).send('Authentication failed: User not found');
+        return res.status(401).send('Authentication failed: User not found or user is not verified');
       }
   
       // Compare the provided password with the stored hash

@@ -3,6 +3,10 @@ import { BrowserRouter, Routes, Route, Outlet, useNavigate, Link } from "react-r
 import Button from '@mui/material/Button';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 
+// Styling
+import './SignUp.css';
+import logo from '../images/linkup_logo_highquality.png';
+
 const SignUp = () => {
   const [txtEmail, setTxtEmail] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
@@ -94,8 +98,33 @@ const SignUp = () => {
   }
 
   return (
-    <div>
-      <h1> LinkUp Sign Up Page </h1>
+    <header className='App-header'>
+      <img className='logo-block' src={logo} alt="logo" />
+      <div className='slogan-block'>
+        <label className='slogan'>
+          Engage anonymously. Improve resumes. Make professional connections.
+        </label>
+      </div>
+      <div className='signup-block'>
+        <label className='email-text-pos'> 
+          Email 
+        </label>
+        <input className='email-custom-textbox' type="email" value={txtEmail} onChange={handleChangeInEmail} />
+        <label className='password-text-pos'> 
+          Password
+        </label>
+        <input className='password-custom-textbox' type="text" value={txtPassword} onChange={handleChangeInPassword} />
+        <label className='confirmpassword-text-pos'> 
+          Confirm Password
+        </label>
+        <input className='confirmpassword-custom-textbox' type="text" value={txtPassword} onChange={handleChangeInPassword} />
+        <button className='signup-button' onClick={sendNewUserToDatabase}> Sign Up </button>
+        <label className='login-prompt'>
+          Already have an account?
+          <a href="/login-page" > Log In </a>
+        </label>
+      </div>
+      {/* <h1> LinkUp Sign Up Page </h1>
       <div>
         <label>
           Email :
@@ -106,7 +135,6 @@ const SignUp = () => {
         <label>
           Password :
           <input type="text" value={txtPassword} onChange={handleChangeInPassword} />
-          {/* This line will only appear if there exists objects in passwordErrors*/}
           {passwordErrors && 
             <span style={{ color: 'red' }}>
               {(passwordErrors.map((error) => (
@@ -119,12 +147,12 @@ const SignUp = () => {
       </div>
       <div>
         <button onClick={sendNewUserToDatabase}> Add user to database </button>
-      </div>
+      </div> */}
       {existsErrors && <span style={{ color: 'red' }}>Unable to sign up</span>}
-      <div>
+      {/* <div>
         <Button component={Link} to="/login-page" variant="contained"> Have an account? Login </Button>
-      </div>
-    </div>
+      </div> */}
+    </header>
   );
 };
 
