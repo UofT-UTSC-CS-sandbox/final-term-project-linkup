@@ -2,7 +2,7 @@ const User = require('../schema/user');
 
 const getUser = async (req, res) => {
     try {
-        const users = await User.find(); // Make sure this model exists and is correctly imported
+        const users = await User.find(); 
         if (!users) {
             return res.status(404).json({ message: "No user found" });
         }

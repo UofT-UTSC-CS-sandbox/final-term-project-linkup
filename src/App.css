@@ -22,7 +22,15 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(31, 31, 33);
+}
+
+.logo-block {
+  position: absolute;
+  top: 8%;
+  left: 11%;
+  width: 13%;
+  height: 13%;
 }
 
 .App-link {
