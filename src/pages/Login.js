@@ -59,7 +59,7 @@ const Login = () => {
               }
             })) {
               // Redirect or perform other actions upon successful login
-              navigate('/test-page');
+              navigate('/upload');
             } else {
               console.error('Authentication failed');
             }

@@ -1,0 +1,166 @@
+/* ResumeUpload.css */
+
+/* Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* Container */
+.container {
+    font-family: 'Roboto', sans-serif;
+    background-color: #bfe7f6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    width: 100%;
+    position: relative;
+}
+
+/* Profile Link */
+.profile-link-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.profile-link {
+    font-size: 30px;
+    color: #6A6A6A;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* Logo and Instructions */
+.logo {
+    width: 200px;
+}
+
+.instruction-text {
+    font-size: 32px;
+    color: #6A6A6A;
+    margin-top: 120px;
+    font-weight: 500;
+    max-width: 80%; 
+    line-height: 1.4;  
+}
+
+/* Content Box for Uploads */
+.content-box {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 30%;
+    max-width: 500px;
+    padding: 20px;  
+    margin-bottom: 20px; 
+}
+
+.upload-header {
+    font-size: 24px;
+    color: #454545;
+    font-weight: 600;
+}
+
+.upload-area {
+    position: relative;
+    border: 2px dashed #c0e5e59a;
+    padding: 40px;
+    margin: 20px auto 50px;  
+    cursor: pointer;
+    text-align: center;
+    max-width: 400px;
+}
+
+.upload-instructions {
+    font-size: 20px;
+    font-weight: 600; 
+    color: #454545;
+}
+
+.file-input-label {
+    color: #26ABD6;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.file-input {
+    display: none;
+}
+
+.supported-formats {
+    font-size: 14px; 
+    color: #676767;
+    margin-top: 10px;  
+}
+
+.uploading-header {
+    font-size: 18px;
+    color: #676767;
+    text-align: left;
+    margin-top: -20px;
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+.uploading-section {
+    font-size: 14px;
+    position: relative;
+    padding: 10px;
+    margin-top: -10px;
+    border: 1px solid #E3E3E3;
+    text-align: left;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    justify-content: space-between;
+    display: flex;
+    padding-right: 5px;
+}
+
+.file-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cancel-button {
+    font-size: 16px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.progress {
+    height: 4px;  /* Initial width for animation or dynamic adjustment */
+    background-color: #26ABD6;
+    overflow: hidden;
+    width: 2%;
+}
+
+.uploading-section.upload-complete {
+    border: 2px solid #26ABD6;
+}
+
+.upload-btn {
+    font-weight: bold;
+    background-color: #26ACD6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    max-width: 500px;
+    margin-top: 10px;
+}
