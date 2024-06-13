@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
 function TestPage() {
   const navigate = useNavigate();
@@ -30,6 +30,9 @@ function TestPage() {
       <div>
           <p>Hello {auth.email}</p>
           <button onClick={signOutAndRedirect}>Sign Out</button>
+          <Link to="/preferences">
+          <button>Go to Preferences Page</button>
+        </Link>
       </div>
     ) 
   }

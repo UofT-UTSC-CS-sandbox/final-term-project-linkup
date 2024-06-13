@@ -19,6 +19,7 @@ import HomePage from './pages/HomePage.js';
 import LoginPage from './pages/Login.js';
 import SignUpPage from './pages/SignUp.js';
 import VerificationPage from "./pages/VerificationPage.js";
+import PreferencesPage from './pages/PreferencesPage.js'; 
 
 // React Auth Kit
 import createStore from 'react-auth-kit/createStore';
@@ -41,6 +42,7 @@ function App() {
               <Route path="/login-page" element={<LoginPage/>} />
               <Route path="/signup-page" element={<SignUpPage/>} />
               <Route path="/verification/:token" element={<VerificationPage/>} />
+              <Route path="/preferences" element={<PreferencesPage />} />
             </Routes>
         </div>
       </BrowserRouter>
