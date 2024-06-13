@@ -1,115 +1,154 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './ProfilePage.css'; // Make sure to import the CSS file
+import SettingsIcon from '@mui/icons-material/Settings';
+import DeleteIcon from '@mui/icons-material/Delete';
+import logo from '../images/linkup_logo.png';
+import ResumeUploadModal from './UploadPopUp';
+import './ProfilePage.css'; 
 
 const Profile = () => {
   const [resumes, setResumes] = useState([]);
-  const [selectedResume, setSelectedResume] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteMode, setIsDeleteMode] = useState(false);
-  const [selectedResumes, setSelectedResumes] = useState([]);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [resumeToDelete, setResumeToDelete] = useState(null);
+  const pdfContainerRef = useRef(null);
   const userId = "6668b379930f4bfc3a165935";
-  const navigate = useNavigate(); // Hook for navigation
 
-  useEffect(() => {
     const fetchResumes = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
-        setResumes(response.data);
-      } catch (error) {
-        console.error('Error fetching resumes:', error);
-      }
+        try {
+            const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
+            setResumes(response.data);
+        } catch (error) {
+            console.error('Error fetching resumes:', error);
+        }
     };
 
+    useEffect(() => {
     fetchResumes();
+    }, [userId]);
+
+  useEffect(() => {
+    const container = pdfContainerRef.current;
+    const handleWheel = (e) => {
+      e.preventDefault();
+      container.scrollLeft += e.deltaX;
+    };
+  
+    container.addEventListener('wheel', handleWheel, { passive: false });
+  
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+    };
   }, []);
+  
 
-  const openModal = (resume) => {
-    setSelectedResume(resume);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedResume(null);
-    setIsModalOpen(false);
+  const handleResumeUploadSuccess = (newResume) => {
+    console.log('Adding new resume:', newResume);
+    fetchResumes();
   };
 
   const handleAddResumeClick = () => {
-    navigate('/upload'); // Navigate to the ResumeUpload page
+      setIsUploadModalOpen(true);
   };
 
-  const toggleDeleteMode = () => {
-    setIsDeleteMode(!isDeleteMode);
-    setSelectedResumes([]);
+  const closeModal = () => {
+      setIsUploadModalOpen(false);
   };
 
-  const handleResumeSelect = (resumeId) => {
-    setSelectedResumes(prevSelectedResumes => {
-      if (prevSelectedResumes.includes(resumeId)) {
-        return prevSelectedResumes.filter(id => id !== resumeId);
-      } else {
-        return [...prevSelectedResumes, resumeId];
-      }
-    });
+  const openDeleteModal = (resume) => {
+      setResumeToDelete(resume);
+      setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDeletion = async () => {
-    try {
-      // Delete resumes from backend
-      await axios.post('http://localhost:3001/delete-resumes', { resumeIds: selectedResumes });
+  const closeDeleteModal = () => {
+      setIsDeleteModalOpen(false);
+      setResumeToDelete(null);
+  };
 
-      // Update resumes state
-      setResumes(prevResumes => prevResumes.filter(resume => !selectedResumes.includes(resume._id)));
-      setSelectedResumes([]);
-      setIsDeleteMode(false);
-    } catch (error) {
-      console.error('Error deleting resumes:', error);
+  const handleDeleteResume = async () => {
+    if (!resumeToDelete) {
+        console.log('No resume selected for deletion');
+        return;
     }
-  };
 
-  return (
-    <div>
-      <h2>Your Resumes</h2>
-      <div className="button-container">
-        <button onClick={toggleDeleteMode} className="delete-resumes-btn">
-          {isDeleteMode ? 'Cancel' : 'Delete Resumes'}
-        </button>
-        {isDeleteMode && selectedResumes.length > 0 && (
-          <button onClick={handleConfirmDeletion} className="confirm-deletion-btn">
-            Confirm Deletion
-          </button>
-        )}
-      </div>
-      <div className="pdf-container">
-        {resumes.map((resume) => (
-          <div key={resume._id} className={`pdf-item ${isDeleteMode ? 'selectable' : ''}`} onClick={() => isDeleteMode ? handleResumeSelect(resume._id) : openModal(resume)}>
-            <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
-            {isDeleteMode && (
-              <input
-                type="checkbox"
-                className="resume-checkbox"
-                checked={selectedResumes.includes(resume._id)}
-                onChange={() => handleResumeSelect(resume._id)}
-              />
-            )}
-          </div>
-        ))}
-        <div className="pdf-item add-resume" onClick={handleAddResumeClick}>
-          <span className="plus-sign">+</span>
-        </div>
-      </div>
-      
-      {isModalOpen && selectedResume && (
-        <div id="myModal" className="modal" style={{ display: 'block' }}>
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <embed src={`http://localhost:3001/bucket/files/${selectedResume.file_path}`} width="100%" height="600px" type="application/pdf" />
-          </div>
-        </div>
+    const currentResumeToDelete = resumeToDelete;
+    setResumes(prevResumes => prevResumes.filter(resume => resume._id !== currentResumeToDelete._id));
+    closeDeleteModal();
+    try {
+        const response = await axios.post(`http://localhost:3001/delete-resumes`, {
+            resumeIds: [currentResumeToDelete._id]
+        });
+        if (response.status !== 200) {
+            console.error('Delete failed, reverting UI', response.status);
+            setResumes(prevResumes => [...prevResumes, currentResumeToDelete]); // Re-add the deleted item
+        }
+    } catch (error) {
+        console.error('Error deleting resume:', error);
+        setResumes(prevResumes => [...prevResumes, currentResumeToDelete]);
+    }
+};
+
+    return (
+        <div className="profile-container">
+            <header className="profile-header">
+                <img src={logo} alt="LinkUp Logo" className="profile-logo" />
+            </header>
+            <div className="profile-content">
+                <div className="blue-header"></div>
+                <div className="profile-icon-section">
+                    <div className="profile-icon-placeholder"></div>
+                    <div className="username">Username</div>
+                    <button className="settings-button">
+                        <SettingsIcon />
+                        Settings
+                    </button>
+                </div>
+                <div className="horizontal-container">
+                    <div className="vertical-line"></div>
+                    <div className="fields-container">
+                        <div className="profile-info">MY INFORMATION</div>
+                        <div className="field-label">Industry:</div>
+                        <div className="field-label">Location:</div>
+                        <div className="field-label">Education:</div>
+                        <div className="field-label">Public Resume:</div>
+                    </div>
+                </div>
+                <div className="uploads-container">
+                    <div className="uploads-info">MY UPLOADS</div>
+                    <hr className="uploads-divider" />
+                    <div className="horizontal-scroll" ref={pdfContainerRef}>
+                        {resumes.map((resume) => (
+                            <div key={resume._id} className="pdf-item">
+                                <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
+                                <DeleteIcon 
+                                    className="delete-icon"
+                                    onClick={() => openDeleteModal(resume)}
+                                />
+                            </div>
+                            
+                        ))}
+                        <div className="pdf-item add-resume" onClick={handleAddResumeClick}>
+                            <span className="plus-sign">+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {isUploadModalOpen && (<ResumeUploadModal closeModal={closeModal} onUploadSuccess={handleResumeUploadSuccess} />
       )}
-    </div>
-  );
+            {isDeleteModalOpen && (
+            <div className="modal-overlay-delete">
+                <div className="modal-content-delete">
+                    <h2 className="modal-header-delete">Are you sure you want to delete this resume?</h2>
+                    <p>This item will be deleted immediately with the data (comments, conversations, etc.) related to it. <br /> You can’t undo this action.</p>
+                    <div className="modal-buttons-delete">
+                        <button className="cancel-button-delete modal-button-delete" onClick={closeDeleteModal}>Cancel</button>
+                        <button className="delete-button-delete modal-button-delete" onClick={handleDeleteResume}>Delete</button>
+                    </div>
+                </div>
+            </div>
+        )}
+        </div>
+    );
 };
 
 export default Profile;

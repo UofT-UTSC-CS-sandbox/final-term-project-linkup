@@ -1,106 +1,274 @@
 /* ProfilePage.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 .profile-container {
+    background-color: #bfe7f6;
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
     width: 100%;
-    background-color: #bfe7f6;
-    min-height: 100vh;
-    font-family: 'Roboto', sans-serif;
+    position: relative;
 }
 
 .profile-header {
-    width: 100%;
     display: flex;
     justify-content: center;
-    padding: 20px 0;
+    padding: 30px 0;
 }
 
 .profile-logo {
-    width: 200px;  /* Logo size can be adjusted as needed */
+    width: 200px;
 }
 
 .profile-content {
-    width: 80%;
+    background-color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    width: 980px;
+    min-height: 700px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 20px;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding: 40px; 
+    box-sizing: border-box;
+}
+
+.blue-header {
+    background-color: #26ACD6;
+    height: 180px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    border-radius: 15px 15px 0 0;
 }
 
 .profile-icon-section {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 20px;
+    position: absolute;
+    top: 80px;
+    left: 7%;
 }
 
 .profile-icon-placeholder {
-    width: 50px;
-    height: 50px;
-    background-color: #ccc;  /* Placeholder for an icon */
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: #D0D0D0;
+    border: 3px solid black;
 }
 
 .username {
-    font-size: 24px;
-    color: #333;
+    margin-top: 10px;
+    font-size: 32px;
+    color: black;
     font-weight: bold;
-    margin: 0 15px;
 }
 
 .settings-button {
+    background-color: #81d2fd;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
-    background-color: #f1f1f1;
-    border: none;
-    cursor: pointer;
-    padding: 10px 15px;
-    border-radius: 5px;
+    justify-content: center;
+    gap: 10px;
+    border: 2px solid black;
 }
 
 .horizontal-container {
     display: flex;
-    width: 100%;
-    align-items: center;
-    margin-top: 20px;
+    align-items: flex-start;
+    margin-top: 90px;
+    position: relative;
 }
 
 .vertical-line {
-    height: 100px;
     width: 2px;
-    background-color: #ccc;
-    margin-right: 20px;
+    height: 95%;
+    background-color: #26ACD6;
+    position:absolute;
+    top: 60px;
+    left: -30%;
 }
 
 .fields-container {
+    font-family: 'Roboto', sans-serif;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    top: 50px;
+    left: -10%;
+}
+
+.profile-info {
+    padding: 20px 0;
+    font-size: 25px;
+    color: #26ACD6;
+    font-weight: bold;
 }
 
 .field-label {
-    font-size: 16px;
-    color: #666;
+    font-size: 28px;
+    color: black;
     margin: 5px 0;
+    font-weight: bold;
 }
 
 .uploads-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
-    margin-top: 30px;
+    max-width: 990px;
+    margin-top: 60px; 
 }
 
 .uploads-info {
-    font-size: 18px;
-    color: #333;
+    font-size: 25px;
     font-weight: bold;
-    margin-bottom: 10px;
+    color: #26ACD6;
+    margin-left: 5px;
 }
 
 .uploads-divider {
-    width: 100%;
-    border-top: 1px solid #ccc;
+    width: 100%; 
+    border: none;
+    height: 2px;
+    background-color: #26ACD6;
 }
 
-/* Additional styling for other needed elements */
+.horizontal-scroll {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    width: 100%; 
+    white-space: nowrap; 
+    scrollbar-width: thin;
+    scrollbar-color: #26ACD6; 
+}
+
+.pdf-item {
+    width: 200px;
+    height: 250px;
+    flex: 0 0 auto;
+    margin-right: 20px;
+}
+
+.delete-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: #ff0000; 
+    cursor: pointer;
+}
+
+.pdf-embed {
+    width: 100%;
+    height: 100%;
+}
+
+.add-resume {
+    width: 200px;
+    height: 250px;
+    background-color: #f0f0f0;
+    display: flex;
+    border: 2px dashed #ccc;
+    flex-shrink: 0;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+}
+
+.modal-overlay-delete {
+    font-family: 'Roboto', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;  /* Center the modal horizontally */
+    align-items: center;      /* Center the modal vertically */
+    z-index: 1050;
+}
+
+.modal-content-delete {
+    background: #e0f7fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-header-delete {
+    background-color: #237993;
+    color: white;
+    width: calc(100% + 40px);
+    margin: -20px -40px 20px -40px;
+    padding: 20px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 22px;
+    border-radius: 10px 10px 0 0;
+}
+
+.modal-content-delete p {
+    margin-top: 0px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 18px;
+    color: #333333;
+}
+
+.modal-buttons-delete {
+    display: flex;
+    justify-content: center; 
+    gap: 15px;  /* Space between buttons */
+}
+
+.modal-button-delete {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content-delete .cancel-button-delete {
+    background-color: #26ACD6;
+    color: white;
+    font-size: 18px;
+}
+
+.modal-content-delete .delete-button-delete {
+    background-color: #748D95;
+    color: white;
+    font-size: 18px;
+}
+
+
+
