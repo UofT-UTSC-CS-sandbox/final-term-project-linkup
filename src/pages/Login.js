@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Outlet, useNavigate, Link } from "react-router-dom";
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import Button from '@mui/material/Button';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
+import TextField from '@mui/material/TextField';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+
+// Styling
+import './Login.css';
+import logo from '../images/linkup_logo_highquality.png';
+import loginDesign from '../images/login-design.png';
+
 
 const Login = () => {
   const [txtEmail, setTxtEmail] = useState('');
@@ -79,27 +86,26 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <h1> LinkUp Login Page </h1>
-      <div>
-        <label>
-          Email :
-          <input type="email" value={txtEmail} onChange={handleChangeInEmail} />
+    <header className='App-header'>
+      <img className='logo-block' src={logo} alt="logo" />
+      <div className='textbox-block'>
+        <h1 className='slogan-pos'> Swipe. Match. Network. </h1>
+        <label className='email-text-posit'> 
+          Email 
+        </label>
+        <input className='email-custom-textboxx' type="email" value={txtEmail} onChange={handleChangeInEmail} />
+        <label className='password-text-posit'> 
+          Password
+        </label>
+        <input className='password-custom-textboxx' type="text" value={txtPassword} onChange={handleChangeInPassword} />
+        <button className='login-button' onClick={attemptLogin}> Log In </button>
+        <label className='signup-prompt'>
+          Don't have an account?
+          <a href="/signup-page" > Create now </a>
         </label>
       </div>
-      <div>
-        <label>
-          Password :
-          <input type="text" value={txtPassword} onChange={handleChangeInPassword} />
-        </label>
-      </div>
-      <div>
-        <button onClick={attemptLogin}> Login </button>
-      </div>
-      <div>
-        <Button component={Link} to="/signup-page" variant="contained"> Create an account </Button>
-      </div>
-    </div>
+      <img className='design-block' src={loginDesign} alt="logo" />
+    </header>
   );
 };
 
