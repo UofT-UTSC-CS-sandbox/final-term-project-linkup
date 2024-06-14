@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+// Styling
+import './VerificationPage.css';
+import logo from '../images/linkup_logo.png';
+
 const VerificationPage = () => {
   const { token } = useParams(); // Get token from queryString in URL from email
   console.log(token);
@@ -30,9 +34,14 @@ const VerificationPage = () => {
     });
 
   return (
-    <div>
-      <p>Your account is now verified!</p>
-    </div>
+    <header className="App-header">
+      <img style={{width: "20%"}} src={logo} alt="logo" />
+      <p className="verification-prompt">
+        Your account is now verified!
+        <a href="/login-page" style={{marginLeft: "5px"}} >Start Exploring</a>
+      </p>
+      
+    </header>
   );
 };
 

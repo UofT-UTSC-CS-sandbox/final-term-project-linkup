@@ -11,10 +11,10 @@
 
 .design-block {
     position: absolute;
-    top: 10%;
-    left: 57%;
-    width: 43%;
-    height: 94%;
+    top: 8%;
+    left: 60%;
+    width: 40%;
+    height: 92%;
 }
 
 .slogan-pos {
@@ -102,6 +102,14 @@
     padding: 10px;           /* Some padding for better appearance */
     outline: none;           /* Remove default outline on focus */
     box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.login-button:hover{
+    background-color: #2298bc; /* White background */
+}
+
+.login-button:active{
+    background-color: #0e3e4d; /* White background */
 }
 
 .signup-prompt {

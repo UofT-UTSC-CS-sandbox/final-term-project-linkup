@@ -6,6 +6,11 @@ import logo from '../images/linkup_logo.png';
 import ResumeUploadModal from './UploadPopUp';
 import './ProfilePage.css'; 
 
+// Routing and authentication
+import { useNavigate } from "react-router-dom";
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+
 const Profile = () => {
   const [resumes, setResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -13,6 +18,9 @@ const Profile = () => {
   const [resumeToDelete, setResumeToDelete] = useState(null);
   const pdfContainerRef = useRef(null);
   const userId = "6668b379930f4bfc3a165935";
+  const navigate = useNavigate();
+  const isAuthenticated = useIsAuthenticated();
+  const auth = useAuthUser();
 
     const fetchResumes = async () => {
         try {
@@ -24,7 +32,10 @@ const Profile = () => {
     };
 
     useEffect(() => {
-    fetchResumes();
+        if(!isAuthenticated) {
+            navigate('/login-page');
+        }
+        fetchResumes();
     }, [userId]);
 
   useEffect(() => {
@@ -97,7 +108,7 @@ const Profile = () => {
                 <div className="blue-header"></div>
                 <div className="profile-icon-section">
                     <div className="profile-icon-placeholder"></div>
-                    <div className="username">Username</div>
+                    <div className="username"> {auth.name} </div>
                     <button className="settings-button">
                         <SettingsIcon />
                         Settings

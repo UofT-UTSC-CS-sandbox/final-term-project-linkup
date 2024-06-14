@@ -19,7 +19,7 @@ function TestPage() {
 
   const signOutAndRedirect = () => {
     signOut();
-    navigate('/');
+    navigate('/login-page');
   };
 
   // Showing nothing if the user isn't authenticated

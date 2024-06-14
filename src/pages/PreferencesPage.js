@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from '../images/linkup_logo.png'; 
 import Select from 'react-select';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';

@@ -52,6 +52,7 @@ const loginUser = async (req, res) => {
         accessToken: accessToken,
         user: {
           email: user.email,
+          name: user.anon_username,
           id: user._id
         },
       });

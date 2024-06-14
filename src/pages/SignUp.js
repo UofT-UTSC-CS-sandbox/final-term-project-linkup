@@ -19,7 +19,7 @@ const SignUp = () => {
   // Redirecting if already authenticated
   useEffect(() => {
     if(isAuthenticated) {
-      navigate('/test-page');
+      navigate('/profile');
     }
   });
 

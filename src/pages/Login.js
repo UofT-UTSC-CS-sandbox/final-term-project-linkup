@@ -10,7 +10,6 @@ import './Login.css';
 import logo from '../images/linkup_logo_highquality.png';
 import loginDesign from '../images/login-design.png';
 
-
 const Login = () => {
   const [txtEmail, setTxtEmail] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
@@ -21,7 +20,7 @@ const Login = () => {
   // Redirecting if already authenticated
   useEffect(() => {
     if(isAuthenticated) {
-      navigate('/test-page');
+      navigate('/profile');
     }
   });
 
@@ -55,7 +54,8 @@ const Login = () => {
                 token: data.accessToken,
                 type: 'Bearer'},
               userState: {
-                  email: data.user.email
+                  email: data.user.email,
+                  name: data.user.name
               }
             })) {
               // Redirect or perform other actions upon successful login

@@ -14,7 +14,11 @@ function HomePage() {
   // Redirecting if already authenticated
   useEffect(() => {
     if(isAuthenticated) {
-      navigate('/test-page');
+      navigate('/login-page');
+    }
+    else
+    {
+      navigate('/profile');
     }
   });
 

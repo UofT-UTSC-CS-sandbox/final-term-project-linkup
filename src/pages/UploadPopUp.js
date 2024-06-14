@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import uploadIcon from '../images/Upload_icon.png';
 import deleteIcon from '../images/DeleteIcon.png';
 import cancelIcon from '../images/Vector.png';
 import './UploadPopUp.css';
+
+// Routing and authentication
+import { useNavigate } from "react-router-dom";
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
 const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
   const [file, setFile] = useState(null);
@@ -12,6 +16,14 @@ const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
   const [uploadStatus, setUploadStatus] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const userId = "6668b379930f4bfc3a165935";
+  const navigate = useNavigate();
+  const isAuthenticated = useIsAuthenticated();
+
+  useEffect(() => {
+    if(!isAuthenticated) {
+      navigate('/login-page');
+    }
+  });
 
   const handleFileChange = (event) => {
     if (isUploading) return;
