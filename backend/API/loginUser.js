@@ -34,14 +34,14 @@ const loginUser = async (req, res) => {
       });
 
       if (!user) {
-        return res.status(401).send('Authentication failed: User not found or user is not verified');
+        return res.status(401).json({errorMsg : "Unable to log in, account is not found or verified"});
       }
   
       // Compare the provided password with the stored hash
       const isPasswordValid = bcryptjs.compareSync(passedUser.password, user.password);
   
       if (!isPasswordValid) {
-        return res.status(401).send('Authentication failed: Incorrect password');
+        return res.status(401).json({errorMsg : "Unable to log in, password is incorrect"});
       }
       
       // Create tokens

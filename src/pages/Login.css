@@ -123,3 +123,48 @@
     padding: 5px;
 }
 
+.login-validation-error {
+    position: absolute;
+    color: #AC4747;
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    top: 70%;
+    left: 8%;
+    width: 80%;
+    height: 5%;
+}
+
+.login-button-validation-error {
+    position: absolute;
+    top: 78%;
+    left: 10%;
+    width: 80%;
+    height: 12%;
+    color: white;
+    font: 500 15px/1.18 "Inter", sans-serif;
+    background-color: #26ACD6; /* White background */
+    border: 0px;
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.login-button-validation-error:hover{
+    background-color: #2298bc; /* White background */
+}
+
+.login-button-validation-error:active{
+    background-color: #0e3e4d; /* White background */
+}
+
+.signup-prompt-validation-error0 {
+    position: absolute;
+    top: 93%;
+    left: 23.5%;
+    width: 50%;
+    height: 6%;
+    font: 500 14px/1.18 "Inter", sans-serif;
+    color: rgb(42, 46, 53);
+    padding: 5px;
+}
+

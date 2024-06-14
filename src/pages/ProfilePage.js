@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
-import logo from '../images/linkup_logo.png';
+import logo from '../images/linkup_logo_highquality.png';
 import ResumeUploadModal from './UploadPopUp';
 import './ProfilePage.css'; 
 
@@ -16,6 +16,7 @@ const Profile = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [resumeToDelete, setResumeToDelete] = useState(null);
+  const [preferences, setPreferences] = useState({});
   const pdfContainerRef = useRef(null);
   const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const Profile = () => {
         if(!isAuthenticated) {
             navigate('/login-page');
         }
+        retrievePreferences();
         fetchResumes();
     }, [userId]);
 
@@ -97,7 +99,31 @@ const Profile = () => {
         console.error('Error deleting resume:', error);
         setResumes(prevResumes => [...prevResumes, currentResumeToDelete]);
     }
-};
+  };
+
+  // Communicating Email and password to server
+  const retrievePreferences = async () => {
+
+      try {
+        const response = await fetch('http://localhost:3001/getPreferences', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({email : auth.email})
+        });
+  
+        if (response.ok) {
+          const retrievedPref = await response.json();
+          setPreferences(retrievedPref);
+
+        } else {
+          console.error('Error retrieving');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+  };
 
     return (
         <div className="profile-container">
@@ -118,9 +144,9 @@ const Profile = () => {
                     <div className="vertical-line"></div>
                     <div className="fields-container">
                         <div className="profile-info">MY INFORMATION</div>
-                        <div className="field-label">Industry:</div>
-                        <div className="field-label">Location:</div>
-                        <div className="field-label">Education:</div>
+                        <div className="field-label">Industry: {preferences.field_of_interest}</div>
+                        <div className="field-label">Location: {preferences.location} </div>
+                        <div className="field-label">Education: {preferences.education} </div>
                         <div className="field-label">Public Resume:</div>
                     </div>
                 </div>

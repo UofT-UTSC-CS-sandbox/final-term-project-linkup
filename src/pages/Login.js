@@ -13,6 +13,8 @@ import loginDesign from '../images/login-design.png';
 const Login = () => {
   const [txtEmail, setTxtEmail] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
+  const [loginErrorMsg, setLoginErrorMsg] = useState('');
   const signIn = useSignIn();
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
@@ -46,8 +48,6 @@ const Login = () => {
         if (response.ok) {
           const data = await response.json();
 
-          console.log(data);
-
           if (data.accessToken && data.user.email) {
             if (signIn({
               auth: {
@@ -59,18 +59,22 @@ const Login = () => {
               }
             })) {
               // Redirect or perform other actions upon successful login
-              navigate('/upload');
+              navigate('/');
             } else {
               console.error('Authentication failed');
+              setLoginError(true);
             }
           } else {
-            console.log('Invalid data received from backend');
+            setLoginError(true);
           }
         } else {
-          console.error('Error logging in');
+          const errMsg = await response.json();
+          setLoginErrorMsg(errMsg.errorMsg);
+          setLoginError(true);
         }
       } catch (error) {
         console.error('Error:', error);
+        setLoginError(true);
       }
   };
 
@@ -98,11 +102,25 @@ const Login = () => {
           Password
         </label>
         <input className='password-custom-textboxx' type="text" value={txtPassword} onChange={handleChangeInPassword} />
-        <button className='login-button' onClick={attemptLogin}> Log In </button>
-        <label className='signup-prompt'>
-          Don't have an account?
-          <a href="/signup-page" > Create now </a>
-        </label>
+        {loginError && (
+          <div>
+            <label className='login-validation-error'>  {loginErrorMsg} </label>
+            <button className='login-button-validation-error' onClick={attemptLogin}> Log In </button>
+            <label className='signup-prompt-validation-error0'>
+              Don't have an account?
+              <a href="/signup-page" > Create now </a>
+            </label>
+          </div>
+        )}
+        {!loginError && (
+          <div>
+            <button className='login-button' onClick={attemptLogin}> Log In </button>
+            <label className='signup-prompt'>
+              Don't have an account?
+              <a href="/signup-page" > Create now </a>
+            </label>
+          </div>
+        )}
       </div>
       <img className='design-block' src={loginDesign} alt="logo" />
     </header>

@@ -45,6 +45,10 @@ const SignUp = () => {
     }
 
     setPasswordErrors(errors);
+    if(!(errors.length === 0))
+    {
+      setThereExistsErrors(true);
+    }
     // Return if the number of errors is zero
     return errors.length === 0;
   };
@@ -105,25 +109,54 @@ const SignUp = () => {
           Engage anonymously. Improve resumes. Make professional connections.
         </label>
       </div>
-      <div className='signup-block'>
-        <label className='email-text-pos'> 
-          Email 
-        </label>
-        <input className='email-custom-textbox' type="email" value={txtEmail} onChange={handleChangeInEmail} />
-        <label className='password-text-pos'> 
-          Password
-        </label>
-        <input className='password-custom-textbox' type="text" value={txtPassword} onChange={handleChangeInPassword} />
-        <label className='confirmpassword-text-pos'> 
-          Confirm Password
-        </label>
-        <input className='confirmpassword-custom-textbox' type="text" value={txtPassword} onChange={handleChangeInPassword} />
-        <button className='signup-button' onClick={sendNewUserToDatabase}> Sign Up </button>
-        <label className='login-prompt'>
-          Already have an account?
-          <a href="/login-page" > Log In </a>
-        </label>
-      </div>
+      {!existsErrors &&
+        <div className='signup-block'>
+          <label className='email-text-pos'> 
+            Email 
+          </label>
+          <input className='email-custom-textbox' type="email" value={txtEmail} onChange={handleChangeInEmail} />
+          <label className='password-text-pos'> 
+            Password
+          </label>
+          <input className='password-custom-textbox' type="text" value={txtPassword} onChange={handleChangeInPassword} />
+          <label className='confirmpassword-text-pos'> 
+            Confirm Password
+          </label>
+          <input className='confirmpassword-custom-textbox' type="text" value={txtPassword} onChange={handleChangeInPassword} />
+          <button className='signup-button' onClick={sendNewUserToDatabase}> Sign Up </button>
+          <label className='login-prompt'>
+            Already have an account?
+            <a href="/login-page" > Log In </a>
+          </label>
+        </div>
+      }
+      {existsErrors &&
+        <div className='signup-block-valerr'>
+          <label className='email-text-pos-valerr'> 
+            Email 
+          </label>
+          <input className='email-custom-textbox-valerr' type="email" value={txtEmail} onChange={handleChangeInEmail} />
+          <label className='password-text-pos-valerr'> 
+            Password
+          </label>
+          <input className='password-custom-textbox-valerr' type="text" value={txtPassword} onChange={handleChangeInPassword} />
+          <label className='confirmpassword-text-pos-valerr'> 
+            Confirm Password
+          </label>
+          <input className='confirmpassword-custom-textbox-valerr' type="text" value={txtPassword} onChange={handleChangeInPassword} />
+          <div className='signup-validation-error-block-pos'>
+            {(passwordErrors.map((error) => (
+              <div>
+                <p className="signup-validation-error0">{error}</p>
+              </div>
+            )))}
+          </div>
+          <button className='signup-button-valerr' onClick={sendNewUserToDatabase}> Sign Up </button>
+          <label className='login-prompt-valerr'>
+            Already have an account?
+            <a href="/login-page" > Log In </a>
+          </label>
+        </div>}
       {/* <h1> LinkUp Sign Up Page </h1>
       <div>
         <label>
