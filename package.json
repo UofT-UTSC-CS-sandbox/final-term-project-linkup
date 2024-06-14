@@ -13,9 +13,9 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
-    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "mongodb": "^5.9.1",
@@ -31,12 +31,15 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "install-all": "cd backend && npm install && cd .. && npm install",
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd backend && npm install && node server.js ",
-    "client": "npm install && react-scripts start",
+    "server": "cd backend && node server.js ",
+    "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean": "rm -rf node_modules && npm cache clean --force && npm install",
+    "big-start": "clean and install-all and concurrently  \"npm run server\" \"npm run client\""
   },
   "eslintConfig": {
     "extends": [
