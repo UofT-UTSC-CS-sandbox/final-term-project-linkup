@@ -66,7 +66,7 @@
 
 .username {
     margin-top: 10px;
-    font-size: 32px;
+    font-size: 25px;
     color: black;
     font-weight: bold;
 }
@@ -90,7 +90,8 @@
 .horizontal-container {
     display: flex;
     align-items: flex-start;
-    margin-top: 90px;
+    margin-left: 20%;
+    margin-top: 11%;
     position: relative;
 }
 
@@ -121,7 +122,7 @@
 }
 
 .field-label {
-    font-size: 28px;
+    font-size: 23px;
     color: black;
     margin: 5px 0;
     font-weight: bold;

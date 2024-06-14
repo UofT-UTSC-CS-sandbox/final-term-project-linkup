@@ -28,13 +28,12 @@ function App() {
       <BrowserRouter>
         <div className="App">
             <Routes>
-              <Route path="/" element={<HomePage/>} />
+              <Route path="/" element={<ResumeUpload/>} />
               <Route path="/test-page" element={<TestPage/>} />
               <Route path="/login-page" element={<LoginPage/>} />
               <Route path="/signup-page" element={<SignUpPage/>} />
               <Route path="/verification/:token" element={<VerificationPage/>} />
               <Route path="/preferences" element={<PreferencesPage />} />
-              <Route path="/upload" element={<ResumeUpload/>} />
               <Route path="/profile" element={<Profile/>} />
             </Routes>
         </div>

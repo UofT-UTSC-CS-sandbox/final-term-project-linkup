@@ -11,11 +11,6 @@ function TestPage() {
   const auth = useAuthUser();
 
   // Redirecting to home page if NOT authenticated
-  useEffect(() => {
-    if(!isAuthenticated) {
-      navigate('/');
-    }
-  });
 
   const signOutAndRedirect = () => {
     signOut();
@@ -23,19 +18,15 @@ function TestPage() {
   };
 
   // Showing nothing if the user isn't authenticated
-  if (!isAuthenticated) {
-    return null;
-  } else {
-    return(
-      <div>
-          <p>Hello {auth.email}</p>
-          <button onClick={signOutAndRedirect}>Sign Out</button>
-          <Link to="/preferences">
-          <button>Go to Preferences Page</button>
-        </Link>
-      </div>
-    ) 
-  }
+ 
+  return(
+    <div>
+        <button onClick={signOutAndRedirect}>Sign Out</button>
+        <Link to="/preferences">
+        <button>Go to Preferences Page</button>
+      </Link>
+    </div>
+  ) 
 
   // return (
   //   <div>

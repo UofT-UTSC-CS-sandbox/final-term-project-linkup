@@ -11,6 +11,7 @@ const loginUser = require('./API/loginUser');
 const newUser = require('./API/newUser');
 const verifyUser = require('./API/EmailVerification');
 const updatePreferences = require('./API/UpdatePreferences'); // Adjust path as necessary
+const getPreferences = require('./API/getPreferences');
 const Resume = require('./schema/resume');
 
 require('dotenv').config();
@@ -208,6 +209,7 @@ app.post('/verify-user', verifyUser);
 
 app.post('/login', loginUser);
 app.post('/api/updatePreferences', updatePreferences);
+app.post('/getPreferences', getPreferences);
 
 // Listening on Port 3001
 const PORT = 3001;

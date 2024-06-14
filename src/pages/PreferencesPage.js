@@ -4,9 +4,13 @@ import Select from 'react-select';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import './Preferences.css'; 
 
+// Routing and authentication
+import { useNavigate } from "react-router-dom";
+
 function PreferencesForm() {
      // Hook to get authenticated user info
     const user = useAuthUser();
+    const navigate = useNavigate();
       // State to store user preferences
     const [preferences, setPreferences] = useState({
         field_of_interest: '',
@@ -47,6 +51,7 @@ function PreferencesForm() {
 
             if (response.ok) {
                 console.log('Preferences updated successfully');
+                navigate("/profile");
             } else {
                 console.error('Error updating preferences:', await response.text());
             }

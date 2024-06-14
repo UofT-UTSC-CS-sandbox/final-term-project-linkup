@@ -10,8 +10,11 @@ import logo from '../images/linkup_logo_highquality.png';
 const SignUp = () => {
   const [txtEmail, setTxtEmail] = useState('');
   const [txtPassword, setTxtPassword] = useState('');
+  const [txtConfirmPassword, setTxtConfirmPassword] = useState('');
   const [passwordErrors, setPasswordErrors] = useState([]);
   const [existsErrors, setThereExistsErrors] = useState(false);
+  const [existsPasswordMatchErrors, setExistsPasswordMatchErrors] = useState(false);
+  const [classes, setClasses] = useState({});
 
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
@@ -21,15 +24,78 @@ const SignUp = () => {
     if(isAuthenticated) {
       navigate('/profile');
     }
+    setDisplayClasses();
   });
+
+  const setDisplayClasses = () => {
+    if(existsErrors)
+    {
+      setClasses(
+        {
+          signup_block: 'signup-block-valerr',
+          email_text_pos: 'email-text-pos-valerr',
+          email_custom_textbox: 'email-custom-textbox-valerr',
+          password_text_pos: 'password-text-pos-valerr',
+          password_custom_textbox: 'password-custom-textbox-valerr',
+          confirmpassword_text_pos: 'confirmpassword-text-pos-valerr',
+          confirmpassword_custom_textbox: 'confirmpassword-custom-textbox-valerr',
+          signup_button: 'signup-button-valerr',
+          login_prompt: 'login-prompt-valerr'
+        }
+      );
+    }
+    else if (existsPasswordMatchErrors) {
+      setClasses(
+        {
+          signup_block: 'signup-block-matcherr',
+          email_text_pos: 'email-text-pos-matcherr',
+          email_custom_textbox: 'email-custom-textbox-matcherr',
+          password_text_pos: 'password-text-pos-matcherr',
+          password_custom_textbox: 'password-custom-textbox-matcherr',
+          confirmpassword_text_pos: 'confirmpassword-text-pos-matcherr',
+          confirmpassword_custom_textbox: 'confirmpassword-custom-textbox-matcherr',
+          signup_button: 'signup-button-matcherr',
+          login_prompt: 'login-prompt-matcherr'
+        }
+      );
+    }
+    else
+    {
+      setClasses(
+        {
+          signup_block: 'signup-block',
+          email_text_pos: 'email-text-pos',
+          email_custom_textbox: 'email-custom-textbox',
+          password_text_pos: 'password-text-pos',
+          password_custom_textbox: 'password-custom-textbox',
+          confirmpassword_text_pos: 'confirmpassword-text-pos',
+          confirmpassword_custom_textbox: 'confirmpassword-custom-textbox',
+          signup_button: 'signup-button',
+          login_prompt: 'login-prompt'
+        }
+      );
+    }
+  }
 
   // Validating password input
   const validatePassword = (val) => {
     const errors = [];
 
-    if (!val) {
+    // Validating email -> semantics changed later
+    if(txtEmail == '' && !val)
+    {
+      errors.push('Email and password is required');
+    }
+    else if (txtEmail == '')
+    {
+      errors.push('Email is required');
+    }
+    else if (!val)
+    {
       errors.push('Password is required');
-    } else {
+    }
+    else 
+    {
       if(val.length <= 8) {
         errors.push('Password must be length of at least 8');
       }
@@ -45,6 +111,10 @@ const SignUp = () => {
     }
 
     setPasswordErrors(errors);
+    if(!(errors.length === 0))
+    {
+      setThereExistsErrors(true);
+    }
     // Return if the number of errors is zero
     return errors.length === 0;
   };
@@ -56,6 +126,13 @@ const SignUp = () => {
       setThereExistsErrors(true);
       return;
     }
+
+    checkPasswordMatch();
+    if(existsPasswordMatchErrors){
+      return;
+    }
+
+    setThereExistsErrors(false);
 
     const newUser = {
       email: txtEmail,
@@ -83,19 +160,39 @@ const SignUp = () => {
     }
   };
 
+  const checkPasswordMatch = () => {
+    if (txtPassword != txtConfirmPassword)
+    {
+      setExistsPasswordMatchErrors(true);
+    }
+    else
+    {
+      setExistsPasswordMatchErrors(false);
+    }
+  }
+
   // Handling events
   // [!!] NOTE: Need to handle changes in textboxes as well,
   //      hence why we need to have temp variable
   const handleChangeInEmail = (e) => {
     setThereExistsErrors(false);
+    setExistsPasswordMatchErrors(false);
     setTxtEmail(e.target.value);
-  }
+    validatePassword(txtPassword);
+  };
 
   const handleChangeInPassword = (e) => {
     setThereExistsErrors(false);
+    setExistsPasswordMatchErrors(false);
     setTxtPassword(e.target.value);
     validatePassword(e.target.value);
-  }
+    setDisplayClasses();
+  };
+
+  const handleChangeInConfirmPassword = (e) => {
+    setExistsPasswordMatchErrors(false);
+    setTxtConfirmPassword(e.target.value);
+  };
 
   return (
     <header className='App-header'>
@@ -105,25 +202,36 @@ const SignUp = () => {
           Engage anonymously. Improve resumes. Make professional connections.
         </label>
       </div>
-      <div className='signup-block'>
-        <label className='email-text-pos'> 
+      <div className={classes.signup_block}>
+        <label className={classes.email_text_pos}> 
           Email 
         </label>
-        <input className='email-custom-textbox' type="email" value={txtEmail} onChange={handleChangeInEmail} />
-        <label className='password-text-pos'> 
+        <input className={classes.email_custom_textbox} type="email" value={txtEmail} onChange={handleChangeInEmail} />
+        <label className={classes.password_text_pos}> 
           Password
         </label>
-        <input className='password-custom-textbox' type="text" value={txtPassword} onChange={handleChangeInPassword} />
-        <label className='confirmpassword-text-pos'> 
+        <input className={classes.password_custom_textbox} type="text" value={txtPassword} onChange={handleChangeInPassword} />
+        {existsErrors && 
+          (<div className='signup-validation-error-block-pos'>
+            {(passwordErrors.map((error) => (
+              <div>
+                <p className="signup-validation-error0">{error}</p>
+              </div>
+            )))}
+          </div>)}
+        <label className={classes.confirmpassword_text_pos}> 
           Confirm Password
         </label>
-        <input className='confirmpassword-custom-textbox' type="text" value={txtPassword} onChange={handleChangeInPassword} />
-        <button className='signup-button' onClick={sendNewUserToDatabase}> Sign Up </button>
-        <label className='login-prompt'>
+        <input className={classes.confirmpassword_custom_textbox} type="text" value={txtConfirmPassword} onChange={handleChangeInConfirmPassword} />
+        {existsPasswordMatchErrors &&
+          <label className='signup-passwordMatch-err0'> Unable to sign up, passwords don't match </label>}
+        <button className={classes.signup_button} onClick={sendNewUserToDatabase}> Sign Up </button>
+        <label className={classes.login_prompt}>
           Already have an account?
           <a href="/login-page" > Log In </a>
         </label>
       </div>
+        
       {/* <h1> LinkUp Sign Up Page </h1>
       <div>
         <label>

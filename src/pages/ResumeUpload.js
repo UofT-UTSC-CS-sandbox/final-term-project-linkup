@@ -90,7 +90,7 @@ const ResumeUpload = () => {
         }
       });
       setUploadStatus(response.data.message);
-      navigate('/profile'); // Navigate to Profile page after upload
+      navigate('/preferences'); // Navigate to Profile page after upload
     } catch (error) {
       console.error('Error uploading resume:', error);
       setUploadStatus('Error uploading resume');
