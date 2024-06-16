@@ -11,6 +11,7 @@ import './ResumeUpload.css'; // Import the CSS file
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
 const ResumeUpload = () => {
+  // State hooks to manage file, upload progress, visibility, and status
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [publicFlag, setPublicFlag] = useState(false);
@@ -20,12 +21,14 @@ const ResumeUpload = () => {
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
 
+  // Redirect user to login page if not authenticated
   useEffect(() => {
     if(!isAuthenticated) {
       navigate('/login-page');
     }
   });
 
+  // Handle file selection
   const handleFileChange = (event) => {
     if (isUploading) return; // Prevent file selection if already uploading
     const selectedFile = event.target.files[0];
@@ -37,6 +40,7 @@ const ResumeUpload = () => {
     }
   };
 
+  // Simulate the upload process
   const simulateUpload = (file) => {
     setIsUploading(true); // Start uploading
     setUploadProgress(0); // Initialize progress to 0 at the start of upload
@@ -55,6 +59,7 @@ const ResumeUpload = () => {
     }, stepTime);
   };
 
+  // Function to reset file input
   const removeFile = () => {
     setFile(null);
     setUploadProgress(0);
@@ -63,10 +68,12 @@ const ResumeUpload = () => {
     document.getElementById('file-upload').value = null; // Reset the file input
   };
 
+  // Handle checkbox for public/private flag
   const handlePublicFlagChange = (e) => {
     setPublicFlag(e.target.checked);
   };
 
+  // Handle form submission and upload to server
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file || file.type !== 'application/pdf') {

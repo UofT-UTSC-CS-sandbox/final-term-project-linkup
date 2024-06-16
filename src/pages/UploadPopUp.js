@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
 const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
+  // State to manage file selection, upload progress and status, and privacy flag
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [publicFlag, setPublicFlag] = useState(false);
@@ -19,12 +20,14 @@ const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
 
+  // Redirect if not authenticated
   useEffect(() => {
     if(!isAuthenticated) {
       navigate('/login-page');
     }
   });
 
+  // Function to handle file selection
   const handleFileChange = (event) => {
     if (isUploading) return;
     const selectedFile = event.target.files[0];
@@ -36,6 +39,7 @@ const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
     }
   };
 
+  // Simulate the upload process
   const simulateUpload = (file) => {
     setIsUploading(true);
     setUploadProgress(0);
@@ -53,6 +57,7 @@ const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
     }, stepTime);
   };
 
+  // Function to remove selected file
   const removeFile = () => {
     setFile(null);
     setUploadProgress(0);
@@ -61,10 +66,12 @@ const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
     document.getElementById('file-upload').value = null;
   };
 
+  // Function to toggle the public/private flag
   const handlePublicFlagChange = (e) => {
     setPublicFlag(e.target.checked);
   };
 
+  // Function to handle form submission and file upload
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file || file.type !== 'application/pdf') {

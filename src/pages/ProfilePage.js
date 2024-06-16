@@ -12,6 +12,7 @@ import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const Profile = () => {
+// State management for resumes, modal visibility, selected resume for deletion, and user preferences
   const [resumes, setResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -23,6 +24,7 @@ const Profile = () => {
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
 
+    // Fetch resumes from the server for the logged-in user
     const fetchResumes = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
@@ -32,6 +34,7 @@ const Profile = () => {
         }
     };
 
+    // Redirect to login if not authenticated and fetch data on component mount
     useEffect(() => {
         if(!isAuthenticated) {
             navigate('/login-page');
@@ -40,26 +43,28 @@ const Profile = () => {
         fetchResumes();
     }, [userId]);
 
-  useEffect(() => {
+    // Handle horizontal scrolling of PDF container via mouse wheel
+    useEffect(() => {
     const container = pdfContainerRef.current;
     const handleWheel = (e) => {
-      e.preventDefault();
-      container.scrollLeft += e.deltaX;
+        e.preventDefault();
+        container.scrollLeft += e.deltaX;
     };
-  
-    container.addEventListener('wheel', handleWheel, { passive: false });
-  
-    return () => {
-      container.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
-  
 
+    container.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+        container.removeEventListener('wheel', handleWheel);
+    };
+    }, []);
+  
+  // Refresh resumes on successful upload
   const handleResumeUploadSuccess = (newResume) => {
     console.log('Adding new resume:', newResume);
     fetchResumes();
   };
 
+  // Open/close modals for resume upload and deletion
   const handleAddResumeClick = () => {
       setIsUploadModalOpen(true);
   };
@@ -78,6 +83,7 @@ const Profile = () => {
       setResumeToDelete(null);
   };
 
+  // Delete a resume from the server and update UI accordingly
   const handleDeleteResume = async () => {
     if (!resumeToDelete) {
         console.log('No resume selected for deletion');
