@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.modal-content {
+    background: #FFFFFF; /* Ensuring background color is set */
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center; /* Center aligns the content boxes */
+    width: auto; /* Responsive width based on viewport */
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 32px; /* Large enough for easy interaction */
+    color: #333; /* Visible against the modal content background */
+}
+
+.content-box {
+    font-family: 'Montserrat', sans-serif;
+    width: auto;
+}
+
+.upload-header {
+    font-size: 24px;
+    color: #454545;
+    font-weight: 600;
+}
+
+.upload-area {
+    position: relative;
+    border: 2px dashed #c0e5e59a;
+    padding: 40px;
+    margin: 20px auto 50px;  
+    cursor: pointer;
+    text-align: center;
+    max-width: 400px;
+}
+
+.upload-instructions {
+    font-size: 20px;
+    font-weight: 600; 
+    color: #454545;
+}
+
+.file-input-label {
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.file-input {
+    display: none;
+}
+
+.supported-formats {
+    font-size: 14px; 
+    color: #676767;
+    margin-top: 10px;  
+}
+
+.uploading-header {
+    font-size: 18px;
+    color: #676767;
+    text-align: left;
+    margin-top: -20px;
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+.uploading-section {
+    font-size: 14px;
+    position: relative;
+    padding: 10px;
+    margin-top: -10px;
+    border: 1px solid #E3E3E3;
+    text-align: left;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    justify-content: space-between;
+    display: flex;
+    padding-right: 5px;
+}
+
+.file-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cancel-button {
+    font-size: 16px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    appearance: none;
+}
+
+.progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.progress {
+    height: 4px; 
+    background-color: #26ABD6;
+    overflow: hidden;
+    width: 2%;
+}
+
+.uploading-section.upload-complete {
+    border: 2px solid #26ABD6;
+}
+
+.upload-btn {
+    font-weight: bold;
+    background-color: #26ACD6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    max-width: 500px;
+    margin-top: 10px;
+}

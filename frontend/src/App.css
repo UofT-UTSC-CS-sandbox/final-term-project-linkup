@@ -1,0 +1,340 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  width: 35%;
+  height: 35%;
+  pointer-events: none;
+}
+
+/* @media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+} */
+
+.App-header {
+  background-color: #bfe7f6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(31, 31, 33);
+  overflow: hidden;
+}
+
+.logo-block {
+  position: absolute;
+  top: 8%;
+  left: 11%;
+  width: 13%;
+  height: 13%;
+}
+
+.App-link {
+  color: #61dafb;
+}
+.pdf-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 200px); /* Fixed width for each column */
+  gap: 20px;
+  justify-content: center; /* Center the grid items */
+}
+
+.pdf-item {
+  position: relative;
+  width: 200px; /* Fixed width for each PDF item */
+  height: 260px; /* Fixed height for each PDF item to represent a page */
+  overflow: hidden; /* Prevent overflow */
+  border: 1px solid #ccc; /* Optional: Add a border for visual separation */
+  border-radius: 5px; /* Optional: Add some rounding to corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for some depth */
+  background-color: #f9f9f9; /* Optional: Background color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* Indicate that it's clickable */
+}
+
+.pdf-item embed {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensure the PDF content fits within the container */
+  pointer-events: none; /* Disable interaction to prevent scrolling */
+}
+
+.pdf-item.add-resume {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1f1f1;
+}
+
+.plus-sign {
+  font-size: 48px;
+  color: #999;
+}
+
+.plus-sign:hover {
+  color: #333;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; /* 5% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+.container {
+    font-family: 'Roboto';
+    background-color: #bfe7f6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    width: 100%;
+    position: relative;
+}
+
+.profile-link-container {
+    position: absolute;
+    right: 20px;
+    top: 20px; 
+}
+
+.profile-link {
+    font-size: 30px;
+    color: #6A6A6A;
+    position: relative;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.logo {
+    width: 200px;
+}
+
+.instruction-text {
+    font-size: 32px;
+    color: #6A6A6A;
+    margin-top: 120px;
+    font-weight: 500;
+    max-width: 80%; 
+    line-height: 1.4;  
+}
+
+.content-box {
+    font-family: 'Montserrat';
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 30%;
+    max-width: 500px;
+    padding: 20px;  
+    margin-bottom: 20px; 
+}
+
+.upload-header {
+    font-size: 24px;
+    color: #454545;
+    font-weight: 600;
+}
+
+.upload-area {
+    position: relative;
+    border: 2px dashed #c0e5e59a;
+    padding: 40px;
+    margin: 20px auto 50px;  
+    cursor: pointer;
+    text-align: center;
+    max-width: 400px;
+}
+
+.upload-instructions {
+    font-family: 'Montserrat';
+    font-size: 20px;
+    font-weight: 600; 
+    margin-bottom: 5px;
+    color: #454545;
+}
+
+.file-input-label {
+    color: #26ABD6;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.file-input {
+    display: none;
+}
+
+.supported-formats {
+    font-family: 'Montserrat';
+    display: block;  
+    font-size: 14px; 
+    color: #676767;
+    margin-top: 10px;  
+    padding-top: 10px;  
+}
+
+.uploading-header {
+    font-family: 'Montserrat';
+    font-size: 18px;
+    color: #676767;
+    text-align: left;
+    margin-top: -20px;
+    font-weight: 600;
+    padding-left: 5px
+}
+
+.uploading-section {
+    font-family: 'Montserrat';
+    font-size: 14px;
+    position: relative;
+    padding: 10px;
+    margin-top: -10px;
+    border: 1px solid #E3E3E3;
+    text-align: left;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    justify-content: space-between;
+    display: flex;
+    padding-right: 5px
+}
+
+.file-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cancel-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.progress {
+    height: 4px;
+    background-color: #26ABD6;
+    overflow: hidden;
+    width: 2%;
+}
+
+.uploading-section.upload-complete {
+    border: 2px solid #26ABD6;
+}
+
+.upload-btn {
+    font-family: 'Montserrat';
+    font-weight: bold;
+    background-color: #26ACD6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    max-width: 500px;
+    margin-top: 10px;
+}
+
+.publicFlag-label {
+    font-family: 'Montserrat';
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* Other existing styles */
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.delete-resumes-btn, .confirm-deletion-btn {
+  font-family: 'Montserrat';
+  font-weight: bold;
+  background-color: #26ACD6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.pdf-item.selectable {
+  position: relative;
+  cursor: pointer;
+}
+
+.resume-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+
+
+
+/* @keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
