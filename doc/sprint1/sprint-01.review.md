@@ -28,20 +28,20 @@ Here are team organization decisions that turned out to be successful:
 #### **Goals and/or tasks that were met/completed**:
 **User Registration and Login**: 
 
-![User Login](src\images\Sprint01_loginpage.png)
+![User Login](../../src/images/Sprint01_loginpage.png)
 
-![User Signup](src\images\Sprint01_signuppage.png)
+![User Signup](../../src/images/Sprint01_signuppage.png)
  
 
 **Resume Uploading and Deleting**:
 
-![Resume Upload](src\images\Sprint01_profilepage.png)
+![Resume Upload](../../src/images/Sprint01_profilepage.png)
 
-![Resume Delete](src\images\Sprint01_deleteresume.png)
+![Resume Delete](../../src/images/Sprint01_deleteresume.png)
  
 **Setting user preferences**:
 
-![Preferences Page](src\images\Sprint01_preferen.png)
+![Preferences Page](../../src/images/Sprint01_preferencespage.png)
 
 #### **Goals and/or tasks that were planned but not met/completed**:
 - **Profile Page**: We haven’t gotten to finalizing the Profile Page. We haven’t gotten to displaying only the current user’s uploaded files. In addition, users aren’t able to choose what resume they want to be public. As a team, we felt that it wasn’t important for this sprint since we could still satisfy our user stories that we had allocated for this sprint. 
