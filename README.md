@@ -26,20 +26,15 @@ To build and run the LinkUp project, follow these steps after setting up the pre
 
 2. **Navigate to the project directory in your terminal:**
    ```bash
-   cd final-term-project-linkup
+   cd final-term-project-linkup/frontend
    ```
 
-3. **Install the required dependencies:**
-   ```bash
-   npm install
-   ```
-
-4. **Start the application:**
+3. **Run script to install the required dependencies & start the application:**
    ```bash
    npm start
    ```
 
-5. **Open your browser and visit the following URL to access the Linkup web application:**
+4. **Open your browser and visit the following URL to access the Linkup web application:**
 Once you have started the server, Visual Studio Code or your terminal should automatically open your browser. If it does not, you can manually open your browser and visit the following URL to access the Linkup web application:
 
    ```plaintext
