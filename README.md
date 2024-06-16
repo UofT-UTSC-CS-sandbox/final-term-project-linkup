@@ -8,7 +8,7 @@ LinkUp is a dynamic web application designed to transform how job seekers refine
 When mutual right swipes occur, signaling a match, LinkUp allows users to initiate direct messaging, fostering deeper connections and potential professional collaborations. This system not only enhances resume quality through direct community feedback but also builds a network of professionals who can support each other’s career growth. LinkUp is committed to helping job seekers improve their employment prospects in a competitive market while nurturing a supportive professional community.
 
 
-![Readme Image 2](src/images/readme2.png "Screenshot for Readme")
+![Readme Image 2](frontend/src/images/readme2.png "Screenshot for Readme")
 
 
 ## Motivation
