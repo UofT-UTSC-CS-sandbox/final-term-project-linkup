@@ -24,21 +24,32 @@ To build and run the LinkUp project, follow these steps after setting up the pre
    git clone https://github.com/UofT-UTSC-CS-sandbox/final-term-project-linkup.git
    ```
 
-2. **Navigate to the project directory in your terminal:**
+2. **Navigate to the frontend directory in the project directory in your terminal:**
    ```bash
    cd final-term-project-linkup/frontend
    ```
 3. **Run script to install the required dependencies**
-    ```bash
+   ```bash
    npm install
    ```
-
-5. **Start the application:**
+4. **Navigate to the backend directory in the project directory in your terminal:**
+   ```bash
+   cd .. & cd backend
+   ```
+5. **Run script to install the required dependencies**
+   ```bash
+   npm install
+   ```
+2. **Navigate back to the frontend directory in your terminal:**
+   ```bash
+   cd .. & cd frontend
+   ```
+6. **Start the application:**
    ```bash
    npm start
    ```
 
-6. **Open your browser and visit the following URL to access the Linkup web application:**
+7. **Open your browser and visit the following URL to access the Linkup web application:**
 Once you have started the server, Visual Studio Code or your terminal should automatically open your browser. If it does not, you can manually open your browser and visit the following URL to access the Linkup web application:
 
    ```plaintext
