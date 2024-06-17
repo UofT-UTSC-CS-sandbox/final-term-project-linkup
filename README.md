@@ -8,7 +8,7 @@ LinkUp is a dynamic web application designed to transform how job seekers refine
 When mutual right swipes occur, signaling a match, LinkUp allows users to initiate direct messaging, fostering deeper connections and potential professional collaborations. This system not only enhances resume quality through direct community feedback but also builds a network of professionals who can support each other’s career growth. LinkUp is committed to helping job seekers improve their employment prospects in a competitive market while nurturing a supportive professional community.
 
 
-![Readme Image 2](src/images/readme2.png "Screenshot for Readme")
+![Readme Image 2](frontend/src/images/readme2.png "Screenshot for Readme")
 
 
 ## Motivation
@@ -24,22 +24,32 @@ To build and run the LinkUp project, follow these steps after setting up the pre
    git clone https://github.com/UofT-UTSC-CS-sandbox/final-term-project-linkup.git
    ```
 
-2. **Navigate to the project directory in your terminal:**
+2. **Navigate to the frontend directory in the project directory in your terminal:**
    ```bash
-   cd final-term-project-linkup
+   cd final-term-project-linkup/frontend
    ```
-
-3. **Install the required dependencies:**
+3. **Run script to install the required dependencies**
    ```bash
    npm install
    ```
-
-4. **Start the application:**
+4. **Navigate to the backend directory in the project directory in your terminal:**
+   ```bash
+   cd .. & cd backend
+   ```
+5. **Run script to install the required dependencies**
+   ```bash
+   npm install
+   ```
+2. **Navigate back to the frontend directory in your terminal:**
+   ```bash
+   cd .. & cd frontend
+   ```
+6. **Start the application:**
    ```bash
    npm start
    ```
 
-5. **Open your browser and visit the following URL to access the Linkup web application:**
+7. **Open your browser and visit the following URL to access the Linkup web application:**
 Once you have started the server, Visual Studio Code or your terminal should automatically open your browser. If it does not, you can manually open your browser and visit the following URL to access the Linkup web application:
 
    ```plaintext
