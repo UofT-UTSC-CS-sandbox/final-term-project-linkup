@@ -139,7 +139,7 @@ function PreferencesForm() {
                     <Select
                         name="preferences_edu"
                         options={[
-                            { value: 'highschool', label: 'Diploma' },
+                            { value: 'diploma', label: 'Diploma' },
                             { value: 'bachelor', label: 'Bachelor' },
                             { value: 'master', label: 'Master' },
                             { value: 'phd', label: 'PHD' }

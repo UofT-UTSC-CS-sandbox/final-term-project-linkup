@@ -122,8 +122,8 @@ const AboutForm = () => {
   return (
     <div className="preferences-container">
       <img src={logo} alt="LinkUp Logo" className="logo-block" />
+      <h3 className="slogan">Tell us about yourself.</h3>
       <div className="preferences-form-container">
-        <h3>Tell About Yourself.</h3>
         <form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>
           <Select
             name="field_of_interest"
@@ -157,7 +157,7 @@ const AboutForm = () => {
           <Select
             name="education"
             options={[
-              { value: 'highschool', label: 'Diploma' },
+              { value: 'diploma', label: 'Diploma' },
               { value: 'bachelor', label: 'Bachelor' },
               { value: 'master', label: 'Master' },
               { value: 'phd', label: 'PHD' }
@@ -189,6 +189,10 @@ const AboutForm = () => {
           />
           {errors.location && <p className="error">{errors.location}</p>}
           <button type="submit" className="submit-button">Finish</button>
+          <br></br>
+          <div className="login-prompt">
+        <span>Already have an account? <a href="/login-page">Log In</a></span>
+      </div>
         </form>
       </div>
     </div>
