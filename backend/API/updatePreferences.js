@@ -11,13 +11,13 @@ async function updatePreferences(req, res) {
             return res.status(404).send('User not found');
         }
 
-        // Then, update the user's preferences using the user ID
         const updatedUser = await User.findByIdAndUpdate(user._id, {
-            field_of_interest: preferences.field_of_interest || user.field_of_interest,
-            work_experience_level: preferences.work_experience_level || user.work_experience_level,
-            education: preferences.education || user.education,
-            location: preferences.location || user.location,
+            preferences_edu: preferences.preferences_edu || user.preferences_edu,
+            preferences_interest: preferences.preferences_interest || user.preferences_interest,
+            preferences_loc: preferences.preferences_loc || user.preferences_loc,
+            preferences_workexp: preferences.preferences_workexp || user.preferences_workexp,
         }, { new: true });
+        
 
         console.log('Updated User:', updatedUser); // Log updated user info
         res.status(200).send('Preferences updated successfully');

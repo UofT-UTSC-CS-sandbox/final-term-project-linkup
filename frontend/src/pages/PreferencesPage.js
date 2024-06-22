@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import logo from '../images/linkup_logo.png'; 
 import Select from 'react-select';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
@@ -13,10 +13,10 @@ function PreferencesForm() {
     const navigate = useNavigate();
       // State to store user preferences
     const [preferences, setPreferences] = useState({
-        field_of_interest: '',
-        work_experience_level: '',
-        education: '',
-        location: '',
+        preferences_edu: '',
+        preferences_interest: '',
+        preferences_loc: '',
+        preferences_workexp: '',
     });
    // Handle changes in the select dropdowns
     const handleChange = (selectedOption, action) => {
@@ -110,7 +110,7 @@ function PreferencesForm() {
                 <form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>
                 < br></br>
                     <Select
-                        name="field_of_interest"
+                        name="preferences_interest"
                         options={[
                             { value: 'computer science', label: 'Computer Science' },
                             { value: 'business', label: 'Business' },
@@ -125,7 +125,7 @@ function PreferencesForm() {
                         isClearable
                     />
                     <Select
-                        name="work_experience_level"
+                        name="preferences_workexp"
                         options={[
                             { value: 'entry', label: 'Entry Level' },
                             { value: 'intermediate', label: 'Intermediate Level' },
@@ -137,7 +137,7 @@ function PreferencesForm() {
                         isClearable
                     />
                     <Select
-                        name="education"
+                        name="preferences_edu"
                         options={[
                             { value: 'highschool', label: 'Diploma' },
                             { value: 'bachelor', label: 'Bachelor' },
@@ -150,7 +150,7 @@ function PreferencesForm() {
                         isClearable
                     />
                     <Select
-                        name="location"
+                        name="preferences_loc"
                         options={[
                             { value: 'usa', label: 'USA' },
                             { value: 'canada', label: 'Canada' },

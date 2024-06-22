@@ -14,7 +14,11 @@ const UserSchema = new mongoose.Schema({
     avatar: String,
     salt: String,
     verified: Boolean,
-    verificationToken: String
+    verificationToken: String,
+    preferences_edu: String,
+    preferences_interest: String,
+    preferences_loc: String,
+    preferences_workexp: String,
   }, { collection: 'users' });
 
 const User = mongoose.model('User', UserSchema);
