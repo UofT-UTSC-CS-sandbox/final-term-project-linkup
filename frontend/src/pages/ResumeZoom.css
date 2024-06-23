@@ -1,0 +1,56 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    cursor: pointer;
+    font-size: 30px;
+    background: transparent;
+    border: none;
+  }
+  
+  .resume-container {
+    flex-grow: 1;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+  }
+  
+  .resume-container:active {
+    cursor: grabbing;
+  }
+  
+  .pdf-embed {
+    width: 100%;
+    height: 100%;
+  }
+  

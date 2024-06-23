@@ -4,6 +4,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
 import logo from '../images/linkup_logo_highquality.png';
 import ResumeUploadModal from './UploadPopUp';
+import withZoomModal from '../hooks/withZoomModal';
 import './ProfilePage.css'; 
 
 // Routing and authentication
@@ -11,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
-const Profile = () => {
+const Profile = ({ openZoomModal }) => {
 // State management for resumes, modal visibility, selected resume for deletion, and user preferences
   const [resumes, setResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -162,7 +163,7 @@ const Profile = () => {
                     <hr className="uploads-divider" />
                     <div className="horizontal-scroll" ref={pdfContainerRef}>
                         {resumes.map((resume) => (
-                            <div key={resume._id} className="pdf-item">
+                            <div key={resume._id} className="pdf-item" onClick={() => openZoomModal(resume)}>
                                 <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
                                 <DeleteIcon 
                                     className="delete-icon"
@@ -195,4 +196,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default withZoomModal(Profile);
