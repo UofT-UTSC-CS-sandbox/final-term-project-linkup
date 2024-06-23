@@ -56,9 +56,9 @@ const ResumeZoom = ({ resume, closeModal }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <span className="close-button" onClick={closeModal}>&times;</span>
+    <div className="zoom-modal-overlay">
+      <div className="zoom-modal-content">
+        <button className="zoom-close-button" onClick={closeModal}>&times;</button>
         <div
           className="resume-container"
           onMouseDown={startDrag}
@@ -78,8 +78,6 @@ const ResumeZoom = ({ resume, closeModal }) => {
               transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
               transformOrigin: 'top left',
               cursor: isDragging ? 'grabbing' : 'grab',
-              width: `${100 / zoomLevel}%`,
-              height: '100%'
             }}
           />
         </div>

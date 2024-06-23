@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ResumeZoom from '../pages/ResumeZoom';
 
 const useZoomModal = () => {
   const [selectedResume, setSelectedResume] = useState(null);
@@ -11,11 +12,11 @@ const useZoomModal = () => {
     setSelectedResume(null);
   };
 
-  return {
-    selectedResume,
-    openZoomModal,
-    closeZoomModal,
-  };
+  const ZoomModal = () => (
+    selectedResume ? <ResumeZoom resume={selectedResume} closeModal={closeZoomModal} /> : null
+  );
+
+  return [openZoomModal, ZoomModal];
 };
 
 export default useZoomModal;

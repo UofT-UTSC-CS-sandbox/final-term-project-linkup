@@ -4,7 +4,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
 import logo from '../images/linkup_logo_highquality.png';
 import ResumeUploadModal from './UploadPopUp';
-import withZoomModal from '../hooks/withZoomModal';
+import useZoomModal from '../hooks/useZoomModal';
 import './ProfilePage.css'; 
 
 // Routing and authentication
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
-const Profile = ({ openZoomModal }) => {
+const Profile = () => {
 // State management for resumes, modal visibility, selected resume for deletion, and user preferences
   const [resumes, setResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -25,6 +25,7 @@ const Profile = ({ openZoomModal }) => {
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
   const userId = auth.id;
+  const [openZoomModal, ZoomModal] = useZoomModal();
 
     // Fetch resumes from the server for the logged-in user
     const fetchResumes = async () => {
@@ -167,7 +168,7 @@ const Profile = ({ openZoomModal }) => {
                                 <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
                                 <DeleteIcon 
                                     className="delete-icon"
-                                    onClick={() => openDeleteModal(resume)}
+                                    onClick={(e) => { e.stopPropagation(); openDeleteModal(resume); }}
                                 />
                             </div>
                             
@@ -192,8 +193,9 @@ const Profile = ({ openZoomModal }) => {
                 </div>
             </div>
         )}
+        <ZoomModal />
         </div>
     );
 };
 
-export default withZoomModal(Profile);
+export default Profile;
