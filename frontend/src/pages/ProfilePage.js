@@ -19,13 +19,15 @@ const Profile = () => {
   const [resumeToDelete, setResumeToDelete] = useState(null);
   const [preferences, setPreferences] = useState({});
   const pdfContainerRef = useRef(null);
-  const userId = "6668b379930f4bfc3a165935";
+  //const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
+  const userId = auth.id;
 
     // Fetch resumes from the server for the logged-in user
     const fetchResumes = async () => {
+        if (!userId) return;  
         try {
             const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
             setResumes(response.data);
@@ -38,8 +40,7 @@ const Profile = () => {
     useEffect(() => {
         if(!isAuthenticated) {
             navigate('/login-page');
-        }
-        retrievePreferences();
+        }retrievePreferences();
         fetchResumes();
     }, [userId]);
 

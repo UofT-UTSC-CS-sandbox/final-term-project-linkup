@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const crypto = require('crypto');
@@ -40,10 +41,11 @@ const uploadResumes = async (req, res) => {
         if (!file){
         return res.status(400).json({ error: 'No file uploaded' });
         }
+        const uploaderId = mongoose.Types.ObjectId(body.uploader_id);
 
         // Create a new resume object
         const newResume = new Resume({
-            uploader_id: body.uploader_id,
+            uploader_id: uploaderId,
             file_path: file.filename, // Store the GridFS filename
             public: body.public === 'true',
             num_swipes: 0
