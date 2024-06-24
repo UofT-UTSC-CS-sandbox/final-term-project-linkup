@@ -190,6 +190,8 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
     );
 };
 
+const hasPublicResume = resumes.some(resume => resume.public);
+
 function capitalizeWords(str) {
     if (typeof str !== 'string') {  // Check if the input is a string
         return '';  // Return an empty string if the input is not a string
@@ -251,7 +253,7 @@ function capitalizeWords(str) {
                     </div>
                 </div>
             </div>
-            {isUploadModalOpen && (<ResumeUploadModal closeModal={closeModal} onUploadSuccess={handleResumeUploadSuccess} />
+            {isUploadModalOpen && (<ResumeUploadModal closeModal={closeModal} onUploadSuccess={handleResumeUploadSuccess} disablePublicOption={hasPublicResume}/>
       )}
             {isDeleteModalOpen && (
             <div className="modal-overlay-delete">
