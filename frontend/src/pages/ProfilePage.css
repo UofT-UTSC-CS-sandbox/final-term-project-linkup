@@ -166,6 +166,10 @@
     font-weight: bold;
 }
 
+.value-normal {
+    font-weight: normal; 
+}
+
 /* Container for resume uploads */
 .uploads-container {
     display: flex;

@@ -23,6 +23,9 @@
     max-width: 90%; /* Responsive design */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
+    display: flex;
+    align-items: center; /* Center aligns the content boxes */
+    width: auto;
   }
 
 .close-button {

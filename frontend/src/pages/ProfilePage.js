@@ -15,12 +15,12 @@ import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const Profile = () => {
-// State management for resumes, modal visibility, selected resume for deletion, and user preferences
+// State management for resumes, modal visibility, selected resume for deletion, and user bio
   const [resumes, setResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [resumeToDelete, setResumeToDelete] = useState(null);
-  const [preferences, setPreferences] = useState({});
+  const [bio, setBio] = useState({});
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [notificationHeader, setNotificationHeader] = useState('');
   const [notificationBody, setNotificationBody] = useState('');
@@ -47,7 +47,7 @@ const Profile = () => {
     useEffect(() => {
         if(!isAuthenticated) {
             navigate('/login-page');
-        }retrievePreferences();
+        }retrieveBio();
         fetchResumes();
     }, [userId]);
 
@@ -116,10 +116,10 @@ const Profile = () => {
   };
 
   // Communicating Email and password to server
-  const retrievePreferences = async () => {
+  const retrieveBio = async () => {
 
       try {
-        const response = await fetch('http://localhost:3001/getPreferences', {
+        const response = await fetch('http://localhost:3001/getUserBio', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -128,8 +128,8 @@ const Profile = () => {
         });
   
         if (response.ok) {
-          const retrievedPref = await response.json();
-          setPreferences(retrievedPref);
+          const retrievedBio = await response.json();
+          setBio(retrievedBio);
 
         } else {
           console.error('Error retrieving');
@@ -176,7 +176,6 @@ const Profile = () => {
     }
 };
 
-
 const NotificationModal = ({ isOpen, header, body, onClose }) => {
     if (!isOpen) return null;
 
@@ -193,6 +192,14 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
     );
 };
 
+const hasPublicResume = resumes.some(resume => resume.public);
+
+function capitalizeWords(str) {
+    if (typeof str !== 'string') {  // Check if the input is a string
+        return '';  // Return an empty string if the input is not a string
+    }
+    return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+};
 
     return (
         <div className="profile-container">
@@ -217,10 +224,10 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
                     <div className="vertical-line"></div>
                     <div className="fields-container">
                         <div className="profile-info">MY INFORMATION</div>
-                        <div className="field-label">Industry: {preferences.field_of_interest}</div>
-                        <div className="field-label">Location: {preferences.location} </div>
-                        <div className="field-label">Education: {preferences.education} </div>
-                        <div className="field-label">Level of Experience:</div>
+                        <div className="field-label">Industry: <span className="value-normal">{capitalizeWords(bio.field_of_interest)}</span></div>
+                        <div className="field-label">Location: <span className="value-normal">{capitalizeWords(bio.location)}</span></div>
+                        <div className="field-label">Education: <span className="value-normal">{capitalizeWords(bio.education)}</span> </div>
+                        <div className="field-label">Level of Experience: <span className="value-normal">{capitalizeWords(bio.work_experience_level)}</span></div>
                     </div>
                 </div>
                 <div className="uploads-container">
@@ -231,8 +238,8 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
                             <div key={resume._id} className="pdf-item" onClick={() => openZoomModal(resume)}>
                                 <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
                                 {resume.public ? 
-                                    <VisibilityIcon className="public-icon" onClick={() => toggleResumeVisibility(resume)} /> : 
-                                    <VisibilityOffIcon className="private-icon" onClick={() => toggleResumeVisibility(resume)} />
+                                    <VisibilityIcon className="public-icon" onClick={(e) => { e.stopPropagation(); toggleResumeVisibility(resume); }} /> : 
+                                    <VisibilityOffIcon className="private-icon" onClick={(e) => { e.stopPropagation(); toggleResumeVisibility(resume); }} />
                                 }
                                 <DeleteIcon 
                                     className="delete-icon"
@@ -247,7 +254,7 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
                     </div>
                 </div>
             </div>
-            {isUploadModalOpen && (<ResumeUploadModal closeModal={closeModal} onUploadSuccess={handleResumeUploadSuccess} />
+            {isUploadModalOpen && (<ResumeUploadModal closeModal={closeModal} onUploadSuccess={handleResumeUploadSuccess} disablePublicOption={hasPublicResume}/>
       )}
             {isDeleteModalOpen && (
             <div className="modal-overlay-delete">
