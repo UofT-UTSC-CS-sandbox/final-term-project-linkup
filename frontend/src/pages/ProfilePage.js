@@ -174,10 +174,6 @@ const Profile = () => {
     }
 };
 
-function capitalizeWords(str) {
-    return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-};
-
 const NotificationModal = ({ isOpen, header, body, onClose }) => {
     if (!isOpen) return null;
 
@@ -192,6 +188,13 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
             </div>
         </div>
     );
+};
+
+function capitalizeWords(str) {
+    if (typeof str !== 'string') {  // Check if the input is a string
+        return '';  // Return an empty string if the input is not a string
+    }
+    return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 };
 
 
