@@ -111,8 +111,9 @@ const ResumeUpload = () => {
 
   return (
     <div className="container">
-      <div className="profile-link-container">
+      <div className="upload-link-container">
         <a href="/profile" className="profile-link">Your Profile</a>
+        <a href="/TrendingResumes" className="TrendingPage-link">Trending Resumes</a>
       </div>
       <img src={logo} className="logo" alt="LinkUp Logo" />
       <h2 className="instruction-text">

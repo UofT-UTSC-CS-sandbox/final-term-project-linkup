@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* Container */
+.container-trending {
+    font-family: 'Roboto', sans-serif;
+    background-color: #bfe7f6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    width: 100%;
+    position: relative;
+}
+
+.link-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.profile-link-trending {
+    font-size: 30px;
+    color: #6A6A6A;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.Trending-link-trending {
+    font-size: 30px;
+    color: #53D1F9;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+/* Logo and Instructions */
+.logo {
+    width: 200px;
+}
+
+.horizontal-scroll-trending {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px;
+    width: 90%; /* Adjusts the width to not take full container width */
+    margin-top: 150px; /* Ensure it does not overlap anything above */
+    border-radius: 10px;
+}
+
+.pdf-item-trending {
+    flex: 0 0 auto; /* Adjust size here */
+    width: 570px; /* Example width, adjust as necessary */
+    height: 770px; /* Example height, adjust as necessary */
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+.pdf-embed-trending {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}

@@ -6,12 +6,14 @@ const getUser = require('./API/getUser');
 const loginUser = require('./API/loginUser');
 const newUser = require('./API/newUser');
 const verifyUser = require('./API/EmailVerification');
-const updatePreferences = require('./API/UpdatePreferences'); // Adjust path as necessary
+const updatePreferences = require('./API/UpdatePreferences'); 
 const getPreferences = require('./API/getPreferences');
 const { upload, uploadResumes } = require('./API/uploadResumes');
 const getUserResumes = require('./API/getUserResumes');
 const displayResumes = require('./API/displayResumes');
 const deleteResumes = require('./API/deleteResumes');
+const updateResumePublicStatus = require('./API/updateResume')
+
 
 require('dotenv').config();
 
@@ -43,6 +45,7 @@ conn.once('open', () => {
   app.get('/resumes/:userId', getUserResumes);
   app.get('/bucket/files/:filename', displayResumes(gfsBucket));
   app.post('/delete-resumes', deleteResumes(gfsBucket));
+  app.post('/api/update-resume', updateResumePublicStatus)
 
 });
 
@@ -70,6 +73,7 @@ app.post('/verify-user', verifyUser);
 
 app.post('/login', loginUser);
 app.post('/api/updatePreferences', updatePreferences);
+// app.post('/api/updatePreferences', updateYourself);
 app.post('/getPreferences', getPreferences);
 
 // Listening on Port 3001
