@@ -174,6 +174,9 @@ const Profile = () => {
     }
 };
 
+function capitalizeWords(str) {
+    return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+};
 
 const NotificationModal = ({ isOpen, header, body, onClose }) => {
     if (!isOpen) return null;
@@ -215,10 +218,10 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
                     <div className="vertical-line"></div>
                     <div className="fields-container">
                         <div className="profile-info">MY INFORMATION</div>
-                        <div className="field-label">Industry: {preferences.field_of_interest}</div>
-                        <div className="field-label">Location: {preferences.location} </div>
-                        <div className="field-label">Education: {preferences.education} </div>
-                        <div className="field-label">Level of Experience:</div>
+                        <div className="field-label">Industry: <span className="value-normal">{capitalizeWords(preferences.field_of_interest)}</span></div>
+                        <div className="field-label">Location: <span className="value-normal">{capitalizeWords(preferences.location)}</span></div>
+                        <div className="field-label">Education: <span className="value-normal">{capitalizeWords(preferences.education)}</span> </div>
+                        <div className="field-label">Level of Experience: <span className="value-normal">{capitalizeWords(preferences.work_experience_level)}</span></div>
                     </div>
                 </div>
                 <div className="uploads-container">

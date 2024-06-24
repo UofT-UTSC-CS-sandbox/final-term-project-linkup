@@ -21,7 +21,8 @@ const getPreferences = async (req, res) => {
       res.status(200).json({
         field_of_interest: user.field_of_interest,
         education: user.education,
-        location: user.location});
+        location: user.location,
+        work_experience_level: user.work_experience_level});
   
     } catch (error) {
       res.status(500).send('Error retrieving data: ' + error.message);
