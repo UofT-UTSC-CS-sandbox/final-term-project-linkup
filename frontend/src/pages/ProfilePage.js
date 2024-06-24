@@ -6,6 +6,7 @@ import logo from '../images/linkup_logo_highquality.png';
 import ResumeUploadModal from './UploadPopUp';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import useZoomModal from '../hooks/useZoomModal';
 import './ProfilePage.css'; 
 
 // Routing and authentication
@@ -29,6 +30,7 @@ const Profile = () => {
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
   const userId = auth.id;
+  const [openZoomModal, ZoomModal] = useZoomModal();
 
     // Fetch resumes from the server for the logged-in user
     const fetchResumes = async () => {
@@ -226,7 +228,7 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
                     <hr className="uploads-divider" />
                     <div className="horizontal-scroll" ref={pdfContainerRef}>
                         {resumes.map((resume) => (
-                            <div key={resume._id} className="pdf-item">
+                            <div key={resume._id} className="pdf-item" onClick={() => openZoomModal(resume)}>
                                 <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
                                 {resume.public ? 
                                     <VisibilityIcon className="public-icon" onClick={() => toggleResumeVisibility(resume)} /> : 
@@ -234,7 +236,7 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
                                 }
                                 <DeleteIcon 
                                     className="delete-icon"
-                                    onClick={() => openDeleteModal(resume)}
+                                    onClick={(e) => { e.stopPropagation(); openDeleteModal(resume); }}
                                 />
                             </div>
                             
@@ -265,6 +267,7 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
             body={notificationBody}
             onClose={() => setIsNotificationModalOpen(false)}
         />
+        <ZoomModal />
         </div>
     );
 };
