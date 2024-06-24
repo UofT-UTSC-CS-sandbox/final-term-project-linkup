@@ -238,8 +238,8 @@ function capitalizeWords(str) {
                             <div key={resume._id} className="pdf-item" onClick={() => openZoomModal(resume)}>
                                 <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
                                 {resume.public ? 
-                                    <VisibilityIcon className="public-icon" onClick={() => toggleResumeVisibility(resume)} /> : 
-                                    <VisibilityOffIcon className="private-icon" onClick={() => toggleResumeVisibility(resume)} />
+                                    <VisibilityIcon className="public-icon" onClick={(e) => { e.stopPropagation(); toggleResumeVisibility(resume); }} /> : 
+                                    <VisibilityOffIcon className="private-icon" onClick={(e) => { e.stopPropagation(); toggleResumeVisibility(resume); }} />
                                 }
                                 <DeleteIcon 
                                     className="delete-icon"
