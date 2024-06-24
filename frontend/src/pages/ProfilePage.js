@@ -139,6 +139,18 @@ const Profile = () => {
 
   const toggleResumeVisibility = async (resume) => {
     const newPublicStatus = !resume.public; // Toggle the current status
+
+    // Check if the new status is public and there's already another public resume
+    if (newPublicStatus) {
+        const publicResumesCount = resumes.filter(r => r.public && r._id !== resume._id).length;
+        if (publicResumesCount >= 1) {
+            setNotificationHeader('Multiple Public Resumes');
+            setNotificationBody("You have a public resume. You cannot have more than one public resume at a time.");
+            setIsNotificationModalOpen(true);
+            return; // Early return to prevent the resume status change
+        }
+    }
+
     try {
         const response = await axios.post(`http://localhost:3001/api/update-resume`, {
             _id: resume._id,
@@ -161,6 +173,7 @@ const Profile = () => {
         setIsNotificationModalOpen(true);
     }
 };
+
 
 const NotificationModal = ({ isOpen, header, body, onClose }) => {
     if (!isOpen) return null;
@@ -205,7 +218,7 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
                         <div className="field-label">Industry: {preferences.field_of_interest}</div>
                         <div className="field-label">Location: {preferences.location} </div>
                         <div className="field-label">Education: {preferences.education} </div>
-                        <div className="field-label">Public Resume:</div>
+                        <div className="field-label">Level of Experience:</div>
                     </div>
                 </div>
                 <div className="uploads-container">
