@@ -14,12 +14,12 @@ import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const Profile = () => {
-// State management for resumes, modal visibility, selected resume for deletion, and user preferences
+// State management for resumes, modal visibility, selected resume for deletion, and user bio
   const [resumes, setResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [resumeToDelete, setResumeToDelete] = useState(null);
-  const [preferences, setPreferences] = useState({});
+  const [bio, setBio] = useState({});
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [notificationHeader, setNotificationHeader] = useState('');
   const [notificationBody, setNotificationBody] = useState('');
@@ -45,7 +45,7 @@ const Profile = () => {
     useEffect(() => {
         if(!isAuthenticated) {
             navigate('/login-page');
-        }retrievePreferences();
+        }retrieveBio();
         fetchResumes();
     }, [userId]);
 
@@ -114,7 +114,7 @@ const Profile = () => {
   };
 
   // Communicating Email and password to server
-  const retrievePreferences = async () => {
+  const retrieveBio = async () => {
 
       try {
         const response = await fetch('http://localhost:3001/getUserBio', {
@@ -126,8 +126,8 @@ const Profile = () => {
         });
   
         if (response.ok) {
-          const retrievedPref = await response.json();
-          setPreferences(retrievedPref);
+          const retrievedBio = await response.json();
+          setBio(retrievedBio);
 
         } else {
           console.error('Error retrieving');
@@ -223,10 +223,10 @@ function capitalizeWords(str) {
                     <div className="vertical-line"></div>
                     <div className="fields-container">
                         <div className="profile-info">MY INFORMATION</div>
-                        <div className="field-label">Industry: <span className="value-normal">{capitalizeWords(preferences.field_of_interest)}</span></div>
-                        <div className="field-label">Location: <span className="value-normal">{capitalizeWords(preferences.location)}</span></div>
-                        <div className="field-label">Education: <span className="value-normal">{capitalizeWords(preferences.education)}</span> </div>
-                        <div className="field-label">Level of Experience: <span className="value-normal">{capitalizeWords(preferences.work_experience_level)}</span></div>
+                        <div className="field-label">Industry: <span className="value-normal">{capitalizeWords(bio.field_of_interest)}</span></div>
+                        <div className="field-label">Location: <span className="value-normal">{capitalizeWords(bio.location)}</span></div>
+                        <div className="field-label">Education: <span className="value-normal">{capitalizeWords(bio.education)}</span> </div>
+                        <div className="field-label">Level of Experience: <span className="value-normal">{capitalizeWords(bio.work_experience_level)}</span></div>
                     </div>
                 </div>
                 <div className="uploads-container">
