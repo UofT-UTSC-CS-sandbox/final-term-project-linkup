@@ -15,11 +15,13 @@
     position: relative;
 }
 
-/* Profile Link */
-.profile-link-container {
+.upload-link-container {
     position: absolute;
     right: 20px;
     top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .profile-link {
@@ -27,6 +29,14 @@
     color: #6A6A6A;
     font-weight: 500;
     text-decoration: none;
+}
+
+.TrendingPage-link {
+    font-size: 30px;
+    color: #6A6A6A;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 10px;
 }
 
 /* Logo and Instructions */

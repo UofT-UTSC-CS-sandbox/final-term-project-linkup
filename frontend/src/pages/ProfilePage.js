@@ -4,6 +4,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
 import logo from '../images/linkup_logo_highquality.png';
 import ResumeUploadModal from './UploadPopUp';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import './ProfilePage.css'; 
 
 // Routing and authentication
@@ -18,14 +20,19 @@ const Profile = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [resumeToDelete, setResumeToDelete] = useState(null);
   const [preferences, setPreferences] = useState({});
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [notificationHeader, setNotificationHeader] = useState('');
+  const [notificationBody, setNotificationBody] = useState('');
   const pdfContainerRef = useRef(null);
-  const userId = "6668b379930f4bfc3a165935";
+  //const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
+  const userId = auth.id;
 
     // Fetch resumes from the server for the logged-in user
     const fetchResumes = async () => {
+        if (!userId) return;  
         try {
             const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
             setResumes(response.data);
@@ -38,8 +45,7 @@ const Profile = () => {
     useEffect(() => {
         if(!isAuthenticated) {
             navigate('/login-page');
-        }
-        retrievePreferences();
+        }retrievePreferences();
         fetchResumes();
     }, [userId]);
 
@@ -131,11 +137,70 @@ const Profile = () => {
       }
   };
 
+  const toggleResumeVisibility = async (resume) => {
+    const newPublicStatus = !resume.public; // Toggle the current status
+
+    // Check if the new status is public and there's already another public resume
+    if (newPublicStatus) {
+        const publicResumesCount = resumes.filter(r => r.public && r._id !== resume._id).length;
+        if (publicResumesCount >= 1) {
+            setNotificationHeader('Multiple Public Resumes');
+            setNotificationBody("You have a public resume. You cannot have more than one public resume at a time.");
+            setIsNotificationModalOpen(true);
+            return; // Early return to prevent the resume status change
+        }
+    }
+
+    try {
+        const response = await axios.post(`http://localhost:3001/api/update-resume`, {
+            _id: resume._id,
+            publicStatus: newPublicStatus
+        });
+        if (response.status === 200) {
+            setResumes(resumes.map(r => r._id === resume._id ? {...r, public: newPublicStatus} : r));
+            setNotificationHeader(`Your resume has been made ${newPublicStatus ? 'Public' : 'Not Public'}.`);
+            setNotificationBody(newPublicStatus 
+                ? "Your resume is now set to Public and is visible to other users."
+                : "Your resume is now set to Not Public and is no longer visible to other users.");
+            setIsNotificationModalOpen(true);
+        } else {
+            throw new Error(`Failed to make resume ${newPublicStatus ? 'Public' : 'Not Public'}`);
+        }
+    } catch (error) {
+        console.error(`Error making resume ${newPublicStatus ? 'Public' : 'Not Public'}:`, error);
+        setNotificationHeader('Error');
+        setNotificationBody(`Failed to make resume ${newPublicStatus ? 'Public' : 'Not Public'}. Please try again.`);
+        setIsNotificationModalOpen(true);
+    }
+};
+
+
+const NotificationModal = ({ isOpen, header, body, onClose }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="modal-overlay-delete">
+            <div className="modal-content-delete modal-content-notification">
+                <h2 className="modal-header-delete modal-header-notification">{header}</h2>
+                <p>{body}</p>
+                <div className="notification-buttons">
+                    <button className="modal-button-delete modal-button-notification" onClick={onClose}>Close</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
     return (
         <div className="profile-container">
             <header className="profile-header">
                 <img src={logo} alt="LinkUp Logo" className="profile-logo" />
             </header>
+            <div className="profile-link-container">
+            <a href="/profile" className="profile-link-profile">Your Profile</a>
+            <a href="/TrendingResumes" className="Trending-link-profile">Trending Resumes</a>
+            </div>
             <div className="profile-content">
                 <div className="blue-header"></div>
                 <div className="profile-icon-section">
@@ -153,7 +218,7 @@ const Profile = () => {
                         <div className="field-label">Industry: {preferences.field_of_interest}</div>
                         <div className="field-label">Location: {preferences.location} </div>
                         <div className="field-label">Education: {preferences.education} </div>
-                        <div className="field-label">Public Resume:</div>
+                        <div className="field-label">Level of Experience:</div>
                     </div>
                 </div>
                 <div className="uploads-container">
@@ -163,6 +228,10 @@ const Profile = () => {
                         {resumes.map((resume) => (
                             <div key={resume._id} className="pdf-item">
                                 <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
+                                {resume.public ? 
+                                    <VisibilityIcon className="public-icon" onClick={() => toggleResumeVisibility(resume)} /> : 
+                                    <VisibilityOffIcon className="private-icon" onClick={() => toggleResumeVisibility(resume)} />
+                                }
                                 <DeleteIcon 
                                     className="delete-icon"
                                     onClick={() => openDeleteModal(resume)}
@@ -190,6 +259,12 @@ const Profile = () => {
                 </div>
             </div>
         )}
+        <NotificationModal
+            isOpen={isNotificationModalOpen}
+            header={notificationHeader}
+            body={notificationBody}
+            onClose={() => setIsNotificationModalOpen(false)}
+        />
         </div>
     );
 };

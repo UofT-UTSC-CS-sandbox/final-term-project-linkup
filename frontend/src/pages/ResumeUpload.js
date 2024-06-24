@@ -9,6 +9,7 @@ import './ResumeUpload.css'; // Import the CSS file
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
 
 const ResumeUpload = () => {
   // State hooks to manage file, upload progress, visibility, and status
@@ -17,9 +18,13 @@ const ResumeUpload = () => {
   const [publicFlag, setPublicFlag] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [isUploading, setIsUploading] = useState(false); // State to track if uploading
-  const userId = "6668b379930f4bfc3a165935";
+  //const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
+  const auth = useAuthUser();
+  console.log(auth);
+  const userId = auth.id;
+  
 
   // Redirect user to login page if not authenticated
   useEffect(() => {
@@ -106,8 +111,9 @@ const ResumeUpload = () => {
 
   return (
     <div className="container">
-      <div className="profile-link-container">
+      <div className="upload-link-container">
         <a href="/profile" className="profile-link">Your Profile</a>
+        <a href="/TrendingResumes" className="TrendingPage-link">Trending Resumes</a>
       </div>
       <img src={logo} className="logo" alt="LinkUp Logo" />
       <h2 className="instruction-text">
