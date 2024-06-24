@@ -117,7 +117,7 @@ const Profile = () => {
   const retrievePreferences = async () => {
 
       try {
-        const response = await fetch('http://localhost:3001/getPreferences', {
+        const response = await fetch('http://localhost:3001/getUserBio', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
