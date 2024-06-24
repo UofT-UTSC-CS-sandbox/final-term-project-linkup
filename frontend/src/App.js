@@ -11,7 +11,12 @@ import VerificationPage from "./pages/VerificationPage.js";
 import PreferencesPage from './pages/PreferencesPage.js'; 
 import ResumeUpload from './pages/ResumeUpload';
 import Profile from './pages/ProfilePage';
+
+import AboutForm from "./pages/AboutYourself.js";
+import CheckEmail from "./pages/CheckEmail.js";
+
 import TrendingResumes from './pages/TrendingResumes.js';
+
 
 // React Auth Kit
 import createStore from 'react-auth-kit/createStore';
@@ -33,6 +38,8 @@ function App() {
               <Route path="/test-page" element={<TestPage/>} />
               <Route path="/login-page" element={<LoginPage/>} />
               <Route path="/signup-page" element={<SignUpPage/>} />
+              <Route path="/about-form" element={<AboutForm/>} />
+              <Route path="/check-email" element={<CheckEmail />} />
               <Route path="/verification/:token" element={<VerificationPage/>} />
               <Route path="/preferences" element={<PreferencesPage />} />
               <Route path="/profile" element={<Profile/>} />
