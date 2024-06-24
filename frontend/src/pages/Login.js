@@ -55,7 +55,8 @@ const Login = () => {
                 type: 'Bearer'},
               userState: {
                   email: data.user.email,
-                  name: data.user.name
+                  name: data.user.name,
+                  id: data.user.id
               }
             })) {
               // Redirect or perform other actions upon successful login

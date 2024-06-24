@@ -8,6 +8,7 @@ import './UploadPopUp.css';
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
   // State to manage file selection, upload progress and status, and privacy flag
@@ -16,9 +17,11 @@ const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
   const [publicFlag, setPublicFlag] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const userId = "6668b379930f4bfc3a165935";
+  //const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
+  const auth = useAuthUser();
+  const userId = auth.id;
 
   // Redirect if not authenticated
   useEffect(() => {

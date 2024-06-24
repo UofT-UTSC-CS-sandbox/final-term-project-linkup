@@ -4,6 +4,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
 import logo from '../images/linkup_logo_highquality.png';
 import ResumeUploadModal from './UploadPopUp';
+import useZoomModal from '../hooks/useZoomModal';
 import './ProfilePage.css'; 
 
 // Routing and authentication
@@ -19,13 +20,16 @@ const Profile = () => {
   const [resumeToDelete, setResumeToDelete] = useState(null);
   const [preferences, setPreferences] = useState({});
   const pdfContainerRef = useRef(null);
-  const userId = "6668b379930f4bfc3a165935";
+  //const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
+  const userId = auth.id;
+  const [openZoomModal, ZoomModal] = useZoomModal();
 
     // Fetch resumes from the server for the logged-in user
     const fetchResumes = async () => {
+        if (!userId) return;  
         try {
             const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
             setResumes(response.data);
@@ -38,8 +42,7 @@ const Profile = () => {
     useEffect(() => {
         if(!isAuthenticated) {
             navigate('/login-page');
-        }
-        retrievePreferences();
+        }retrievePreferences();
         fetchResumes();
     }, [userId]);
 
@@ -161,11 +164,11 @@ const Profile = () => {
                     <hr className="uploads-divider" />
                     <div className="horizontal-scroll" ref={pdfContainerRef}>
                         {resumes.map((resume) => (
-                            <div key={resume._id} className="pdf-item">
+                            <div key={resume._id} className="pdf-item" onClick={() => openZoomModal(resume)}>
                                 <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
                                 <DeleteIcon 
                                     className="delete-icon"
-                                    onClick={() => openDeleteModal(resume)}
+                                    onClick={(e) => { e.stopPropagation(); openDeleteModal(resume); }}
                                 />
                             </div>
                             
@@ -190,6 +193,7 @@ const Profile = () => {
                 </div>
             </div>
         )}
+        <ZoomModal />
         </div>
     );
 };
