@@ -1,8 +1,9 @@
 import React, {useEffect, useState } from 'react';
-import logo from '../images/linkup_logo.png'; 
+import logo from '../images/linkup_logo_highquality.png'; 
 import Select from 'react-select';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import './Preferences.css'; 
+import Sidebar from '../components/Sidebar.js';
 
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
@@ -100,8 +101,13 @@ function PreferencesForm() {
     };
 
     return (
-        <div className="preferences-container">
-            <img src={logo} alt="LinkUp Logo" className="logo" />
+        <div className="container">
+            <div className="app-logo-container"> 
+                <a href="/">
+                <img src={logo} className="logo" alt="LinkUp Logo" />
+                </a> 
+            </div>
+            <Sidebar></Sidebar>
             <div className="preferences-form-container">
                 <h3>Select Your Preferences</h3>
                 

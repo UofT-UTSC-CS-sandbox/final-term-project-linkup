@@ -2,12 +2,13 @@
   text-align: center;
 }
 
-.App-logo {
-  width: 35%;
-  height: 35%;
-  pointer-events: none;
+.app-logo-container {
+  top:0;
+  width: 100%;
+  justify-content: center;
+  display: flex;
 }
-
+  
 /* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -37,6 +38,7 @@
 .App-link {
   color: #61dafb;
 }
+
 .pdf-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, 200px); /* Fixed width for each column */
@@ -137,16 +139,18 @@
     top: 20px; 
 }
 
-.profile-link {
-    font-size: 30px;
+.sidebar-link {
+    font-size: 5vh;
     color: #6A6A6A;
     position: relative;
     font-weight: 500;
     text-decoration: none;
+    padding:5px;
 }
 
 .logo {
-    width: 200px;
+    max-width: 200px;
+    height: auto;
 }
 
 .instruction-text {
