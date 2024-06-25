@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState, useRef} from "react";
 import axios from "axios";
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { useNavigate} from "react-router-dom";
@@ -24,7 +24,7 @@ const LandingPage = () => {
     });
 
     const [resumes, setResumes] = useState([]);
-    const pdfContainerRef = useRef(null); // Renamed from pdfContainerRef2 for consistency
+    const pdfContainerRef = useRef(null); 
 
     useEffect(() => {
         const fetchResumesTrending = async () => {
