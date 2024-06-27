@@ -18,26 +18,73 @@ const LandingPage = () => {
     console.log(auth);
     const userId = auth.id;
 
-    const [resumes, setResumes] = useState([]);
-    const pdfContainerRef = useRef(null); 
+    const [swipingResumes, setSwipingResumes] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
     const [openZoomModal, ZoomModal] = useZoomModal();
 
-    useEffect(() => {
-        const fetchSwipingResumes = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
-                const fetchedUserResumes = response.data;
-                setResumes(fetchedUserResumes);
-                if (fetchedUserResumes.length == 0){
-                    navigate('/upload-first-resume');
-                }
-            } catch (error) {
-                console.error('Failed to fetch resumes', error);
+    const checkIfAtLeastOneUploadedFile = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
+            const fetchedUserResumes = response.data;
+            if (fetchedUserResumes.length == 0){
+                navigate('/upload-first-resume');
             }
-        };
-        fetchSwipingResumes();
-    }, []);
+        } catch (error) {
+            console.error('Failed to fetch resumes', error);
+        }
+    };
 
+    const fetchSwipingResumes = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/api/swiping-resumes/${userId}`);
+            const fetchedUserResumes = response.data;
+            setSwipingResumes(fetchedUserResumes);
+        } catch (error) {
+            console.error('Failed to fetch resumes', error);
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "ArrowLeft") {
+            handleSwipe(false);
+        } else if (event.key === "ArrowRight") {
+            handleSwipe(true);
+        }
+    };
+
+    const handleSwipe = async (accept) => {
+        if (currentIndex >= swipingResumes.length) {
+            return;
+        }
+        
+        const currentResume = swipingResumes[currentIndex];
+        
+        try {
+            await axios.post(`http://localhost:3001/api/swipe/${userId}`, {
+                user_id: userId,
+                resume_id: currentResume._id,
+                uploader_id: currentResume.uploader_id._id,
+                accept: accept
+            });
+            setCurrentIndex(currentIndex + 1);
+        } catch (error) {
+            console.error('Failed to swipe resume', error);
+        }
+    };
+    
+    useEffect(() =>  {
+        checkIfAtLeastOneUploadedFile();
+        fetchSwipingResumes();
+
+        const keyPress = (event) => handleKeyDown(event);
+        window.addEventListener('keydown', keyPress);
+        return () => {
+            window.removeEventListener('keydown', keyPress);
+        };
+    }, [userId, navigate]) ;
+
+    const currentResume = swipingResumes[currentIndex];
 
     return (
     <div className="container">
@@ -47,20 +94,15 @@ const LandingPage = () => {
         </a> 
       </div>
       <Sidebar/>
-      <ZoomModal />
-      <div ref={pdfContainerRef}>
-            {resumes.map((resume) => (
-                    <div key={resume._id} className="pdf-item" onClick={() => openZoomModal(resume)} >
-                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                            <Viewer
-                                fileUrl={`http://localhost:3001/bucket/files/${resume.file_path}`}
-                                defaultScale={1.0}
-                            />
-                        </Worker>
-                    </div>
-                ))}
-            </div>
-    </div>
+      <ZoomModal/>
+      {currentResume ? (
+        <div className="pdf-item" onClick={() => openZoomModal(currentResume)}>
+            <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${currentResume.file_path}`} type="application/pdf" />
+        </div>
+        ) : (
+            <div>No more resumes to swipe</div>
+        )}
+</div>
     );
 }
 export default LandingPage;

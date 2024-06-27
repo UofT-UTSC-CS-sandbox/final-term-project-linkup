@@ -12,7 +12,9 @@ const { upload, uploadResumes } = require('./API/uploadResumes');
 const getUserResumes = require('./API/getUserResumes');
 const displayResumes = require('./API/displayResumes');
 const deleteResumes = require('./API/deleteResumes');
-const updateResumePublicStatus = require('./API/updateResume')
+const updateResumePublicStatus = require('./API/updateResume');
+const getSwipingResumes = require('./API/getSwipingResumes');
+const addSwipe = require('./API/addSwipe');
 
 
 require('dotenv').config();
@@ -45,8 +47,7 @@ conn.once('open', () => {
   app.get('/resumes/:userId', getUserResumes);
   app.get('/bucket/files/:filename', displayResumes(gfsBucket));
   app.post('/delete-resumes', deleteResumes(gfsBucket));
-  app.post('/api/update-resume', updateResumePublicStatus)
-
+  app.post('/api/update-resume', updateResumePublicStatus);
 });
 
 
@@ -75,6 +76,8 @@ app.post('/login', loginUser);
 app.post('/api/updatePreferences', updatePreferences);
 // app.post('/api/updatePreferences', updateYourself);
 app.post('/getUserBio', getUserBio);
+app.get('/api/swiping-resumes/:userId', getSwipingResumes);
+app.get('/api/swipe/:userId', addSwipe);
 
 // Listening on Port 3001
 const PORT = 3001;
