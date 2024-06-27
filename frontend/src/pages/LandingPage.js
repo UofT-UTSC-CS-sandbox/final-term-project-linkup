@@ -4,6 +4,8 @@ import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { useNavigate} from "react-router-dom";
 import logo from '../images/linkup_logo_highquality.png';
 import Sidebar from '../components/Sidebar.js'
+import useZoomModal from '../hooks/useZoomModal';
+
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -15,43 +17,27 @@ const LandingPage = () => {
     const auth = useAuthUser();
     console.log(auth);
     const userId = auth.id;
-    
-    // Redirect user to login page if not authenticated
-    useEffect(() => {
-        if(!isAuthenticated) {
-        navigate('/login-page');
-        }
-    });
 
     const [resumes, setResumes] = useState([]);
     const pdfContainerRef = useRef(null); 
+    const [openZoomModal, ZoomModal] = useZoomModal();
 
     useEffect(() => {
-        const fetchResumesTrending = async () => {
+        const fetchSwipingResumes = async () => {
             try {
                 const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
-                setResumes(response.data);
+                const fetchedUserResumes = response.data;
+                setResumes(fetchedUserResumes);
+                if (fetchedUserResumes.length == 0){
+                    navigate('/upload-first-resume');
+                }
             } catch (error) {
                 console.error('Failed to fetch resumes', error);
             }
         };
-
-        fetchResumesTrending();
+        fetchSwipingResumes();
     }, []);
 
-    useEffect(() => {
-        const container = pdfContainerRef.current; // Corrected reference name
-        const handleWheel = (e) => {
-            e.preventDefault();
-            container.scrollLeft += e.deltaX; // Horizontal scrolling
-        };
-
-        container.addEventListener('wheel', handleWheel, { passive: false });
-
-        return () => {
-            container.removeEventListener('wheel', handleWheel);
-        };
-    }, []);
 
     return (
     <div className="container">
@@ -60,10 +46,11 @@ const LandingPage = () => {
           <img src={logo} className="logo" alt="LinkUp Logo" />
         </a> 
       </div>
-      <Sidebar></Sidebar>
-      <div className="horizontal-scroll-trending" ref={pdfContainerRef}>
+      <Sidebar/>
+      <ZoomModal />
+      <div ref={pdfContainerRef}>
             {resumes.map((resume) => (
-                    <div key={resume._id} className="pdf-item-trending">
+                    <div key={resume._id} className="pdf-item" onClick={() => openZoomModal(resume)} >
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
                             <Viewer
                                 fileUrl={`http://localhost:3001/bucket/files/${resume.file_path}`}

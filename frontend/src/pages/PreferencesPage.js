@@ -52,7 +52,7 @@ function PreferencesForm() {
 
             if (response.ok) {
                 console.log('Preferences updated successfully');
-                navigate("/profile");
+                navigate(`/swiping/${user.id}`);
             } else {
                 console.error('Error updating preferences:', await response.text());
             }
