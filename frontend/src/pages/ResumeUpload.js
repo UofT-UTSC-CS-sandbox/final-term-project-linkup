@@ -22,14 +22,16 @@ const ResumeUpload = () => {
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
-  console.log(auth);
-  const userId = auth.id;
-  
+  var userId = null;
 
   // Redirect user to login page if not authenticated
   useEffect(() => {
     if(!isAuthenticated) {
       navigate('/login-page');
+    }
+    else
+    {
+      userId = auth.id;
     }
   });
 

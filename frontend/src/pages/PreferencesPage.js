@@ -1,17 +1,34 @@
 import React, {useEffect, useState } from 'react';
 import logo from '../images/linkup_logo.png'; 
 import Select from 'react-select';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import './Preferences.css'; 
 
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
 
+// Routing and authentication
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
+
 function PreferencesForm() {
      // Hook to get authenticated user info
     const user = useAuthUser();
     const navigate = useNavigate();
-      // State to store user preferences
+    const isAuthenticated = useIsAuthenticated();
+    const auth = useAuthUser();
+    var userId = null;
+
+    // Redirect user to login page if not authenticated
+    useEffect(() => {
+    if(!isAuthenticated) {
+        navigate('/login-page');
+    }
+    else
+    {
+        userId = auth.id;
+    }
+    });
+    
     const [preferences, setPreferences] = useState({
         preferences_edu: '',
         preferences_interest: '',

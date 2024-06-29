@@ -12,7 +12,9 @@ const { upload, uploadResumes } = require('./API/uploadResumes');
 const getUserResumes = require('./API/getUserResumes');
 const displayResumes = require('./API/displayResumes');
 const deleteResumes = require('./API/deleteResumes');
-const updateResumePublicStatus = require('./API/updateResume')
+const updateResumePublicStatus = require('./API/updateResume');
+const sendMessage = require('./API/sendMessage');
+const getMessages = require('./API/getMessages');
 
 
 require('dotenv').config();
@@ -63,7 +65,7 @@ app.post('/test-page', async (req, res) => {
 });
 
 // API call to get existing users
-app.get('/test-page', getUser);
+app.get('/get-user', getUser);
 
 // SIGN-UP
 // API call to create new object
@@ -75,6 +77,10 @@ app.post('/login', loginUser);
 app.post('/api/updatePreferences', updatePreferences);
 // app.post('/api/updatePreferences', updateYourself);
 app.post('/getUserBio', getUserBio);
+
+// Direct Messaging
+app.post('/send-message', sendMessage);
+app.post('/get-messages', getMessages);
 
 // Listening on Port 3001
 const PORT = 3001;

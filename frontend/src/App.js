@@ -11,6 +11,7 @@ import VerificationPage from "./pages/VerificationPage.js";
 import PreferencesPage from './pages/PreferencesPage.js'; 
 import ResumeUpload from './pages/ResumeUpload';
 import Profile from './pages/ProfilePage';
+import DirectMessages from './pages/DirectMessages.js';
 
 import AboutForm from "./pages/AboutYourself.js";
 import CheckEmail from "./pages/CheckEmail.js";
@@ -43,6 +44,7 @@ function App() {
               <Route path="/verification/:token" element={<VerificationPage/>} />
               <Route path="/preferences" element={<PreferencesPage />} />
               <Route path="/profile" element={<Profile/>} />
+              <Route path="/direct-messages" element={<DirectMessages/>} />
               <Route path="/TrendingResumes" element={<TrendingResumes/>} />
             </Routes>
         </div>

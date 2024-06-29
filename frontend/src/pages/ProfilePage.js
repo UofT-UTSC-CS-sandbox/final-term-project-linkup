@@ -29,7 +29,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
-  const userId = auth.id;
+  var userId = null;
   const [openZoomModal, ZoomModal] = useZoomModal();
 
     // Fetch resumes from the server for the logged-in user
@@ -47,7 +47,12 @@ const Profile = () => {
     useEffect(() => {
         if(!isAuthenticated) {
             navigate('/login-page');
-        }retrieveBio();
+        }
+        else
+        {
+            userId = auth.id;
+        }
+        retrieveBio();
         fetchResumes();
     }, [userId]);
 

@@ -22,7 +22,7 @@ const Login = () => {
   // Redirecting if already authenticated
   useEffect(() => {
     if(isAuthenticated) {
-      navigate('/profile');
+      navigate('/');
     }
   });
 

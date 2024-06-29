@@ -18,7 +18,7 @@ const SignUp = () => {
 // Redirecting if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/profile');
+      navigate('/');
     }
     setDisplayClasses();
   }, [isAuthenticated]);
@@ -63,33 +63,36 @@ const SignUp = () => {
     }
   }
  // Validating password input
-  const validatePassword = (val) => {
+  const validatePage = () => {
     const errors = [];
     // Validating email -> semantics changed later
-    if (txtEmail === '' && !val) {
-      errors.push('Email and password is required');
-    } else if (txtEmail === '') {
+    if (txtEmail === '') {
       errors.push('Email is required');
-    } else if (!val) {
+    }
+    if (txtPassword === '') {
       errors.push('Password is required');
     } else {
-      if (val.length <= 8) {
+      if (txtPassword.length <= 8) {
         errors.push('Password must be length of at least 8');
       }
-      if (!/[A-Z]/.test(val)) {
+      if (!/[A-Z]/.test(txtPassword)) {
         errors.push('Password must contain at least one uppercase letter');
       }
-      if (!/[a-z]/.test(val)) {
+      if (!/[a-z]/.test(txtPassword)) {
         errors.push('Password must contain at least one lowercase letter');
       }
-      if (!/[$%&#]/.test(val)) {
-        errors.push('Password must contain at least one special character (one of $ % & #)');
+      if (!/[123456789$%&#]/.test(txtPassword)) {
+        errors.push('Password must contain at least one special character (one of 1,2,3,4,5,6,7,8,9,$,%,&,#)');
       }
     }
 
     setPasswordErrors(errors);
     if (errors.length !== 0) {
       setThereExistsErrors(true);
+    }
+    else 
+    {
+      setThereExistsErrors(false);
     }
     return errors.length === 0;
   };
@@ -103,15 +106,15 @@ const SignUp = () => {
   }
 
   const handleNext = () => {
-    if (!validatePassword(txtPassword)) {
+    if (!validatePage()) {
       setThereExistsErrors(true);
       return;
     }
 
-    // checkPasswordMatch();
-    // if (existsPasswordMatchErrors) {
-    //   return;
-    // }
+    checkPasswordMatch();
+    if (existsPasswordMatchErrors) {
+      return;
+    }
 
     setThereExistsErrors(false);
 
@@ -126,23 +129,23 @@ const SignUp = () => {
   // [!!] NOTE: Need to handle changes in textboxes as well,
   //      hence why we need to have temp variable
   const handleChangeInEmail = (e) => {
-    setThereExistsErrors(false);
     setExistsPasswordMatchErrors(false);
     setTxtEmail(e.target.value);
-    validatePassword(txtPassword);
+    validatePage();
+    setDisplayClasses();
   };
 
   const handleChangeInPassword = (e) => {
-    setThereExistsErrors(false);
     setExistsPasswordMatchErrors(false);
     setTxtPassword(e.target.value);
-    validatePassword(e.target.value);
+    validatePage();
     setDisplayClasses();
   };
 
   const handleChangeInConfirmPassword = (e) => {
     setExistsPasswordMatchErrors(false);
     setTxtConfirmPassword(e.target.value);
+    setDisplayClasses();
   };
 
   return (

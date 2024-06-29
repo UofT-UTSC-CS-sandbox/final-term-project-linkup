@@ -1,0 +1,34 @@
+.select-user-block {
+    position: absolute;
+    background-color:gray;
+    top: 5%;
+    left: 3%;
+    width: 25%;
+    height: 90%;
+    overflow: auto; /* Add overflow property */
+    padding: 5px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    border: 1px solid #ccc; /* Optional: Add a border to visualize the block */
+}
+
+.direct-messages-block {
+    position: absolute;
+    background-color:gray;
+    top: 5%;
+    left: 30%;
+    width: 60%;
+    height: 70%;
+    overflow: auto; /* Add overflow property */
+    padding: 5px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    border: 1px solid #ccc; /* Optional: Add a border to visualize the block */
+}
+
+.textbox-msg-block {
+    position: absolute;
+    background-color:gray;
+    top: 80%;
+    left: 30%;
+    width: 30%;
+    height: 10%;
+}
