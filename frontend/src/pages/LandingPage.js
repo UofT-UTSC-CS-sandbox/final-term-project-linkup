@@ -77,10 +77,26 @@ const LandingPage = () => {
             }, axiosConfig);
 
             setCurrentIndex(prevIndex => prevIndex + 1);
+            await checkMatches(currentResume._id, accept);
         } catch (error) {
             console.error('Failed to swipe resume', error);
         }
     };
+
+    const checkMatches = async (swipedResumeId, accept) => {
+        try {
+            const response = await axios.post(`http://localhost:3001/api/match/${userId}`, {
+                swipedResumeId,
+                accept
+            });
+            const hasMatch = response.data.hasMatch;
+            if (hasMatch) {
+                navigate('/match-found'); // Redirect to match found page
+            }
+        } catch (error) {
+            console.error('Failed to check for matches', error);
+        }
+    }
 
     
     useEffect(() =>  {

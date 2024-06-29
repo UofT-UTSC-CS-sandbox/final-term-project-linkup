@@ -15,6 +15,7 @@ const deleteResumes = require('./API/deleteResumes');
 const updateResumePublicStatus = require('./API/updateResume');
 const getSwipingResumes = require('./API/getSwipingResumes');
 const addSwipe = require('./API/addSwipe');
+const checkMatch = require('./API/checkMatch');
 
 
 require('dotenv').config();
@@ -78,6 +79,7 @@ app.post('/api/updatePreferences', updatePreferences);
 app.post('/getUserBio', getUserBio);
 app.get('/api/swiping-resumes/:userId', getSwipingResumes);
 app.post('/api/swipes/:userId', addSwipe);
+app.post('/api/match/:userId', checkMatch);
 
 // Listening on Port 3001
 const PORT = 3001;

@@ -14,7 +14,8 @@ import Profile from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
 import AboutForm from "./pages/AboutYourself.js";
 import CheckEmail from "./pages/CheckEmail.js";
-import CheckUserLoggedIn  from "./pages/CheckUserLoggedIn";
+import CheckUserLoggedIn  from "./pages/CheckUserLoggedIn.js";
+import MatchPage  from "./pages/MatchPage";
 
 import TrendingResumes from './pages/TrendingResumes.js';
 
@@ -37,6 +38,7 @@ function App() {
             <Routes>
               <Route path="/" element={<CheckUserLoggedIn/>} />
               <Route path="/swiping" element={<LandingPage/>} />
+              <Route path="/match-found" element={<MatchPage/>} />
               <Route path="/upload-first-resume" element={<ResumeUpload/>} />
               <Route path="/test-page" element={<TestPage/>} />
               <Route path="/login-page" element={<LoginPage/>} />
