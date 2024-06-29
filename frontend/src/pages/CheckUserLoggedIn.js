@@ -22,7 +22,7 @@ const CheckUserLoggedIn = () => {
             navigate('/login-page');
         } else {
             const userId = auth.id;
-            navigate(`/swiping/${userId}`);
+            navigate('/swiping');
         }
     }, [isAuthenticated, navigate]);
 }

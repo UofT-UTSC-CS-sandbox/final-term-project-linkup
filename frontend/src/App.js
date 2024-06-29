@@ -36,7 +36,7 @@ function App() {
         <div className="App">
             <Routes>
               <Route path="/" element={<CheckUserLoggedIn/>} />
-              <Route path="/swiping/:userId" element={<LandingPage/>} />
+              <Route path="/swiping" element={<LandingPage/>} />
               <Route path="/upload-first-resume" element={<ResumeUpload/>} />
               <Route path="/test-page" element={<TestPage/>} />
               <Route path="/login-page" element={<LoginPage/>} />

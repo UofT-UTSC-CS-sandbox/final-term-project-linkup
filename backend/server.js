@@ -77,7 +77,7 @@ app.post('/api/updatePreferences', updatePreferences);
 // app.post('/api/updatePreferences', updateYourself);
 app.post('/getUserBio', getUserBio);
 app.get('/api/swiping-resumes/:userId', getSwipingResumes);
-app.get('/api/swipe/:userId', addSwipe);
+app.post('/api/swipes/:userId', addSwipe);
 
 // Listening on Port 3001
 const PORT = 3001;

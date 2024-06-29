@@ -40,6 +40,7 @@ const LandingPage = () => {
             const response = await axios.get(`http://localhost:3001/api/swiping-resumes/${userId}`);
             const fetchedUserResumes = response.data;
             setSwipingResumes(fetchedUserResumes);
+            setCurrentIndex(0);
         } catch (error) {
             console.error('Failed to fetch resumes', error);
         }
@@ -61,28 +62,43 @@ const LandingPage = () => {
         const currentResume = swipingResumes[currentIndex];
         
         try {
-            await axios.post(`http://localhost:3001/api/swipe/${userId}`, {
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Access-Control-Allow-Origin": "*",
+                }
+            };
+
+            await axios.post(`http://localhost:3001/api/swipes/${userId}`, {
                 user_id: userId,
                 resume_id: currentResume._id,
-                uploader_id: currentResume.uploader_id._id,
+                uploader_id: currentResume.uploader_id,
                 accept: accept
-            });
-            setCurrentIndex(currentIndex + 1);
+            }, axiosConfig);
+
+            setCurrentIndex(prevIndex => prevIndex + 1);
         } catch (error) {
             console.error('Failed to swipe resume', error);
         }
     };
+
     
     useEffect(() =>  {
-        checkIfAtLeastOneUploadedFile();
-        fetchSwipingResumes();
+        const initialize = async () => {
+            await checkIfAtLeastOneUploadedFile();
+            await fetchSwipingResumes();
+        };
+        initialize();
+    }, [userId, navigate]);
 
+    useEffect(() => {
+        console.log("useEffect is running"); // Debugging log
         const keyPress = (event) => handleKeyDown(event);
         window.addEventListener('keydown', keyPress);
         return () => {
             window.removeEventListener('keydown', keyPress);
         };
-    }, [userId, navigate]) ;
+    });
 
     const currentResume = swipingResumes[currentIndex];
 
