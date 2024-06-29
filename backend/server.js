@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const { EventEmitter } = require('events');
 const User = require('./schema/user');
 const getUser = require('./API/getUser');
 const loginUser = require('./API/loginUser');
@@ -30,14 +31,51 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-
+// Function to setup MongoDB Change Stream
+const eventEmitter = new EventEmitter();
 
 // MongoDB connection
 mongoose.connect(MONGO_DB, {dbName: "linkup"})
-  .then(() => console.log('MongoDB connected'))
+  .then(() => {
+    console.log('MongoDB connected');
+    setupChangeStream()})
   .catch(err => console.error('MongoDB connection error:', err));
 
 const conn = mongoose.connection;
+
+function setupChangeStream() {
+  const db = mongoose.connection;
+  const collection = db.collection('messages');
+
+  // Watch for changes in the 'messages' collection
+  const changeStream = collection.watch();
+
+  // Handle change events
+  changeStream.on('change', (change) => {
+      if (change.operationType === 'insert') {
+          const newMessage = change.fullDocument;
+          console.log('New message:', newMessage);
+          eventEmitter.emit('newMessage', newMessage);
+      }
+  });
+}
+
+app.get('/sse', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  const listener = (message) => {
+      res.write(`data: ${JSON.stringify(message)}\n\n`);
+  };
+
+  eventEmitter.on('newMessage', listener);
+
+  req.on('close', () => {
+      eventEmitter.off('newMessage', listener);
+  });
+});
+
 // Initialize GridFS
 let gfsBucket;
 conn.once('open', () => {
@@ -67,22 +105,6 @@ app.post('/test-page', async (req, res) => {
   }
 });
 
-// Websocket
-const server = new http.createServer(app);
-const wss = new WebSocket.Server({ server });
-
-wss.on('connection', (ws) => {
-  console.log('New client connected');
-
-  ws.on('message', (message) => {
-    console.log(`Received: ${message}`);
-  });
-
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
-});
-
 // API call to get existing users
 app.get('/get-user', getUser);
 
@@ -103,4 +125,4 @@ app.post('/get-messages', getMessages);
 
 // Listening on Port 3001
 const PORT = 3001;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

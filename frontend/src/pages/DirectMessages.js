@@ -27,9 +27,6 @@ function App() {
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
 
-  // Websocket
-  const ws = useRef(null);
-
   // const prevListRef = useRef();
 
   // useEffect(() => {
@@ -91,25 +88,19 @@ function App() {
   }, [msgList]);
 
   useEffect(() => {
-    ws.current = new WebSocket('ws://localhost:3001');
-    
-    ws.current.onopen = () => {
-      console.log('WebSocket connection established');
-    };
+    const eventSource = new EventSource('http://localhost:3001/sse');
 
-    ws.current.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      console.log("new message received : " + newMessage)
-    };
-
-    ws.current.onclose = () => {
-      console.log('WebSocket connection closed');
+    eventSource.onmessage = (event) => {
+        const newMessage = JSON.parse(event.data);
+        if(newMessage.to === auth.name) {
+          getMessages();
+        }
     };
 
     return () => {
-      ws.current.close();
+        eventSource.close();
     };
-  }, []);
+  });
 
   const handleTxtChange = (event) => {
     setTxtMsg(event.target.value);
