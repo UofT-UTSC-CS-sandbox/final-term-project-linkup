@@ -16,6 +16,8 @@ const updateResumePublicStatus = require('./API/updateResume');
 const sendMessage = require('./API/sendMessage');
 const getMessages = require('./API/getMessages');
 
+const WebSocket = require('ws');
+const http = require('http');
 
 require('dotenv').config();
 
@@ -27,6 +29,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
 
 
 // MongoDB connection
@@ -64,6 +67,22 @@ app.post('/test-page', async (req, res) => {
   }
 });
 
+// Websocket
+const server = new http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  console.log('New client connected');
+
+  ws.on('message', (message) => {
+    console.log(`Received: ${message}`);
+  });
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+});
+
 // API call to get existing users
 app.get('/get-user', getUser);
 
@@ -84,4 +103,4 @@ app.post('/get-messages', getMessages);
 
 // Listening on Port 3001
 const PORT = 3001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
