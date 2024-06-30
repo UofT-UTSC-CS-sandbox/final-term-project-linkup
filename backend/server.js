@@ -19,6 +19,7 @@ const updateResumePublicStatus = require('./API/updateResume');
 const sendMessage = require('./API/sendMessage');
 const getMessages = require('./API/getMessages');
 const markMessagesAsRead = require('./API/markMessagesAsRead');
+const getNumberOfUnreadDms = require('./API/getNumberOfUnreadDms');
 
 require('dotenv').config();
 
@@ -123,6 +124,7 @@ app.post('/getUserBio', getUserBio);
 app.post('/send-message', sendMessage);
 app.post('/get-messages', getMessages);
 app.post('/mark-messages-as-read', markMessagesAsRead);
+app.post('/get-number-of-unread-dms', getNumberOfUnreadDms);
 
 // Listening on Port 3001
 const PORT = 3001;

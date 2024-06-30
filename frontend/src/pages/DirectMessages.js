@@ -12,7 +12,7 @@ function App() {
   const [txtMsg, setTxtMsg] = useState('');
 
   const [userList, setUserList] = useState([]);
-  const [userListUnread, setUserListUnread] = useState({});
+  const [userListUnreadNum, setUserListUnreadNum] = useState([]);
 
   const [msgList, setMsgList] = useState([]);
   const [msgLimit, setMsgLimit] = useState(10);
@@ -71,6 +71,10 @@ function App() {
     }
   }, [msgList]);
 
+  useEffect(() => {
+    userList.forEach((user) => getNumberOfUnreadDms(user));
+  }, [userList])
+
   // Listening for new messages
   useEffect(() => {
     const eventSource = new EventSource('http://localhost:3001/sse');
@@ -78,6 +82,7 @@ function App() {
     eventSource.onmessage = (event) => {
         const newMessage = JSON.parse(event.data);
         if(newMessage.to === auth.name) {
+          userList.forEach((user) => getNumberOfUnreadDms(user));
           getMessages();
         }
     };
@@ -91,7 +96,6 @@ function App() {
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       if (selectedUser) {
-        console.log("read messages when leaving page");
         markCurrMessagesAsRead();
       }
     };
@@ -122,6 +126,8 @@ function App() {
 
         if (response.ok) {
             const data = await response.json();
+            
+            // Setting user list
             setUserList(data);
             setSelectedUser(data[0].anon_username);
         } else {
@@ -220,6 +226,35 @@ function App() {
     }
   }
 
+  // Communicating Email and password to server
+  const getNumberOfUnreadDms = async (user) => {
+    const parties = {
+      to: currentUser,
+      from: user.anon_username
+    };
+    
+    try {
+      const response = await fetch('http://localhost:3001/get-number-of-unread-dms', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(parties)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        setUserListUnreadNum(prevState => [...prevState, { from: user.anon_username, number: data.number }]);
+      } else {
+        console.log("response was not ok");
+          
+      }
+    } catch (error) {
+      console.log("error here>0");
+    }
+  };
+
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
@@ -251,17 +286,17 @@ function App() {
           placeholder={msgLimit}
         />
         <button onClick={() => sendMessage()}>Send</button>
-        <button onClick={() => markCurrMessagesAsRead()}>Mark</button>
+        <button onClick={() => {console.log(userListUnreadNum)}}>Mark</button>
       </div>
       <div className="select-user-block">
         {userList.map((user) => (
           <div onClick={() => 
             { 
-              console.log(selectedUser);
               markCurrMessagesAsRead();
+              getNumberOfUnreadDms(selectedUser);
               setSelectedUser(user.anon_username);
             }} style={{ cursor: 'pointer' }}>
-            {user.anon_username}
+            {user.anon_username} + ({userListUnreadNum.find(item => item.from === user.anon_username)?.number})
           </div>
         ))}
       </div>
