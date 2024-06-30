@@ -14,11 +14,11 @@ const getUserResumes = require('./API/getUserResumes');
 const displayResumes = require('./API/displayResumes');
 const deleteResumes = require('./API/deleteResumes');
 const updateResumePublicStatus = require('./API/updateResume');
+
+// Direct messaging api's
 const sendMessage = require('./API/sendMessage');
 const getMessages = require('./API/getMessages');
-
-const WebSocket = require('ws');
-const http = require('http');
+const markMessagesAsRead = require('./API/markMessagesAsRead');
 
 require('dotenv').config();
 
@@ -43,6 +43,7 @@ mongoose.connect(MONGO_DB, {dbName: "linkup"})
 
 const conn = mongoose.connection;
 
+// Listener for new messages
 function setupChangeStream() {
   const db = mongoose.connection;
   const collection = db.collection('messages');
@@ -54,7 +55,6 @@ function setupChangeStream() {
   changeStream.on('change', (change) => {
       if (change.operationType === 'insert') {
           const newMessage = change.fullDocument;
-          console.log('New message:', newMessage);
           eventEmitter.emit('newMessage', newMessage);
       }
   });
@@ -122,6 +122,7 @@ app.post('/getUserBio', getUserBio);
 // Direct Messaging
 app.post('/send-message', sendMessage);
 app.post('/get-messages', getMessages);
+app.post('/mark-messages-as-read', markMessagesAsRead);
 
 // Listening on Port 3001
 const PORT = 3001;

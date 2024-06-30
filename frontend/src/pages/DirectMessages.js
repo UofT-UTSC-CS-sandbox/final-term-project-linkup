@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // Styling
 import './DirectMessages.css';
@@ -11,7 +10,10 @@ import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 function App() {
   const [txtMsg, setTxtMsg] = useState('');
+
   const [userList, setUserList] = useState([]);
+  const [userListUnread, setUserListUnread] = useState({});
+
   const [msgList, setMsgList] = useState([]);
   const [msgLimit, setMsgLimit] = useState(10);
   const [selectedUser, setSelectedUser] = useState('');
@@ -20,31 +22,13 @@ function App() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [existMoreToLoad, setExistsMoreToLoad] = useState(true);
 
-  const currentTime = new Date().toLocaleString();
   const messagesEndRef = useRef(null);
 
+  // Authentication and navigation
+  const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
-
-  // const prevListRef = useRef();
-
-  // useEffect(() => {
-  //   if (prevListRef.current) {
-  //     const prevList = prevListRef.current;
-  //     const hasChanged = JSON.stringify(prevList) !== JSON.stringify(msgList);
-  //     if (hasChanged) {
-  //       console.log('The list has changed.');
-  //       setExistsMoreToLoad(true);
-  //     } else {
-  //       console.log('The list has not changed.');
-  //       setExistsMoreToLoad(false);
-  //     }
-  //   }
-
-  //   // Update the ref to the current list for the next render
-  //   prevListRef.current = msgList;
-  // }, [msgList]);
 
   // Redirect user to login page if not authenticated
   useEffect(() => {
@@ -87,6 +71,7 @@ function App() {
     }
   }, [msgList]);
 
+  // Listening for new messages
   useEffect(() => {
     const eventSource = new EventSource('http://localhost:3001/sse');
 
@@ -101,6 +86,25 @@ function App() {
         eventSource.close();
     };
   });
+
+  // Checking if the user has left the page
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (selectedUser) {
+        console.log("read messages when leaving page");
+        markCurrMessagesAsRead();
+      }
+    };
+  
+    // Add event listener for beforeunload
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+
+  }, [selectedUser]); 
 
   const handleTxtChange = (event) => {
     setTxtMsg(event.target.value);
@@ -164,7 +168,7 @@ function App() {
     const newMsg = {
       to: selectedUser,
       from: currentUser,
-      timestamp: currentTime,
+      timestamp: new Date().toLocaleString(),
       message: txtMsg
     };
 
@@ -190,20 +194,54 @@ function App() {
     }
   }
 
+  const markCurrMessagesAsRead = async () => {
+    const parties = {
+      to: currentUser,
+      from: selectedUser
+    };
+
+    try {
+      const response = await fetch('http://localhost:3001/mark-messages-as-read', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(parties)
+      });
+
+      if (response.ok) {
+        console.log("messages from another user read");
+      } else {
+      
+          
+      }
+    } catch (error) {
+  
+    }
+  }
+
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
+
+  const messageComponent = (msg) => {
+    if (msg.read_by_to == false && msg.to == auth.name) {
+      return (<div style={{ color: "red" }}>
+        To: {msg.to} From: {msg.from} {msg.timestamp} <br></br>
+        {msg.message}
+      </div>)
+    }
+    return (<div>
+      To: {msg.to} From: {msg.from} {msg.timestamp} <br></br>
+      {msg.message}
+    </div>)
+  }
 
   return (
     <div className="App-header">
       <div className="direct-messages-block" ref={messagesEndRef}>
         {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)}> Load More </button>}
-        {msgList.slice().reverse().map((msg) => (
-          <div>
-            To: {msg.to} From: {msg.from} {msg.timestamp} <br></br>
-            {msg.message}
-          </div>
-        ))}
+        {msgList.slice().reverse().map((msg) => messageComponent(msg))}
       </div>
       <div className="textbox-msg-block">
         <input 
@@ -213,10 +251,16 @@ function App() {
           placeholder={msgLimit}
         />
         <button onClick={() => sendMessage()}>Send</button>
+        <button onClick={() => markCurrMessagesAsRead()}>Mark</button>
       </div>
       <div className="select-user-block">
         {userList.map((user) => (
-          <div onClick={() => setSelectedUser(user.anon_username)} style={{ cursor: 'pointer' }}>
+          <div onClick={() => 
+            { 
+              console.log(selectedUser);
+              markCurrMessagesAsRead();
+              setSelectedUser(user.anon_username);
+            }} style={{ cursor: 'pointer' }}>
             {user.anon_username}
           </div>
         ))}

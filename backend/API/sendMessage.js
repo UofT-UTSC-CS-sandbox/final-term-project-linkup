@@ -16,7 +16,8 @@ const newMessage = async (req, res) => {
         to: passedUser.to,
         from: passedUser.from,
         timestamp: passedUser.timestamp,
-        message: passedUser.message
+        message: passedUser.message,
+        read_by_to: false
     });
 
     await newMsg.save();
