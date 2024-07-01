@@ -13,7 +13,11 @@ const getUserResumes = require('./API/getUserResumes');
 const displayResumes = require('./API/displayResumes');
 const deleteResumes = require('./API/deleteResumes');
 const updateResumePublicStatus = require('./API/updateResume');
+const getSwipingResumes = require('./API/getSwipingResumes');
+const addSwipe = require('./API/addSwipe');
+const checkMatch = require('./API/checkMatch');
 const getPublicResumes = require('./API/getPublicResumes')
+
 
 
 require('dotenv').config();
@@ -48,7 +52,6 @@ conn.once('open', () => {
   app.post('/delete-resumes', deleteResumes(gfsBucket));
   app.post('/api/update-resume', updateResumePublicStatus);
   app.get('/api/resumes/public', getPublicResumes);
-
 });
 
 
@@ -77,6 +80,9 @@ app.post('/login', loginUser);
 app.post('/api/updatePreferences', updatePreferences);
 // app.post('/api/updatePreferences', updateYourself);
 app.post('/getUserBio', getUserBio);
+app.get('/api/swiping-resumes/:userId', getSwipingResumes);
+app.post('/api/swipes/:userId', addSwipe);
+app.post('/api/match/:userId', checkMatch);
 
 // Listening on Port 3001
 const PORT = 3001;

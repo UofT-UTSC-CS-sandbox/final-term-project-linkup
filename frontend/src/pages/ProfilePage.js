@@ -8,6 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import useZoomModal from '../hooks/useZoomModal';
 import './ProfilePage.css'; 
+import Sidebar from '../components/Sidebar.js';
 
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
@@ -200,16 +201,14 @@ function capitalizeWords(str) {
     }
     return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 };
-
     return (
-        <div className="profile-container">
-            <header className="profile-header">
-                <img src={logo} alt="LinkUp Logo" className="profile-logo" />
-            </header>
-            <div className="profile-link-container">
-            <a href="/profile" className="profile-link-profile">Your Profile</a>
-            <a href="/TrendingResumes" className="Trending-link-profile">Trending Resumes</a>
+        <div className="container">
+            <div className="app-logo-container"> 
+                <a href="/">
+                <img src={logo} className="logo" alt="LinkUp Logo" />
+                </a> 
             </div>
+            <Sidebar></Sidebar>
             <div className="profile-content">
                 <div className="blue-header"></div>
                 <div className="profile-icon-section">
