@@ -12,7 +12,8 @@ const { upload, uploadResumes } = require('./API/uploadResumes');
 const getUserResumes = require('./API/getUserResumes');
 const displayResumes = require('./API/displayResumes');
 const deleteResumes = require('./API/deleteResumes');
-const updateResumePublicStatus = require('./API/updateResume')
+const updateResumePublicStatus = require('./API/updateResume');
+const getPublicResumes = require('./API/getPublicResumes')
 
 
 require('dotenv').config();
@@ -45,7 +46,8 @@ conn.once('open', () => {
   app.get('/resumes/:userId', getUserResumes);
   app.get('/bucket/files/:filename', displayResumes(gfsBucket));
   app.post('/delete-resumes', deleteResumes(gfsBucket));
-  app.post('/api/update-resume', updateResumePublicStatus)
+  app.post('/api/update-resume', updateResumePublicStatus);
+  app.get('/api/resumes/public', getPublicResumes);
 
 });
 
