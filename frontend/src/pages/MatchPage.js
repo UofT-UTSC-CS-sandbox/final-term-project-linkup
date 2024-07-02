@@ -4,29 +4,31 @@ import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
-function TestPage() {
+function MatchPage() {
   const navigate = useNavigate();
   const signOut = useSignOut();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
-
-  // Redirecting to home page if NOT authenticated
-
-  const signOutAndRedirect = () => {
-    signOut();
-    navigate('/login-page');
-  };
-
-  // Showing nothing if the user isn't authenticated
  
   return(
-    <div>
-        <button onClick={signOutAndRedirect}>Sign Out</button>
-        <Link to="/preferences">
-        <button>Go to Preferences Page</button>
-      </Link>
+    <div className="container">
+      <h1 className="match-title">Linked Up!</h1>
+      <p>You two have swiped right on each other.</p>
+        <div className="match-button-container"> 
+          <a href="/swiping">
+            <button>
+              Keep Swiping
+            </button>
+          </a> 
+
+          <a href="/swiping">
+            <button>
+              Start a Conversation
+            </button>
+          </a> 
+        </div>
     </div>
   ) 
 }
 
-  export default TestPage;
+  export default MatchPage;

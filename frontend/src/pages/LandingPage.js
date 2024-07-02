@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useRef, useCallback} from "react";
 import axios from "axios";
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { useNavigate} from "react-router-dom";
@@ -20,6 +20,7 @@ const LandingPage = () => {
 
     const [swipingResumes, setSwipingResumes] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const [openZoomModal, ZoomModal] = useZoomModal();
 
@@ -46,14 +47,6 @@ const LandingPage = () => {
         }
     };
 
-    const handleKeyDown = (event) => {
-        if (event.key === "ArrowLeft") {
-            handleSwipe(false);
-        } else if (event.key === "ArrowRight") {
-            handleSwipe(true);
-        }
-    };
-
     const handleSwipe = async (accept) => {
         if (currentIndex >= swipingResumes.length) {
             return;
@@ -64,8 +57,7 @@ const LandingPage = () => {
         try {
             let axiosConfig = {
                 headers: {
-                    'Content-Type': 'application/json',
-                    "Access-Control-Allow-Origin": "*",
+                    'Content-Type': 'application/json'
                 }
             };
 
@@ -77,18 +69,23 @@ const LandingPage = () => {
             }, axiosConfig);
 
             setCurrentIndex(prevIndex => prevIndex + 1);
-            await checkMatches(currentResume._id, accept);
+            await checkMatches(userId, currentResume.uploader_id);
         } catch (error) {
             console.error('Failed to swipe resume', error);
         }
     };
 
-    const checkMatches = async (swipedResumeId, accept) => {
+    const checkMatches = async (currentUserId,swipedResumeUploaderId) => {
         try {
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
             const response = await axios.post(`http://localhost:3001/api/match/${userId}`, {
-                swipedResumeId,
-                accept
-            });
+                currentUserId,
+                swipedResumeUploaderId
+            }, axiosConfig);
             const hasMatch = response.data.hasMatch;
             if (hasMatch) {
                 navigate('/match-found'); // Redirect to match found page
@@ -107,15 +104,6 @@ const LandingPage = () => {
         initialize();
     }, [userId, navigate]);
 
-    useEffect(() => {
-        console.log("useEffect is running"); // Debugging log
-        const keyPress = (event) => handleKeyDown(event);
-        window.addEventListener('keydown', keyPress);
-        return () => {
-            window.removeEventListener('keydown', keyPress);
-        };
-    });
-
     const currentResume = swipingResumes[currentIndex];
 
     return (
@@ -127,9 +115,16 @@ const LandingPage = () => {
       </div>
       <Sidebar/>
       <ZoomModal/>
+      <p>Click LINK to swipe right (accept) or UNLINK to swipe left (reject).</p>
       {currentResume ? (
-        <div className="pdf-item" onClick={() => openZoomModal(currentResume)}>
-            <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${currentResume.file_path}`} type="application/pdf" />
+        <div>
+            <div className="pdf-item" onClick={() => openZoomModal(currentResume)}>
+                <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${currentResume.file_path}`} type="application/pdf" />
+            </div>
+            <div className="accept-reject-container">
+                <button onClick={() => handleSwipe(false)}>UNLINK</button>
+                <button onClick={() => handleSwipe(true)}>LINK</button>
+            </div>
         </div>
         ) : (
             <div>No more resumes to swipe</div>
