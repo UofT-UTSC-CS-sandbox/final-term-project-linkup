@@ -16,6 +16,8 @@ const updateResumePublicStatus = require('./API/updateResume');
 const getSwipingResumes = require('./API/getSwipingResumes');
 const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
+const getPublicResumes = require('./API/getPublicResumes')
+
 
 
 require('dotenv').config();
@@ -49,6 +51,7 @@ conn.once('open', () => {
   app.get('/bucket/files/:filename', displayResumes(gfsBucket));
   app.post('/delete-resumes', deleteResumes(gfsBucket));
   app.post('/api/update-resume', updateResumePublicStatus);
+  app.get('/api/resumes/public', getPublicResumes);
 });
 
 
