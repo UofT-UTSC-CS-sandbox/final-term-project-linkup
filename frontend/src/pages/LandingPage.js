@@ -5,6 +5,9 @@ import { useNavigate} from "react-router-dom";
 import logo from '../images/linkup_logo_highquality.png';
 import Sidebar from '../components/Sidebar.js'
 import useZoomModal from '../hooks/useZoomModal';
+import './LandingPage.css';
+import link from '../images/link.png';
+import unlink from '../images/unlink.png';
 
 
 // Routing and authentication
@@ -69,13 +72,13 @@ const LandingPage = () => {
             }, axiosConfig);
 
             setCurrentIndex(prevIndex => prevIndex + 1);
-            await checkMatches(userId, currentResume.uploader_id);
+            await checkMatches(userId, currentResume.uploader_id, currentResume._id);
         } catch (error) {
             console.error('Failed to swipe resume', error);
         }
     };
 
-    const checkMatches = async (currentUserId,swipedResumeUploaderId) => {
+    const checkMatches = async (currentUserId, swipedResumeUploaderId, swipedResumeId) => {
         try {
             let axiosConfig = {
                 headers: {
@@ -88,7 +91,7 @@ const LandingPage = () => {
             }, axiosConfig);
             const hasMatch = response.data.hasMatch;
             if (hasMatch) {
-                navigate('/match-found'); // Redirect to match found page
+                navigate(`/match-found/${swipedResumeId}`); // Redirect to match found page
             }
         } catch (error) {
             console.error('Failed to check for matches', error);
@@ -115,21 +118,37 @@ const LandingPage = () => {
       </div>
       <Sidebar/>
       <ZoomModal/>
-      <p>Click LINK to swipe right (accept) or UNLINK to swipe left (reject).</p>
-      {currentResume ? (
-        <div>
-            <div className="pdf-item" onClick={() => openZoomModal(currentResume)}>
-                <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${currentResume.file_path}`} type="application/pdf" />
+
+        {currentResume ? (
+            <div className="swiping">
+                <div className="text-button-container">
+                    <p>
+                        Click <span className="roboto-condensed">LINK</span> to swipe right (accept) or <span className="roboto-condensed">UNLINK</span> to swipe left (reject).
+                        </p>
+                    <div className="accept-reject-container">
+                        <button onClick={() => handleSwipe(true)}>
+                            LINK
+                            <img src={link} alt="link" className="link-unlink-img"/>
+                        </button>
+                        <button onClick={() => handleSwipe(false)}>
+                            UNLINK
+                            <img src={unlink} alt="unlink" className="link-unlink-img"/>
+                        </button>
+                    </div>
+                </div>
+                <div className="swiping-pdf-item" onClick={() => openZoomModal(currentResume)}>
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                        <Viewer
+                            fileUrl={`http://localhost:3001/bucket/files/${currentResume.file_path}`}
+                            defaultScale={0.62}
+                        />
+                    </Worker>
+                </div>
             </div>
-            <div className="accept-reject-container">
-                <button onClick={() => handleSwipe(false)}>UNLINK</button>
-                <button onClick={() => handleSwipe(true)}>LINK</button>
-            </div>
-        </div>
         ) : (
             <div>No more resumes to swipe</div>
         )}
-</div>
+    </div>
     );
 }
 export default LandingPage;

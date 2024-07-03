@@ -17,6 +17,7 @@ const getSwipingResumes = require('./API/getSwipingResumes');
 const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
 const getPublicResumes = require('./API/getPublicResumes')
+const getResumebyId = require('./API/getResumebyId');
 
 
 
@@ -52,6 +53,7 @@ conn.once('open', () => {
   app.post('/delete-resumes', deleteResumes(gfsBucket));
   app.post('/api/update-resume', updateResumePublicStatus);
   app.get('/api/resumes/public', getPublicResumes);
+  app.get('/api/resume/:resumeId', getResumebyId);
 });
 
 
