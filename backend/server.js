@@ -43,6 +43,7 @@ mongoose.connect(MONGO_DB, {dbName: "linkup"})
   .catch(err => console.error('MongoDB connection error:', err));
 
 const conn = mongoose.connection;
+var changeStream;
 
 // Listener for new messages
 function setupChangeStream() {
@@ -50,7 +51,7 @@ function setupChangeStream() {
   const collection = db.collection('messages');
 
   // Watch for changes in the 'messages' collection
-  const changeStream = collection.watch();
+  changeStream = collection.watch();
 
   // Handle change events
   changeStream.on('change', (change) => {
@@ -60,6 +61,15 @@ function setupChangeStream() {
       }
   });
 }
+
+// Close change stream when your application shuts down
+process.on('SIGINT', () => {
+  changeStream.close();
+  mongoose.connection.close(() => {
+      console.log('MongoDB disconnected on app termination');
+      process.exit(0);
+  });
+});
 
 app.get('/sse', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');

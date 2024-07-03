@@ -19,7 +19,7 @@ const markMessagesAsRead = async (req, res) => {
         { $set: { read_by_to: true } }
       );
 
-      res.status(200);
+      return res.status(200).json({ message: "updated"});
         
     } catch (error) {
       return res.status(500).json({ message: error.message, isValid: false });

@@ -14,18 +14,15 @@ require('dotenv').config();
 // API call to create new object
 const getMessages = async (req, res) => {
     try {
-      // Using the passed from front-end object
-      const passed = req.body;
-      const me = passed.from;
-      const other = passed.to;
-
+      const passedInfo = req.body;
+      console.log("receieved request to get messages");
+      // Get all messages
       const messages = await Message.find({
         $or: [
-          { to: me, from: other },
-          { to: other, from: me },
+          { to: passedInfo.currUser },
+          { from: passedInfo.currUser },
         ]})
-        .sort({_id:-1})
-        .limit(passed.limit);
+        .sort({_id:-1});
 
       // Send tokens to the frontend
       res.status(200).json(messages);
