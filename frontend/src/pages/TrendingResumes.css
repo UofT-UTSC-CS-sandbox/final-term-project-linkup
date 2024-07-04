@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
-/* Container */
 .container-trending {
     font-family: 'Roboto', sans-serif;
     background-color: #bfe7f6;
@@ -13,7 +11,6 @@
     width: 100%;
     position: relative;
 }
-
 .link-container {
     position: absolute;
     right: 20px;
@@ -22,23 +19,17 @@
     flex-direction: column;
     align-items: flex-end;
 }
-
-.profile-link-trending {
+.profile-link-trending, .Trending-link-trending {
     font-size: 30px;
-    color: #6A6A6A;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.Trending-link-trending {
-    font-size: 30px;
-    color: #53D1F9;
     font-weight: 500;
     text-decoration: none;
     margin-top: 10px;
+    color: #6A6A6A;
+}
+.Trending-link-trending {
+    color: #53D1F9;
 }
 
-/* Logo and Instructions */
 .logo {
     width: 200px;
 }
@@ -47,21 +38,64 @@
     display: flex;
     overflow-x: auto;
     padding: 20px;
-    width: 90%; /* Adjusts the width to not take full container width */
-    margin-top: 150px; /* Ensure it does not overlap anything above */
-    border-radius: 10px;
+    width: 90%;
+    margin-top: 140px;
+}
+
+.pdf-and-comments-container {
+    display: flex; /* Ensures the PDF viewer and comments are side by side */
+    align-items: stretch; /* Aligns them vertically */
+}
+
+.resume-container {
+    flex-grow: 1; /* Allows the resume container to take available space */
+    display: flex;
+    flex-direction: column; /* Stacks the header and PDF viewer vertically */
+}
+
+.resume-header {
+    display: flex;
+    align-items: flex-start; /* Changed from left to flex-start */
+    font-size: 16px;
+    padding: 10px; /* Add some padding for spacing */
 }
 
 .pdf-item-trending {
-    flex: 0 0 auto; /* Adjust size here */
-    width: 570px; /* Example width, adjust as necessary */
-    height: 770px; /* Example height, adjust as necessary */
-    margin-right: 20px;
-    border-radius: 10px;
+    flex: 0 0 auto;
+    width: 600px;
+    height: 780px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: row;
 }
 
-.pdf-embed-trending {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
+.comments-container {
+    width: 350px;
+    min-height: 800px;
+    overflow-y: auto;
+    background-color: none;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+.comment-button {
+    display: inline-flex; /* Aligns icon and text within the button */
+    align-items: center; /* Centers items vertically */
+    justify-content: center; /* Centers content horizontally */
+    padding: 15px 20px; /* Adjust padding to increase the button's size */
+    background-color: #bfe7f6;
+    color: black;
+    font-size: 18px; /* Adjust font size as needed */
+    font-weight: bold; /* Make text bold */
+    border: 2px solid black;
+    border-radius: 15px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    outline: none; /* Remove outline */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.comment-button:hover {
+    background-color: #48abe4; /* Slightly darker blue on hover */
 }

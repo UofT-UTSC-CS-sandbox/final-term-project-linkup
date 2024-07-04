@@ -12,9 +12,11 @@ import PreferencesPage from './pages/PreferencesPage.js';
 import ResumeUpload from './pages/ResumeUpload';
 import Profile from './pages/ProfilePage';
 import DirectMessages from './pages/DirectMessages.js';
-
+import LandingPage from './pages/LandingPage';
 import AboutForm from "./pages/AboutYourself.js";
 import CheckEmail from "./pages/CheckEmail.js";
+import CheckUserLoggedIn  from "./pages/CheckUserLoggedIn.js";
+import MatchPage  from "./pages/MatchPage";
 
 import TrendingResumes from './pages/TrendingResumes.js';
 
@@ -35,7 +37,10 @@ function App() {
       <BrowserRouter>
         <div className="App">
             <Routes>
-              <Route path="/" element={<ResumeUpload/>} />
+              <Route path="/" element={<CheckUserLoggedIn/>} />
+              <Route path="/swiping" element={<LandingPage/>} />
+              <Route path="/match-found/:resumeId" element={<MatchPage/>} />
+              <Route path="/upload-first-resume" element={<ResumeUpload/>} />
               <Route path="/test-page" element={<TestPage/>} />
               <Route path="/login-page" element={<LoginPage/>} />
               <Route path="/signup-page" element={<SignUpPage/>} />

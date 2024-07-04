@@ -10,13 +10,6 @@
     padding-top: 20px;
     font-family:'Roboto';
 }
-/* formatting for logo*/
-.logo {
-    position: absolute;
-    top: 2%;
-    width: 120px;
-    z-index: 10;
-}
 /* formatting for the preference - form - container*/
 .preferences-form-container {
     position: absolute;

@@ -14,6 +14,12 @@ const getUserResumes = require('./API/getUserResumes');
 const displayResumes = require('./API/displayResumes');
 const deleteResumes = require('./API/deleteResumes');
 const updateResumePublicStatus = require('./API/updateResume');
+const getSwipingResumes = require('./API/getSwipingResumes');
+const addSwipe = require('./API/addSwipe');
+const checkMatch = require('./API/checkMatch');
+const getPublicResumes = require('./API/getPublicResumes')
+const getResumebyId = require('./API/getResumebyId');
+
 
 // Direct messaging api's
 const sendMessage = require('./API/sendMessage');
@@ -99,8 +105,9 @@ conn.once('open', () => {
   app.get('/resumes/:userId', getUserResumes);
   app.get('/bucket/files/:filename', displayResumes(gfsBucket));
   app.post('/delete-resumes', deleteResumes(gfsBucket));
-  app.post('/api/update-resume', updateResumePublicStatus)
-
+  app.post('/api/update-resume', updateResumePublicStatus);
+  app.get('/api/resumes/public', getPublicResumes);
+  app.get('/api/resume/:resumeId', getResumebyId);
 });
 
 
@@ -129,6 +136,9 @@ app.post('/login', loginUser);
 app.post('/api/updatePreferences', updatePreferences);
 // app.post('/api/updatePreferences', updateYourself);
 app.post('/getUserBio', getUserBio);
+app.get('/api/swiping-resumes/:userId', getSwipingResumes);
+app.post('/api/swipes/:userId', addSwipe);
+app.post('/api/match/:userId', checkMatch);
 
 // Direct Messaging
 app.post('/send-message', sendMessage);

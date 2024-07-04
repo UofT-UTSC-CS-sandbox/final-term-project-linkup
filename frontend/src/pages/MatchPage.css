@@ -1,0 +1,39 @@
+.match-container {
+    font-family: 'Roboto';
+    background-color: #246072;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    width: 100%;
+    position: relative;
+}
+
+.pdf-item-match {
+    position: relative;
+    width: 15vw; /* Fixed width for each PDF item */
+    height: 40vh; /* Fixed height for each PDF item to represent a page */
+    overflow: hidden; /* Prevent overflow */
+    border: 1px solid #ccc; /* Optional: Add a border for visual separation */
+    border-radius: 5px; /* Optional: Add some rounding to corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for some depth */
+    background-color: #f9f9f9; /* Optional: Background color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* Indicate that it's clickable */
+}
+
+.match-button-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 150px;
+}
+
+.match-button-container button{
+    font-family: 'Roboto';
+    font-weight: 700;
+}

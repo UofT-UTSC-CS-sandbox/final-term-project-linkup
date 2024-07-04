@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import logo from '../images/linkup_logo.png';
+import logo from '../images/linkup_logo_highquality.png';
 import uploadIcon from '../images/Upload_icon.png';
 import deleteIcon from '../images/DeleteIcon.png';
 import cancelIcon from '../images/Vector.png';
 import './ResumeUpload.css'; // Import the CSS file
+import Sidebar from '../components/Sidebar.js';
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -111,13 +112,15 @@ const ResumeUpload = () => {
     }
   };
 
+
   return (
     <div className="container">
-      <div className="upload-link-container">
-        <a href="/profile" className="profile-link">Your Profile</a>
-        <a href="/TrendingResumes" className="TrendingPage-link">Trending Resumes</a>
+      <div className="app-logo-container"> 
+        <a href="/">
+          <img src={logo} className="logo" alt="LinkUp Logo" />
+        </a> 
       </div>
-      <img src={logo} className="logo" alt="LinkUp Logo" />
+      <Sidebar></Sidebar>
       <h2 className="instruction-text">
         To start swiping, <br />please upload your first resume
       </h2>
