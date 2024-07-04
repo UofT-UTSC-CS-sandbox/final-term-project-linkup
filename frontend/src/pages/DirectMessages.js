@@ -4,6 +4,7 @@ import { cloneDeep } from 'lodash';
 
 // Styling
 import './DirectMessages.css';
+import sendIcon from '../images/Iconsax (1).png';
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -18,6 +19,8 @@ function App() {
   const [msgLimit, setMsgLimit] = useState(10);
   const [selectedUser, setSelectedUser] = useState('');
   const [currentUser, setCurrentUser] = useState('');
+  
+  const [currTimeStampShow, setCurrTimeStampShow] = useState('');
   
   const [existMoreToLoad, setExistsMoreToLoad] = useState(true);
 
@@ -242,61 +245,75 @@ function App() {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
 
+
+
+  // Components
   const messageComponent = (msg, index) => {
-    if (msg.read_by_to == false && msg.to == auth.name) {
-      return (<div key={index} style={{ color: "red" }}>
-        To: {msg.to} From: {msg.from} {msg.timestamp} <br></br>
-        {msg.message}
+    if(msg.from !== auth.name) {
+      if (msg.read_by_to == false && msg.to == auth.name) {
+        return (<div key={msg._id} style={{ color: "red" }}>
+          To: {msg.to} From: {msg.from} {msg.timestamp} <br></br>
+          {msg.message}
+        </div>)
+      }
+      return (
+      <div key={msg._id} className="message-outer-single-block">
+        <div className="message-single-block" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
+        {currTimeStampShow === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
       </div>)
     }
-    return (<div key={msg._id}>
-      To: {msg.to} From: {msg.from} {msg.timestamp} <br></br>
-      {msg.message}
+    return (
+      <div key={msg._id} className="message-outer-single-block">
+        <div className="message-single-block-self" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
+        {currTimeStampShow === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+      </div>)
+  }
+
+  const userComponent = (user) => {
+    return (<div onClick={() => 
+      { 
+        markCurrMessagesAsRead();
+        console.log(selectedUser);
+        setSelectedUser(user.anon_username);
+      }}>
+      <div className='individual-user-block'>
+        <div className='individual-user-block-name'>
+          {user.anon_username}
+        </div>
+        <div className='individual-user-block-unread-dm'>
+          {getNumberOfUnreadDms(user)}
+        </div>
+      </div>
     </div>)
   }
 
   return (
-    <div className="App-header">
-      <div className="direct-messages-block" ref={messagesEndRef}>
-        {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)}> Load More </button>}
-        {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
-                                  (msg.to == selectedUser && msg.from == auth.name))
-                .map((msg, index) => messageComponent(msg, index))
-                .slice(0, msgLimit)
-                .reverse()}
+    <div className="dm-page-header">
+      <div className="messages-window-block">
+        <div className="direct-messages-block" ref={messagesEndRef}>
+          {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)} className="loadmore-messages-button"> Load More </button>}
+          {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
+                                    (msg.to == selectedUser && msg.from == auth.name))
+                  .map((msg, index) => messageComponent(msg, index))
+                  .slice(0, msgLimit)
+                  .reverse()}
+        </div>
+        <div className="textbox-msg-block">
+          <button onClick={() => sendMessage()} className='textbox-msg-sendbutton'>
+            <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
+          </button> 
+          <input 
+            type="text" 
+            value={txtMsg} 
+            onChange={handleTxtChange} 
+            placeholder={"   Type a message"}
+            className="textbox-msg-textbox"
+          />
+        </div>
+        <div className="select-user-block">
+          {userList.map((user) => (userComponent(user)))}
+        </div>
       </div>
-      <div className="textbox-msg-block">
-        <input 
-          type="text" 
-          value={txtMsg} 
-          onChange={handleTxtChange} 
-          placeholder={msgLimit}
-        />
-        <button onClick={() => sendMessage()}>Send</button>
-      </div>
-      <div className="select-user-block">
-        {userList.map((user) => (
-          <div onClick={() => 
-            { 
-              markCurrMessagesAsRead();
-              console.log(selectedUser);
-              setSelectedUser(user.anon_username);
-            }} style={{ cursor: 'pointer' }}>
-            {user.anon_username} + ({getNumberOfUnreadDms(user)})
-          </div>
-        ))}
-      </div>
-      {/* <label style={{ color: 'red' }}> 
-        {selectedUser}
-      </label>
-      <br></br>
-      <label style={{ color: 'green' }}> 
-        {currentUser}
-      </label>
-      <br></br>
-      <label style={{ color: 'blue' }}> 
-        {currentTime}
-      </label> */}
     </div>
   );
 }
