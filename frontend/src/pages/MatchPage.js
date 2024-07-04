@@ -30,7 +30,7 @@ function MatchPage() {
   }
 
   return(
-    <div className="container">
+    <div className="match-container">
       <h1 className="match-title">Linked Up!</h1>
       <p>You two have swiped right on each other.</p>
       <div className="pdf-item-match">

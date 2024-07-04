@@ -17,11 +17,6 @@ p {
   font-weight: 300;
 }
 
-button {
-  font-family: 'Roboto Condensed', sans-serif;
-  font-weight: 500;
-}
-
 .text-button-container {
   display: flex;
   flex-direction: column;
@@ -62,6 +57,8 @@ button {
 }
 
 .accept-reject-container button {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 500;
     width: 150px;
     padding: 15px;
     border: none;
@@ -75,7 +72,10 @@ button {
   background-color: #d4432c;
   color: #ffffff;
 }
-.accept-reject-container button:hover .link-unlink-img {
+.accept-reject-container button:hover .unlink-img {
+  filter: brightness(0) invert(1);
+}
+.accept-reject-container button:hover .link-img {
   filter: brightness(0) invert(1);
 }
 
@@ -84,11 +84,16 @@ button {
   color: #ffffff;
 }
 
-.link-unlink-img {
-  width: auto;
-  height: 17px;
+.unlink-img {
+  width: 40px;
+  height: auto;
   margin-left: 10px;  
+}
 
+.link-img {
+  width: 45px;
+  height: auto;
+  margin-left: 20px;  
 }
   
   

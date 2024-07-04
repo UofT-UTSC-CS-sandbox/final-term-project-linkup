@@ -1,3 +1,15 @@
+.match-container {
+    font-family: 'Roboto';
+    background-color: #246072;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    width: 100%;
+    position: relative;
+}
+
 .pdf-item-match {
     position: relative;
     width: 15vw; /* Fixed width for each PDF item */
@@ -11,4 +23,17 @@
     align-items: center;
     justify-content: center;
     cursor: pointer; /* Indicate that it's clickable */
+}
+
+.match-button-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 150px;
+}
+
+.match-button-container button{
+    font-family: 'Roboto';
+    font-weight: 700;
 }

@@ -128,11 +128,11 @@ const LandingPage = () => {
                     <div className="accept-reject-container">
                         <button onClick={() => handleSwipe(true)}>
                             LINK
-                            <img src={link} alt="link" className="link-unlink-img"/>
+                            <img src={link} alt="link" className="link-img"/>
                         </button>
                         <button onClick={() => handleSwipe(false)}>
                             UNLINK
-                            <img src={unlink} alt="unlink" className="link-unlink-img"/>
+                            <img src={unlink} alt="unlink" className="unlink-img"/>
                         </button>
                     </div>
                 </div>
