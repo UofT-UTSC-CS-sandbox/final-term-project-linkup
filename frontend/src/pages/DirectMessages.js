@@ -5,6 +5,7 @@ import { cloneDeep } from 'lodash';
 // Styling
 import './DirectMessages.css';
 import sendIcon from '../images/Iconsax (1).png';
+import messageIcon from '../images/message-square.svg';
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -241,6 +242,11 @@ function App() {
     return msgList.filter((msg) => (msg.to == auth.name && msg.from == user.anon_username && msg.read_by_to == false)).length;
   };
 
+  const getLatestDm = (user) => {
+    return msgList.filter((msg) => ((msg.to == auth.name && msg.from == user.anon_username) || 
+                                    (msg.to == user.anon_username && msg.from == auth.name)))[0];
+  }
+
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
@@ -251,10 +257,11 @@ function App() {
   const messageComponent = (msg, index) => {
     if(msg.from !== auth.name) {
       if (msg.read_by_to == false && msg.to == auth.name) {
-        return (<div key={msg._id} style={{ color: "red" }}>
-          To: {msg.to} From: {msg.from} {msg.timestamp} <br></br>
-          {msg.message}
-        </div>)
+        return (
+          <div key={msg._id} className="message-outer-single-block">
+            <div className="message-single-block-unread" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
+            {currTimeStampShow === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
+          </div>)
       }
       return (
       <div key={msg._id} className="message-outer-single-block">
@@ -270,6 +277,28 @@ function App() {
   }
 
   const userComponent = (user) => {
+    const latestDm = getLatestDm(user);
+    const numUnreadDms = getNumberOfUnreadDms(user);
+    var latestMessage;
+    var latestTimestamp;
+
+    if (latestDm != undefined){
+      if(latestDm.message.length >= 30) {
+        latestMessage = latestDm.message.slice(0,30) + "...";
+      }
+      else if (latestDm.message.length < 30) {
+        latestMessage = latestDm.message;
+      }
+
+      latestTimestamp = latestDm.timestamp.slice(0, latestDm.timestamp.length - 9) + 
+                        latestDm.timestamp.slice(latestDm.timestamp.length - 2, latestDm.timestamp.length);
+    }
+    else if (latestDm === undefined)
+    {
+      latestMessage = "";
+      latestTimestamp = "";
+    }
+
     return (<div onClick={() => 
       { 
         markCurrMessagesAsRead();
@@ -277,11 +306,22 @@ function App() {
         setSelectedUser(user.anon_username);
       }}>
       <div className='individual-user-block'>
+        <div className="circle">
+
+        </div>
         <div className='individual-user-block-name'>
           {user.anon_username}
         </div>
-        <div className='individual-user-block-unread-dm'>
-          {getNumberOfUnreadDms(user)}
+        {numUnreadDms > 0 &&
+          <div className='individual-user-block-unread-dm'>
+          {numUnreadDms}
+          </div>
+        }
+        <div className='individual-user-block-latest-msg'>
+          {latestMessage}
+        </div>
+        <div className='individual-user-block-latest-timestamp'>
+          {latestTimestamp}
         </div>
       </div>
     </div>)
@@ -290,6 +330,20 @@ function App() {
   return (
     <div className="dm-page-header">
       <div className="messages-window-block">
+        <div className="my-conversations-header-block">
+          <img className="my-conversations-header-icon" src={messageIcon} alt="sendIcon" />
+          <div className="my-conversations-header-title">
+            My Conversations
+          </div>
+        </div>
+        <div className="current-selected-user-info-block">
+          <div className="current-select-user-info-block-name-circle">
+
+          </div>
+          <div className="current-select-user-info-block-name">
+            {selectedUser}
+          </div>
+        </div>
         <div className="direct-messages-block" ref={messagesEndRef}>
           {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)} className="loadmore-messages-button"> Load More </button>}
           {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
