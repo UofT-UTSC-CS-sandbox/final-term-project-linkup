@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import './SignUp.css';
 import logo from '../images/linkup_logo_highquality.png';
+import { set } from 'lodash';
 
 const SignUp = () => {
   const [txtEmail, setTxtEmail] = useState('');
@@ -22,6 +23,34 @@ const SignUp = () => {
     }
     setDisplayClasses();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (passwordErrors.length !== 0) {
+      setThereExistsErrors(true);
+    }
+    else 
+    {
+      setThereExistsErrors(false);
+    }
+  }, [passwordErrors])
+
+  useEffect(() => {
+    setDisplayClasses();
+  }, [existsErrors])
+
+  useEffect(() => {
+    setExistsPasswordMatchErrors(false);
+    validatePage();
+  }, [txtEmail])
+
+  useEffect(() => {
+    setExistsPasswordMatchErrors(false);
+    validatePage();
+  }, [txtPassword])
+
+  useEffect(() => {
+    setDisplayClasses();
+  }, [existsPasswordMatchErrors])
 
   const setDisplayClasses = () => {
     if (existsErrors) {
@@ -64,37 +93,32 @@ const SignUp = () => {
   }
  // Validating password input
   const validatePage = () => {
-    const errors = [];
+    setPasswordErrors([]);
+    
     // Validating email -> semantics changed later
     if (txtEmail === '') {
-      errors.push('Email is required');
+      setPasswordErrors((prevState) => [...prevState, 'Email is required']);
     }
     if (txtPassword === '') {
-      errors.push('Password is required');
+      setPasswordErrors((prevState) => [...prevState, 'Password is required']);
     } else {
-      if (txtPassword.length <= 8) {
-        errors.push('Password must be length of at least 8');
+      if (txtPassword.length > 0 && txtPassword.length <= 8) {
+        setPasswordErrors((prevState) => [...prevState, 'Password must be length of at least 8']);
       }
       if (!/[A-Z]/.test(txtPassword)) {
-        errors.push('Password must contain at least one uppercase letter');
+        setPasswordErrors((prevState) => [...prevState, 'Password must contain at least one uppercase letter']);
       }
       if (!/[a-z]/.test(txtPassword)) {
-        errors.push('Password must contain at least one lowercase letter');
+        setPasswordErrors((prevState) => [...prevState, 'Password must contain at least one lowercase letter']);
       }
-      if (!/[123456789$%&#]/.test(txtPassword)) {
-        errors.push('Password must contain at least one special character (one of 1,2,3,4,5,6,7,8,9,$,%,&,#)');
+      if (!/[123456789]/.test(txtPassword)) {
+        setPasswordErrors((prevState) => [...prevState, 'Password must contain a number']);
+      }
+      if (!/[$%&#]/.test(txtPassword)) {
+        setPasswordErrors((prevState) => [...prevState, 'Password must contain at least one special character (one of $,%,&,#)']);
       }
     }
-
-    setPasswordErrors(errors);
-    if (errors.length !== 0) {
-      setThereExistsErrors(true);
-    }
-    else 
-    {
-      setThereExistsErrors(false);
-    }
-    return errors.length === 0;
+    return passwordErrors.length === 0;
   };
 
   const checkPasswordMatch = () => {
@@ -103,16 +127,16 @@ const SignUp = () => {
     } else {
       setExistsPasswordMatchErrors(false);
     }
+    return txtPassword === txtConfirmPassword;
   }
 
   const handleNext = () => {
-    if (!validatePage()) {
-      setThereExistsErrors(true);
+    validatePage();
+    if (existsErrors) {
       return;
     }
 
-    checkPasswordMatch();
-    if (existsPasswordMatchErrors) {
+    if (!checkPasswordMatch()) {
       return;
     }
 
@@ -129,23 +153,15 @@ const SignUp = () => {
   // [!!] NOTE: Need to handle changes in textboxes as well,
   //      hence why we need to have temp variable
   const handleChangeInEmail = (e) => {
-    setExistsPasswordMatchErrors(false);
     setTxtEmail(e.target.value);
-    validatePage();
-    setDisplayClasses();
   };
 
   const handleChangeInPassword = (e) => {
-    setExistsPasswordMatchErrors(false);
     setTxtPassword(e.target.value);
-    validatePage();
-    setDisplayClasses();
   };
 
   const handleChangeInConfirmPassword = (e) => {
-    setExistsPasswordMatchErrors(false);
     setTxtConfirmPassword(e.target.value);
-    setDisplayClasses();
   };
 
   return (

@@ -14,21 +14,7 @@ const AboutForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const newUser = location.state.newUser;
-  const isAuthenticated = useIsAuthenticated();
-  const auth = useAuthUser();
-  var userId = null;
-
-  // Redirect user to login page if not authenticated
-  useEffect(() => {
-    if(!isAuthenticated) {
-      navigate('/login-page');
-    }
-    else
-    {
-      userId = auth.id;
-    }
-  });
-
+  
   const [preferences, setPreferences] = useState({
     field_of_interest: '',
     work_experience_level: '',
