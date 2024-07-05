@@ -6,6 +6,8 @@ import { cloneDeep } from 'lodash';
 import './DirectMessages.css';
 import sendIcon from '../images/Iconsax (1).png';
 import messageIcon from '../images/message-square.svg';
+import logo from '../images/linkup_logo_highquality.png';
+import Sidebar from '../components/Sidebar.js'
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -328,7 +330,13 @@ function App() {
   }
 
   return (
-    <div className="dm-page-header">
+    <div className="container">
+     <div className="app-logo-container"> 
+        <a href="/">
+          <img src={logo} className="logo" alt="LinkUp Logo" />
+        </a> 
+      </div>
+      <Sidebar/>
       <div className="messages-window-block">
         <div className="my-conversations-header-block">
           <img className="my-conversations-header-icon" src={messageIcon} alt="sendIcon" />
@@ -353,7 +361,8 @@ function App() {
                   .reverse()}
         </div>
         <div className="textbox-msg-block">
-          <button onClick={() => sendMessage()} className='textbox-msg-sendbutton'>
+          <button onClick={() => {sendMessage();
+                                  markCurrMessagesAsRead()}} className='textbox-msg-sendbutton'>
             <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
           </button> 
           <input 

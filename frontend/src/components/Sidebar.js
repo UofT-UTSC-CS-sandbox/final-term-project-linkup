@@ -30,6 +30,7 @@ const Sidebar = () => {
         <div className="upload-link-container">
             <a href="/profile" className="sidebar-link">Your Profile</a>
             <a href="/TrendingResumes" className="sidebar-link">Trending Resumes</a>
+            <a href="/direct-messages" className="sidebar-link">Conversations</a>
             <a href= "/login-page" className="sidebar-link" onClick={signOutAndRedirect}>Sign Out</a>
         </div>
     );
