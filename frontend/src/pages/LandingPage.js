@@ -86,8 +86,8 @@ const LandingPage = () => {
                 }
             };
             const response = await axios.post(`http://localhost:3001/api/match/${userId}`, {
-                currentUserId,
-                swipedResumeUploaderId
+                currId: currentUserId,
+                otherId: swipedResumeUploaderId
             }, axiosConfig);
             const hasMatch = response.data.hasMatch;
             if (hasMatch) {

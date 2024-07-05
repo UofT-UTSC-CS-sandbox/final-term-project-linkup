@@ -232,12 +232,30 @@
     font: normal 13px/1.18 "Inter", sans-serif;
 }
 
+.individual-user-block-selected {
+    background-color: white;
+    position: relative;
+    text-align: left; /* Align text content to the left */
+    width: 95%;
+    height: 70px;
+    max-height: 100px;
+    left: 2%;
+    padding: 18.5px;
+    border-radius: 10px;      /* Rounded corners */
+    margin-top: 10px; 
+    margin-bottom: 10px; /* Add margin bottom for space between blocks */
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    font: normal 13px/1.18 "Inter", sans-serif;
+    border: 1.5px solid #53a7d0; /* Optional: Add a border to visualize the block */
+}
+
 .individual-user-block:hover {
     background-color: #F2EFEF;
 }
 
 .individual-user-block-name {
     position: absolute;
+    top: 20%;
     left: 17%;
     font: 500 14px/1.18 "Roboto", sans-serif;
 }

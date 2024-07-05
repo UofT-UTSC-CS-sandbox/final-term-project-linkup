@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useReducer } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cloneDeep } from 'lodash';
+import axios from "axios";
 
 // Styling
 import './DirectMessages.css';
@@ -17,6 +18,7 @@ function App() {
   const [txtMsg, setTxtMsg] = useState('');
 
   const [userList, setUserList] = useState([]);
+  const [matchedList, setMatchedList] = useState([]);
 
   const [msgList, setMsgList] = useState([]);
   const [msgLimit, setMsgLimit] = useState(10);
@@ -60,6 +62,12 @@ function App() {
     checkMoreToLoad();
   }, [msgLimit])
 
+  useEffect(() => {
+    if(userList.length > 0){
+      checkMatched();
+    }
+  }, [userList])
+
   const checkMoreToLoad = () => {
     var filteredListLen = msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
                                           (msg.to == selectedUser && msg.from == auth.name)).length;
@@ -75,13 +83,8 @@ function App() {
   }
 
   useEffect(() => {
-    // userList.forEach((user) => getNumberOfUnreadDms(user));
-  }, [userList])
-
-  useEffect(() => {
     scrollToBottom();
     checkMoreToLoad();
-    console.log(msgList);
   }, [msgList])
 
   // Listening for new messages
@@ -91,7 +94,6 @@ function App() {
     eventSource.onmessage = async (event) => {
         const newMessage = await JSON.parse(event.data);
         if(newMessage.to === auth.name) {
-          // userList.forEach((user) => getNumberOfUnreadDms(user));
           getMessages();
         }
     };
@@ -136,9 +138,7 @@ function App() {
             const data = await response.json();
             
             // Setting user list
-            setUserList([]);
             setUserList(data);
-            setSelectedUser(data[0].anon_username);
           } else {
             console.log("response was not ok");
               
@@ -175,6 +175,10 @@ function App() {
   };
 
   const sendMessage = async () => {
+    if(selectedUser === "") {
+      return;
+    }
+
     const newMsg = {
       to: selectedUser,
       from: currentUser,
@@ -206,6 +210,10 @@ function App() {
   }
 
   const markCurrMessagesAsRead = async () => {
+    if(selectedUser === "") {
+      return;
+    }
+
     // Checking if messages are already read
     const numUnread = msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser && msg.read_by_to == false)).length;
     if(numUnread === 0)
@@ -239,7 +247,49 @@ function App() {
     }
   }
 
-  // Communicating Email and password to server
+  const checkMatched = () => {
+    const currUserId = auth.id;
+    console.log(currUserId);
+
+    try {
+      userList.forEach(async (user) => {
+        const otherUserId = user._id;
+        console.log("trying to match " + user._id);
+
+        if (otherUserId !== currUserId) {
+          try {
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            await axios.post(`http://localhost:3001/api/match/${currUserId}`, {
+                currId: currUserId,
+                otherId: otherUserId
+            }, axiosConfig).then((response) => {
+              const hasMatch = response.data.hasMatch;
+              
+              if (hasMatch) {
+                setMatchedList((prevList) => {
+                  const ids = prevList.map(someOtherUser => someOtherUser._id === user._id)
+                                      .filter(mapping => mapping === true).length;
+                  if(!ids){
+                    return [...prevList, user]
+                  }
+                  return prevList});
+              }});
+          } catch (error) {
+              console.error('Failed to check for matches', error);
+          }
+        }
+      });
+  }
+  catch
+  {
+
+  }
+};
+
   const getNumberOfUnreadDms = (user) => {
     return msgList.filter((msg) => (msg.to == auth.name && msg.from == user.anon_username && msg.read_by_to == false)).length;
   };
@@ -283,6 +333,7 @@ function App() {
     const numUnreadDms = getNumberOfUnreadDms(user);
     var latestMessage;
     var latestTimestamp;
+    var outerBlockClass = 'individual-user-block';
 
     if (latestDm != undefined){
       if(latestDm.message.length >= 30) {
@@ -301,13 +352,19 @@ function App() {
       latestTimestamp = "";
     }
 
+    if (user.anon_username === selectedUser)
+    {
+      outerBlockClass = 'individual-user-block-selected';
+    }
+
     return (<div onClick={() => 
       { 
         markCurrMessagesAsRead();
+        setTxtMsg('');
         console.log(selectedUser);
         setSelectedUser(user.anon_username);
       }}>
-      <div className='individual-user-block'>
+      <div className={outerBlockClass}>
         <div className="circle">
 
         </div>
@@ -374,7 +431,7 @@ function App() {
           />
         </div>
         <div className="select-user-block">
-          {userList.map((user) => (userComponent(user)))}
+          {matchedList.map((user) => (userComponent(user)))}
         </div>
       </div>
     </div>

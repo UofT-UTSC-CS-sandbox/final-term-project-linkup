@@ -2,7 +2,13 @@ const Swipes = require('../schema/swipes');
 
 const checkMatch = async (req, res) => {
     try {
-        const {currentUserId, swipedResumeUploaderId} = req.body;
+        // const {currentUserId, swipedResumeUploaderId} = req.body;
+        const passedInfo = req.body;
+        console.log(passedInfo.currId);
+        console.log(passedInfo.otherId);
+
+        const currentUserId = passedInfo.currId;
+        const swipedResumeUploaderId = passedInfo.otherId;
 
         // find all swipes where user_id swiped right
         const userSwipes = await Swipes.find({

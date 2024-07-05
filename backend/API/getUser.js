@@ -12,7 +12,7 @@ const getUser = async (req, res) => {
         if (!users) {
             return res.status(404).json({ message: "No user found" });
         }
-        res.json(users);
+        res.status(200).json(users);
     } catch (error) {
         console.error('Error fetching user:', error);
         res.status(500).json({ message: error.message });
