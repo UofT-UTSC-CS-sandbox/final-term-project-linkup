@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useCallback} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import axios from "axios";
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { useNavigate} from "react-router-dom";
@@ -23,7 +23,6 @@ const LandingPage = () => {
 
     const [swipingResumes, setSwipingResumes] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isProcessing, setIsProcessing] = useState(false);
 
     const [openZoomModal, ZoomModal] = useZoomModal();
 
@@ -111,14 +110,13 @@ const LandingPage = () => {
 
     return (
     <div className="container">
-      <div className="app-logo-container"> 
+        <div className="app-logo-container"> 
         <a href="/">
-          <img src={logo} className="logo" alt="LinkUp Logo" />
+            <img src={logo} className="logo" alt="LinkUp Logo" />
         </a> 
-      </div>
-      <Sidebar/>
-      <ZoomModal/>
-
+        </div>
+        <Sidebar/>
+        <ZoomModal/>
         {currentResume ? (
             <div className="swiping">
                 <div className="text-button-container">

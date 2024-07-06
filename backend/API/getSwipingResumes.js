@@ -23,7 +23,11 @@ const getSwipingResumes = async (req, res) => {
             public: true, 
             uploader_id: { $ne: userId }, 
             _id: { $nin: swipedResumeIds} 
+<<<<<<< HEAD
         });
+=======
+        }).populate('uploader_id');
+>>>>>>> feature/LC-27-trending-resumes-page
         
         res.json(resumes);
     } catch (error) {
