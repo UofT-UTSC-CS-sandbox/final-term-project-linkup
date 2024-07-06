@@ -97,7 +97,7 @@ On a user’s profile page, they can click on their resumes to enlarge it
 #### Being able to send files through direct messages: 
 Currently, our direct messaging feature only supports plain text messages. Allowing users to send files, especially PDFs, would be valuable in enhancing discussions between users. However, implementing this functionality would add significant complexity to this user story for the current sprint. As a team, we've decided to postpone this aspect of direct messaging to a future sprint.
 
-#### he Matching Page flow is not properly set up:
+#### The Matching Page flow is not properly set up:
 The next sprint, we will fix the bugs that were in this page. We did not implement this right now since we have a time crunch and need to look further into the issue and confirm the flow we want as a group.
 
 #### Swiping not based on user preferences:
