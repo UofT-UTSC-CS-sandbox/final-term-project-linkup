@@ -153,12 +153,13 @@ html, body {
 }
 
 .sidebar-link {
-    font-size: 5vh;
+    font-size: 4vh;
     color: #6A6A6A;
     position: relative;
     font-weight: 500;
     text-decoration: none;
     padding:5px;
+    z-index:100;
 }
 
 .logo {

@@ -52,7 +52,7 @@
 .profile-content {
     background-color: #FFFFFF;
     font-family: 'Roboto', sans-serif;
-    width: 980px;
+    width: 75vw;
     min-height: 700px;
     border-radius: 15px;
     display: flex;
@@ -63,7 +63,7 @@
     position: relative;
     padding: 40px; 
     box-sizing: border-box;
-    margin-top: 30px;
+    margin-top: 55px;
 }
 
 /* Blue header background styling */
