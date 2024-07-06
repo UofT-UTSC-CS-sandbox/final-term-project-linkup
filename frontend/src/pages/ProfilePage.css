@@ -24,11 +24,35 @@
     width: 200px;
 }
 
+.profile-link-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.profile-link-profile {
+    font-size: 30px;
+    color: #53D1F9;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.Trending-link-profile {
+    font-size: 30px;
+    color: #6A6A6A;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
 /* Main content area styling */
 .profile-content {
     background-color: #FFFFFF;
     font-family: 'Roboto', sans-serif;
-    width: 980px;
+    width: 75vw;
     min-height: 700px;
     border-radius: 15px;
     display: flex;
@@ -39,6 +63,7 @@
     position: relative;
     padding: 40px; 
     box-sizing: border-box;
+    margin-top: 55px;
 }
 
 /* Blue header background styling */
@@ -141,6 +166,10 @@
     font-weight: bold;
 }
 
+.value-normal {
+    font-weight: normal; 
+}
+
 /* Container for resume uploads */
 .uploads-container {
     display: flex;
@@ -184,6 +213,24 @@
     height: 250px;
     flex: 0 0 auto;
     margin-right: 20px;
+}
+
+/* Public icon styling */
+.public-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+    color: #000000; 
+    cursor: pointer;
+}
+
+/* Private icon styling */
+.private-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+    color: #000000; 
+    cursor: pointer;
 }
 
 /* Delete icon styling */
@@ -292,5 +339,29 @@
     font-size: 18px;
 }
 
+.notification-buttons {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+}
 
+/* Notification Modal specific styles */
+.modal-content-notification {
+    margin-top: 0px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 18px;
+    background: #e0f7fa; /* Light background for visibility notification */
+    color: #333; /* Dark text for readability */
+}
+
+.modal-header-notification {
+    background-color: #237993; /* Green header to signify success updates */
+    color: white;
+}
+
+.modal-button-notification {
+    font-size: 18px;
+    background-color: #26ACD6; /* Matching button color to header */
+    color: #e0f7fa;
+}
 

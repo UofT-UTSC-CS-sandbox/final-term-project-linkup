@@ -8,17 +8,20 @@ import './UploadPopUp.css';
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
-const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
+const ResumeUploadModal = ({ closeModal, onUploadSuccess, disablePublicOption }) => {
   // State to manage file selection, upload progress and status, and privacy flag
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [publicFlag, setPublicFlag] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const userId = "6668b379930f4bfc3a165935";
+  //const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
+  const auth = useAuthUser();
+  const userId = auth.id;
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -146,7 +149,7 @@ const ResumeUploadModal = ({ closeModal, onUploadSuccess }) => {
             </>
           )}
           <label className="publicFlag-label">
-            <input type="checkbox" id="publicFlag" checked={publicFlag} onChange={handlePublicFlagChange} />
+            <input type="checkbox" id="publicFlag" checked={publicFlag} onChange={handlePublicFlagChange} disabled={disablePublicOption}/>
             Make Public
           </label>
           <button className="upload-btn" onClick={handleSubmit} disabled={isUploading}>UPLOAD FILE</button>

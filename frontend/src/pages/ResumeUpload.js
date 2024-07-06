@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import logo from '../images/linkup_logo.png';
+import logo from '../images/linkup_logo_highquality.png';
 import uploadIcon from '../images/Upload_icon.png';
 import deleteIcon from '../images/DeleteIcon.png';
 import cancelIcon from '../images/Vector.png';
 import './ResumeUpload.css'; // Import the CSS file
+import Sidebar from '../components/Sidebar.js';
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
 
 const ResumeUpload = () => {
   // State hooks to manage file, upload progress, visibility, and status
@@ -17,14 +19,20 @@ const ResumeUpload = () => {
   const [publicFlag, setPublicFlag] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [isUploading, setIsUploading] = useState(false); // State to track if uploading
-  const userId = "6668b379930f4bfc3a165935";
+  //const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
+  const auth = useAuthUser();
+  var userId = null;
 
   // Redirect user to login page if not authenticated
   useEffect(() => {
     if(!isAuthenticated) {
       navigate('/login-page');
+    }
+    else
+    {
+      userId = auth.id;
     }
   });
 
@@ -104,12 +112,15 @@ const ResumeUpload = () => {
     }
   };
 
+
   return (
     <div className="container">
-      <div className="profile-link-container">
-        <a href="/profile" className="profile-link">Your Profile</a>
+      <div className="app-logo-container"> 
+        <a href="/">
+          <img src={logo} className="logo" alt="LinkUp Logo" />
+        </a> 
       </div>
-      <img src={logo} className="logo" alt="LinkUp Logo" />
+      <Sidebar></Sidebar>
       <h2 className="instruction-text">
         To start swiping, <br />please upload your first resume
       </h2>

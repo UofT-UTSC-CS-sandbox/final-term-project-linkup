@@ -12,16 +12,21 @@
     justify-content: center;
     align-items: center;
     z-index: 1050;
-}
+  }
+
 
 .modal-content {
-    background: #FFFFFF; /* Ensuring background color is set */
+    background: #FFFFFF;
     border-radius: 10px;
+    padding: 20px;
+    width: 400px; /* Ensure it is smaller */
+    max-width: 90%; /* Responsive design */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     display: flex;
     align-items: center; /* Center aligns the content boxes */
-    width: auto; /* Responsive width based on viewport */
-}
+    width: auto;
+  }
 
 .close-button {
     position: absolute;

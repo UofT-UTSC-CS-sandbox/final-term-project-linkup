@@ -4,7 +4,11 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
 import logo from '../images/linkup_logo_highquality.png';
 import ResumeUploadModal from './UploadPopUp';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import useZoomModal from '../hooks/useZoomModal';
 import './ProfilePage.css'; 
+import Sidebar from '../components/Sidebar.js';
 
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
@@ -12,20 +16,26 @@ import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const Profile = () => {
-// State management for resumes, modal visibility, selected resume for deletion, and user preferences
+// State management for resumes, modal visibility, selected resume for deletion, and user bio
   const [resumes, setResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [resumeToDelete, setResumeToDelete] = useState(null);
-  const [preferences, setPreferences] = useState({});
+  const [bio, setBio] = useState({});
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [notificationHeader, setNotificationHeader] = useState('');
+  const [notificationBody, setNotificationBody] = useState('');
   const pdfContainerRef = useRef(null);
-  const userId = "6668b379930f4bfc3a165935";
+  //const userId = "6668b379930f4bfc3a165935";
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
+  var userId = null;
+  const [openZoomModal, ZoomModal] = useZoomModal();
 
     // Fetch resumes from the server for the logged-in user
     const fetchResumes = async () => {
+        if (!userId) return;  
         try {
             const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
             setResumes(response.data);
@@ -39,7 +49,11 @@ const Profile = () => {
         if(!isAuthenticated) {
             navigate('/login-page');
         }
-        retrievePreferences();
+        else
+        {
+            userId = auth.id;
+        }
+        retrieveBio();
         fetchResumes();
     }, [userId]);
 
@@ -108,10 +122,10 @@ const Profile = () => {
   };
 
   // Communicating Email and password to server
-  const retrievePreferences = async () => {
+  const retrieveBio = async () => {
 
       try {
-        const response = await fetch('http://localhost:3001/getPreferences', {
+        const response = await fetch('http://localhost:3001/getUserBio', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -120,8 +134,8 @@ const Profile = () => {
         });
   
         if (response.ok) {
-          const retrievedPref = await response.json();
-          setPreferences(retrievedPref);
+          const retrievedBio = await response.json();
+          setBio(retrievedBio);
 
         } else {
           console.error('Error retrieving');
@@ -131,11 +145,75 @@ const Profile = () => {
       }
   };
 
+  const toggleResumeVisibility = async (resume) => {
+    const newPublicStatus = !resume.public; // Toggle the current status
+
+    // Check if the new status is public and there's already another public resume
+    if (newPublicStatus) {
+        const publicResumesCount = resumes.filter(r => r.public && r._id !== resume._id).length;
+        if (publicResumesCount >= 1) {
+            setNotificationHeader('Multiple Public Resumes');
+            setNotificationBody("You have a public resume. You cannot have more than one public resume at a time.");
+            setIsNotificationModalOpen(true);
+            return; // Early return to prevent the resume status change
+        }
+    }
+
+    try {
+        const response = await axios.post(`http://localhost:3001/api/update-resume`, {
+            _id: resume._id,
+            publicStatus: newPublicStatus
+        });
+        if (response.status === 200) {
+            setResumes(resumes.map(r => r._id === resume._id ? {...r, public: newPublicStatus} : r));
+            setNotificationHeader(`Your resume has been made ${newPublicStatus ? 'Public' : 'Not Public'}.`);
+            setNotificationBody(newPublicStatus 
+                ? "Your resume is now set to Public and is visible to other users."
+                : "Your resume is now set to Not Public and is no longer visible to other users.");
+            setIsNotificationModalOpen(true);
+        } else {
+            throw new Error(`Failed to make resume ${newPublicStatus ? 'Public' : 'Not Public'}`);
+        }
+    } catch (error) {
+        console.error(`Error making resume ${newPublicStatus ? 'Public' : 'Not Public'}:`, error);
+        setNotificationHeader('Error');
+        setNotificationBody(`Failed to make resume ${newPublicStatus ? 'Public' : 'Not Public'}. Please try again.`);
+        setIsNotificationModalOpen(true);
+    }
+};
+
+const NotificationModal = ({ isOpen, header, body, onClose }) => {
+    if (!isOpen) return null;
+
     return (
-        <div className="profile-container">
-            <header className="profile-header">
-                <img src={logo} alt="LinkUp Logo" className="profile-logo" />
-            </header>
+        <div className="modal-overlay-delete">
+            <div className="modal-content-delete modal-content-notification">
+                <h2 className="modal-header-delete modal-header-notification">{header}</h2>
+                <p>{body}</p>
+                <div className="notification-buttons">
+                    <button className="modal-button-delete modal-button-notification" onClick={onClose}>Close</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const hasPublicResume = resumes.some(resume => resume.public);
+
+function capitalizeWords(str) {
+    if (typeof str !== 'string') {  // Check if the input is a string
+        return '';  // Return an empty string if the input is not a string
+    }
+    return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+};
+    return (
+        <div className="container">
+            <div className="app-logo-container"> 
+                <a href="/">
+                <img src={logo} className="logo" alt="LinkUp Logo" />
+                </a> 
+            </div>
+            <Sidebar></Sidebar>
             <div className="profile-content">
                 <div className="blue-header"></div>
                 <div className="profile-icon-section">
@@ -150,10 +228,10 @@ const Profile = () => {
                     <div className="vertical-line"></div>
                     <div className="fields-container">
                         <div className="profile-info">MY INFORMATION</div>
-                        <div className="field-label">Industry: {preferences.field_of_interest}</div>
-                        <div className="field-label">Location: {preferences.location} </div>
-                        <div className="field-label">Education: {preferences.education} </div>
-                        <div className="field-label">Public Resume:</div>
+                        <div className="field-label">Industry: <span className="value-normal">{capitalizeWords(bio.field_of_interest)}</span></div>
+                        <div className="field-label">Location: <span className="value-normal">{capitalizeWords(bio.location)}</span></div>
+                        <div className="field-label">Education: <span className="value-normal">{capitalizeWords(bio.education)}</span> </div>
+                        <div className="field-label">Level of Experience: <span className="value-normal">{capitalizeWords(bio.work_experience_level)}</span></div>
                     </div>
                 </div>
                 <div className="uploads-container">
@@ -161,11 +239,15 @@ const Profile = () => {
                     <hr className="uploads-divider" />
                     <div className="horizontal-scroll" ref={pdfContainerRef}>
                         {resumes.map((resume) => (
-                            <div key={resume._id} className="pdf-item">
+                            <div key={resume._id} className="pdf-item" onClick={() => openZoomModal(resume)}>
                                 <embed className="pdf-embed" src={`http://localhost:3001/bucket/files/${resume.file_path}`} type="application/pdf" />
+                                {resume.public ? 
+                                    <VisibilityIcon className="public-icon" onClick={(e) => { e.stopPropagation(); toggleResumeVisibility(resume); }} /> : 
+                                    <VisibilityOffIcon className="private-icon" onClick={(e) => { e.stopPropagation(); toggleResumeVisibility(resume); }} />
+                                }
                                 <DeleteIcon 
                                     className="delete-icon"
-                                    onClick={() => openDeleteModal(resume)}
+                                    onClick={(e) => { e.stopPropagation(); openDeleteModal(resume); }}
                                 />
                             </div>
                             
@@ -176,7 +258,7 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-            {isUploadModalOpen && (<ResumeUploadModal closeModal={closeModal} onUploadSuccess={handleResumeUploadSuccess} />
+            {isUploadModalOpen && (<ResumeUploadModal closeModal={closeModal} onUploadSuccess={handleResumeUploadSuccess} disablePublicOption={hasPublicResume}/>
       )}
             {isDeleteModalOpen && (
             <div className="modal-overlay-delete">
@@ -190,6 +272,13 @@ const Profile = () => {
                 </div>
             </div>
         )}
+        <NotificationModal
+            isOpen={isNotificationModalOpen}
+            header={notificationHeader}
+            body={notificationBody}
+            onClose={() => setIsNotificationModalOpen(false)}
+        />
+        <ZoomModal />
         </div>
     );
 };

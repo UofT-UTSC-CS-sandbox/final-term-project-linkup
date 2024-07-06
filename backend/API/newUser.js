@@ -1,19 +1,15 @@
 const User = require('../schema/user');
 const express = require('express');
 const cors = require('cors');
-
 // Mail and Google API's
 var Mailgen = require('mailgen');
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
-
-// Bcrypt for hashing
 const bcryptjs = require('bcryptjs');
 const crypto = require('crypto');
 const token = crypto.randomBytes(20).toString('hex');
 
-// Middleware
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -23,41 +19,41 @@ require('dotenv').config();
 const createTransporter = async () => {
   try {
     const oauth2Client = new OAuth2(
-        process.env.CLIENT_ID,
-        process.env.CLIENT_SECRET,
-        "https://developers.google.com/oauthplayground"
-      );
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground"
+    );
 
-      oauth2Client.setCredentials({
-        refresh_token: process.env.REFRESH_TOKEN,
-      });
+    oauth2Client.setCredentials({
+      refresh_token: process.env.REFRESH_TOKEN,
+    });
 
-      const accessToken = await new Promise((resolve, reject) => {
-        oauth2Client.getAccessToken((err, token) => {
-          if (err) {
-            console.log("*ERR: ", err)
-            reject();
-          }
-          resolve(token); 
-        });
-      });
-
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          type: "OAuth2",
-          user: process.env.GROUP_EMAIL,
-          accessToken,
-          clientId: process.env.CLIENT_ID,
-          clientSecret: process.env.CLIENT_SECRET,
-          refreshToken: process.env.REFRESH_TOKEN,
-        },
-        tls: {
-          rejectUnauthorized: false
+    const accessToken = await new Promise((resolve, reject) => {
+      oauth2Client.getAccessToken((err, token) => {
+        if (err) {
+          console.log("*ERR: ", err)
+          reject();
         }
+        resolve(token); 
       });
+    });
 
-      return transporter;
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: process.env.GROUP_EMAIL,
+        accessToken,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+
+    return transporter;
   } catch (err) {
     return err;
   }
@@ -66,28 +62,25 @@ const createTransporter = async () => {
 const sendEmailVerification = async({passedEmail}, res) => {
   const currentUrl = "http://localhost:3000";
 
-  // Generating the email, provided by mailgen
   var mailGenerator = new Mailgen({
     theme: 'default',
     product: {
-        // Appears in header & footer of e-mails
-        name: 'LinkUp',
-        link: currentUrl
-        // Optional product logo
+      name: 'LinkUp',
+      link: currentUrl
     }
   });
 
   var emailContent = {
     body: {
-        intro: 'Welcome to LinkUp! We\'re very excited to have you on board.',
-        action: {
-            instructions: 'To get started with LinkUp, please click here:',
-            button: {
-                color: '#22BC66', // Optional action button color
-                text: 'Confirm your account',
-                link: `${currentUrl}/verification/${token}`,
-            }
+      intro: 'Welcome to LinkUp! We\'re very excited to have you on board.',
+      action: {
+        instructions: 'To get started with LinkUp, please click here:',
+        button: {
+          color: '#22BC66',
+          text: 'Confirm your account',
+          link: `${currentUrl}/verification/${token}`,
         }
+      }
     }
   };
 
@@ -100,11 +93,8 @@ const sendEmailVerification = async({passedEmail}, res) => {
     html: emailBody,
   };
 
-  // Sending the email
   let emailTransporter = await createTransporter();
   await emailTransporter.sendMail(mailConfig);
-
- 
 }
 
 const animalNames = ['Cat', 'Dog', 'Moose', 'Eagle', 'Tiger', 'Lion', 'Bear', 'Wolf', 'Fox'];
@@ -123,13 +113,10 @@ const generateAnonUsername = async () => {
   return username;
 };
 
-// API call to create new object
 const newUser = async (req, res) => {
   try {
-    // Using the passed from front-end object
     const passedUser = req.body;
 
-    // If the email already exists
     const user = await User.findOne({
       "email": passedUser.email,
     });
@@ -137,11 +124,9 @@ const newUser = async (req, res) => {
     if (user) {
       return res.status(401).send('Account creation failed: email is already used by an existing account');
     }
-
-    // Generate anonymous username
+    // generate anon username
     const anonUsername = await generateAnonUsername();
-
-    // Hashing the password
+    // Bcrypt for hashing
     var generatedSalt = bcryptjs.genSaltSync(10);
     var hashedPassword = bcryptjs.hashSync(passedUser.password, generatedSalt);
 
@@ -149,20 +134,23 @@ const newUser = async (req, res) => {
       anon_username: anonUsername,
       email: passedUser.email,
       password: hashedPassword,
-      field_of_interest: "",
-      work_experience_level: "",
-      education: "",
-      location: "",
+      field_of_interest: passedUser.field_of_interest,
+      work_experience_level: passedUser.work_experience_level,
+      education: passedUser.education,
+      location: passedUser.location,
       avatar: "",
       salt: generatedSalt,
       verified: false,
-      verificationToken: token
+      verificationToken: token,
+      preferences_edu:"",
+      preferences_interest:"",
+      preferences_loc: "",
+      preferences_workexp: "",
     });
 
     await newUser.save();
     sendEmailVerification({passedEmail: passedUser.email}, res);
-    res.status(200).send('Email sent added successfully');
-
+    res.status(200).json({ message: 'User created and verification email sent', newUser });
 
   } catch (error) {
     res.status(500).send('Error adding User: ' + error.message);

@@ -1,22 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import logo from '../images/linkup_logo.png'; 
+import React, {useEffect, useState } from 'react';
+import logo from '../images/linkup_logo_highquality.png'; 
 import Select from 'react-select';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import './Preferences.css'; 
+import Sidebar from '../components/Sidebar.js';
 
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
+
+// Routing and authentication
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
 
 function PreferencesForm() {
      // Hook to get authenticated user info
     const user = useAuthUser();
     const navigate = useNavigate();
-      // State to store user preferences
+    const isAuthenticated = useIsAuthenticated();
+    const auth = useAuthUser();
+    var userId = null;
+
+    // Redirect user to login page if not authenticated
+    useEffect(() => {
+    if(!isAuthenticated) {
+        navigate('/login-page');
+    }
+    else
+    {
+        userId = auth.id;
+    }
+    });
+    
     const [preferences, setPreferences] = useState({
-        field_of_interest: '',
-        work_experience_level: '',
-        education: '',
-        location: '',
+        preferences_edu: '',
+        preferences_interest: '',
+        preferences_loc: '',
+        preferences_workexp: '',
     });
    // Handle changes in the select dropdowns
     const handleChange = (selectedOption, action) => {
@@ -51,7 +69,7 @@ function PreferencesForm() {
 
             if (response.ok) {
                 console.log('Preferences updated successfully');
-                navigate("/profile");
+                navigate('/swiping');
             } else {
                 console.error('Error updating preferences:', await response.text());
             }
@@ -100,8 +118,13 @@ function PreferencesForm() {
     };
 
     return (
-        <div className="preferences-container">
-            <img src={logo} alt="LinkUp Logo" className="logo" />
+        <div className="container">
+            <div className="app-logo-container"> 
+                <a href="/">
+                <img src={logo} className="logo" alt="LinkUp Logo" />
+                </a> 
+            </div>
+            <Sidebar></Sidebar>
             <div className="preferences-form-container">
                 <h3>Select Your Preferences</h3>
                 
@@ -110,7 +133,7 @@ function PreferencesForm() {
                 <form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>
                 < br></br>
                     <Select
-                        name="field_of_interest"
+                        name="preferences_interest"
                         options={[
                             { value: 'computer science', label: 'Computer Science' },
                             { value: 'business', label: 'Business' },
@@ -125,7 +148,7 @@ function PreferencesForm() {
                         isClearable
                     />
                     <Select
-                        name="work_experience_level"
+                        name="preferences_workexp"
                         options={[
                             { value: 'entry', label: 'Entry Level' },
                             { value: 'intermediate', label: 'Intermediate Level' },
@@ -137,9 +160,9 @@ function PreferencesForm() {
                         isClearable
                     />
                     <Select
-                        name="education"
+                        name="preferences_edu"
                         options={[
-                            { value: 'highschool', label: 'Diploma' },
+                            { value: 'diploma', label: 'Diploma' },
                             { value: 'bachelor', label: 'Bachelor' },
                             { value: 'master', label: 'Master' },
                             { value: 'phd', label: 'PHD' }
@@ -150,7 +173,7 @@ function PreferencesForm() {
                         isClearable
                     />
                     <Select
-                        name="location"
+                        name="preferences_loc"
                         options={[
                             { value: 'usa', label: 'USA' },
                             { value: 'canada', label: 'Canada' },
