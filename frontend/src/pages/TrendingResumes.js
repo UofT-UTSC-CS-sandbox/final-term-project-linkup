@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import logo from '../images/linkup_logo.png';
+import logo from '../images/linkup_logo_highquality.png';
 import './TrendingResumes.css';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Sidebar from '../components/Sidebar.js';
 
 
 function TrendingResumes() {
     const [resumes, setResumes] = useState([]);
     const pdfContainerRef = useRef(null);
     const [showInput, setShowInput] = useState(false);
-    const [comment, setComment] = useState('');
-    const [comments, setComments] = useState({});
 
     useEffect(() => {
         const fetchResumesTrending = async () => {
@@ -50,12 +49,13 @@ function TrendingResumes() {
     };
 
     return (
-        <div className="container-trending">
-            <div className="link-container">
-                <a href="/profile" className="profile-link-trending">Your Profile</a>
-                <a href="/TrendingResumes" className="Trending-link-trending">Trending Resumes</a>
+        <div className="container">
+            <Sidebar></Sidebar>
+            <div className="app-logo-container"> 
+                <a href="/">
+                <img src={logo} className="logo" alt="LinkUp Logo" />
+                </a> 
             </div>
-            <img src={logo} className="logo" alt="LinkUp Logo" />
             <div className="horizontal-scroll-trending" ref={pdfContainerRef}>
                 {resumes.map((resume) => (
                     <div key={resume._id} className="pdf-and-comments-container"> 

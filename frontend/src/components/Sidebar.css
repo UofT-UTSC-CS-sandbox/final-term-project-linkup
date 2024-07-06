@@ -1,0 +1,12 @@
+.sidebar-link {
+    font-family: 'Roboto', sans-serif;
+    font-size: 35px;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 10px;
+    color: #6A6A6A;
+    padding: 0px 0px; 
+}
+.sidebar-link.active {
+    color: #53D1F9
+}
