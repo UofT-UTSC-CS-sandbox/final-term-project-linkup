@@ -374,10 +374,60 @@
 .dm-more-modal {
     background-color: white;
     position: absolute;
-    top: 4%;
+    top: 90%;
     left: 73%;
     width: 25%; /* Adjust size of the circle */
-    height: 20%; /* Adjust size of the circle */
+    height: 120%; /* Adjust size of the circle */
     border-radius: 10px;
     z-index: 100;
+    border: 1.5px solid black; /* Optional: Add a border to visualize the block */
+}
+
+.dm-more-modal-block-individualblock {
+    position: relative;
+    display: flex;
+    width: 93%;
+    height: 45%;
+    left: 2%;
+    margin-bottom: 2%;
+    align-items: center;
+    justify-content: left;
+    font: normal 13px/1.18 "Inter", sans-serif;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    padding-left: 3%;
+    border-radius: 5px;
+}
+
+.dm-more-modal-block-individualblock:hover {
+    background-color: rgb(216, 90, 90);
+}
+
+.dm-more-modal-iconsize {
+    width: 10%;
+    height: auto;
+    margin-right: 3%;
+}
+
+.dm-msgactions-icons {
+    position: absolute;
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px;
+    width: 3%;
+    height: 5%;
+    left: 96.5%;
+    z-index: 100;
+}
+
+.dm-msgactions-size {
+    width: 55%;
+    height: auto;
+}
+
+.dm-msgactions-size:hover {
+    filter: invert(29%) sepia(100%) saturate(7000%) hue-rotate(356deg) brightness(70%) contrast(101%);
 }

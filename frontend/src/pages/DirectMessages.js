@@ -8,6 +8,9 @@ import './DirectMessages.css';
 import sendIcon from '../images/Iconsax (1).png';
 import messageIcon from '../images/message-square.svg';
 import moreIcon from '../images/more-horizontal.svg';
+import deleteIcon from '../images/trash-2.svg';
+import slashIcon from '../images/slash.svg';
+import editIcon from '../images/edit.svg';
 import logo from '../images/linkup_logo_highquality.png';
 import Sidebar from '../components/Sidebar.js'
 
@@ -26,7 +29,7 @@ function App() {
   const [selectedUser, setSelectedUser] = useState('');
   const [currentUser, setCurrentUser] = useState('');
   
-  const [currTimeStampShow, setCurrTimeStampShow] = useState('');
+  const [msgHovered, setMsgHovered] = useState('');
   const [moreModalShow, setMoreModalShow] = useState(false);
   
   const [existMoreToLoad, setExistsMoreToLoad] = useState(true);
@@ -37,8 +40,6 @@ function App() {
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
-
-  const _ = require('lodash');
 
   // Redirect user to login page if not authenticated
   useEffect(() => {
@@ -181,6 +182,11 @@ function App() {
       return;
     }
 
+    // Validation
+    if(txtMsg === "") {
+      return;
+    }
+
     const newMsg = {
       to: selectedUser,
       from: currentUser,
@@ -249,6 +255,61 @@ function App() {
     }
   }
 
+  const deleteConversation = async () => {
+    if(selectedUser === "") {
+      return;
+    }
+
+    const parties = {
+      me: currentUser,
+      other: selectedUser
+    };
+
+    try {
+      await fetch('http://localhost:3001/delete-conversation', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(parties)
+      }).then(async (response) => {
+        if (response.ok) {
+          getMessages();
+        } else {
+          
+        }
+      })
+
+    } catch (error) {
+  
+    }
+  }
+
+  const deleteMessage = async (msg) => {
+    if(selectedUser === "") {
+      return;
+    }
+
+    try {
+      await fetch('http://localhost:3001/delete-message', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({msgId: msg._id})
+      }).then(async (response) => {
+        if (response.ok) {
+          getMessages();
+        } else {
+          
+        }
+      })
+
+    } catch (error) {
+  
+    }
+  }
+
   const checkMatched = () => {
     const currUserId = auth.id;
     console.log(currUserId);
@@ -305,30 +366,41 @@ function App() {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
 
-
-
   // Components
   const messageComponent = (msg, index) => {
     if(msg.from !== auth.name) {
       if (msg.read_by_to == false && msg.to == auth.name) {
         return (
           <div key={msg._id} className="message-outer-single-block">
-            <div className="message-single-block-unread" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
-            {currTimeStampShow === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
+            <div className="message-single-block-unread" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
+            {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
           </div>)
       }
       return (
       <div key={msg._id} className="message-outer-single-block">
-        <div className="message-single-block" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
-        {currTimeStampShow === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+        <div className="message-single-block" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
+        {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
       </div>)
     }
     return (
       <div key={msg._id} className="message-outer-single-block">
-        <div className="message-single-block-self" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
-        {currTimeStampShow === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+        {msgHovered === msg._id &&
+          <div onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')} className='dm-msgactions-icons'>
+            {/* <img className='dm-msgactions-size' src={editIcon} alt="Edit Message Icon" /> */}
+            <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {deleteMessage(msg)}} alt="Delete Message Icon" />
+          </div>
+        }
+        <div className="message-single-block-self" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
+        {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
       </div>)
   }
+
+  // Key listeners
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  };
 
   const userComponent = (user) => {
     const latestDm = getLatestDm(user);
@@ -365,6 +437,7 @@ function App() {
         setTxtMsg('');
         console.log(selectedUser);
         setSelectedUser(user.anon_username);
+        setMoreModalShow(false);
       }}>
       <div className={outerBlockClass}>
         <div className="circle">
@@ -404,24 +477,29 @@ function App() {
           </div>
         </div>
         <div className="current-selected-user-info-block">
-          <div className="current-select-user-info-block-name-circle"></div>
+          {selectedUser !== "" &&
+            <div className="current-select-user-info-block-name-circle"></div>
+          }
           <div className="current-select-user-info-block-name">
             {selectedUser}
           </div>
-          <div className="dm-more-button-block" onClick={() => setMoreModalShow(!moreModalShow)}>
-            <img src={moreIcon} alt="LinkUp Logo" />
-          </div>
+          {selectedUser !== "" &&
+            <div className="dm-more-button-block" onClick={() => setMoreModalShow(!moreModalShow)}>
+              <img src={moreIcon} alt="More modal icon" />
+            </div>}
+          {moreModalShow &&
+            <div className="dm-more-modal">
+              <div onClick={() => deleteConversation()} className='dm-more-modal-block-individualblock'>
+                <img className='dm-more-modal-iconsize' src={deleteIcon} alt="Delete Message Icon" />
+                Delete Conversation
+              </div>
+              <div className='dm-more-modal-block-individualblock'>
+                <img className='dm-more-modal-iconsize' src={slashIcon} alt="Slash Message Icon" />
+                Block User
+              </div>
+            </div>}
         </div>
         <div className="direct-messages-block" ref={messagesEndRef}>
-          {moreModalShow &&
-          <div className="dm-more-modal">
-            <div>
-              Delete Conversation
-            </div>
-            <div>
-              Block User
-            </div>
-          </div>}
           {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)} className="loadmore-messages-button"> Load More </button>}
           {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
                                     (msg.to == selectedUser && msg.from == auth.name))
@@ -438,6 +516,7 @@ function App() {
             type="text" 
             value={txtMsg} 
             onChange={handleTxtChange} 
+            onKeyDown={handleKeyDown}
             placeholder={"   Type a message"}
             className="textbox-msg-textbox"
           />

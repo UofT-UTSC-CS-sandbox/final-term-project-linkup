@@ -25,7 +25,9 @@ const getResumebyId = require('./API/getResumebyId');
 const sendMessage = require('./API/sendMessage');
 const getMessages = require('./API/getMessages');
 const markMessagesAsRead = require('./API/markMessagesAsRead');
-const getNumberOfUnreadDms = require('./API/getNumberOfUnreadDms');
+const getNumberOfUnreadDms = require('./API/getNumberOfUnreadDms'); // Unused
+const deleteConversation = require('./API/deleteConversation');
+const deleteMessage = require('./API/deleteMessage');
 
 require('dotenv').config();
 
@@ -144,7 +146,9 @@ app.post('/api/match/:userId', checkMatch);
 app.post('/send-message', sendMessage);
 app.post('/get-messages', getMessages);
 app.post('/mark-messages-as-read', markMessagesAsRead);
-app.post('/get-number-of-unread-dms', getNumberOfUnreadDms);
+// app.post('/get-number-of-unread-dms', getNumberOfUnreadDms); => unused
+app.post('/delete-conversation', deleteConversation);
+app.post('/delete-message', deleteMessage);
 
 // Listening on Port 3001
 const PORT = 3001;
