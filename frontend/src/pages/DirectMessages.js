@@ -7,6 +7,7 @@ import axios from "axios";
 import './DirectMessages.css';
 import sendIcon from '../images/Iconsax (1).png';
 import messageIcon from '../images/message-square.svg';
+import moreIcon from '../images/more-horizontal.svg';
 import logo from '../images/linkup_logo_highquality.png';
 import Sidebar from '../components/Sidebar.js'
 
@@ -26,6 +27,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState('');
   
   const [currTimeStampShow, setCurrTimeStampShow] = useState('');
+  const [moreModalShow, setMoreModalShow] = useState(false);
   
   const [existMoreToLoad, setExistsMoreToLoad] = useState(true);
 
@@ -402,14 +404,24 @@ function App() {
           </div>
         </div>
         <div className="current-selected-user-info-block">
-          <div className="current-select-user-info-block-name-circle">
-
-          </div>
+          <div className="current-select-user-info-block-name-circle"></div>
           <div className="current-select-user-info-block-name">
             {selectedUser}
           </div>
+          <div className="dm-more-button-block" onClick={() => setMoreModalShow(!moreModalShow)}>
+            <img src={moreIcon} alt="LinkUp Logo" />
+          </div>
         </div>
         <div className="direct-messages-block" ref={messagesEndRef}>
+          {moreModalShow &&
+          <div className="dm-more-modal">
+            <div>
+              Delete Conversation
+            </div>
+            <div>
+              Block User
+            </div>
+          </div>}
           {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)} className="loadmore-messages-button"> Load More </button>}
           {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
                                     (msg.to == selectedUser && msg.from == auth.name))

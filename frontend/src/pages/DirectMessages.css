@@ -355,3 +355,29 @@
     background-color: #768799; /* Random color for demonstration */
     margin-left: 10px; /* Adjust spacing from the message block */
   }
+
+/* User Story LC-30 Styling*/
+.dm-more-button-block {
+    position: absolute;
+    top: 30%;
+    left: 93.5%;
+    width: 35px; /* Adjust size of the circle */
+    height: 20px; /* Adjust size of the circle */
+    border-radius: 5px;
+}
+
+/* User Story LC-30 Styling*/
+.dm-more-button-block:hover {
+    background-color: #F2EFEF;
+}
+
+.dm-more-modal {
+    background-color: white;
+    position: absolute;
+    top: 4%;
+    left: 73%;
+    width: 25%; /* Adjust size of the circle */
+    height: 20%; /* Adjust size of the circle */
+    border-radius: 10px;
+    z-index: 100;
+}
