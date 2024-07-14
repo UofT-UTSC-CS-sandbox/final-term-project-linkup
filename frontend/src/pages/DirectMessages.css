@@ -431,3 +431,87 @@
 .dm-msgactions-size:hover {
     filter: invert(29%) sepia(100%) saturate(7000%) hue-rotate(356deg) brightness(70%) contrast(101%);
 }
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #e0f7fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-header {
+    background-color: #237993;
+    color: white;
+    width: calc(100% + 40px);
+    margin: -20px -40px 20px -40px;
+    padding: 20px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 22px;
+    border-radius: 10px 10px 0 0;
+}
+
+.modal-content p {
+    margin-top: 0px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 18px;
+    color: #333333;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center; 
+    gap: 15px;  /* Space between buttons */
+}
+
+.modal-button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-button {
+    background-color: #26ACD6;
+    color: white;
+    font-size: 18px;
+}
+
+.delete-button {
+    background-color: #748D95;
+    color: white;
+    font-size: 18px;
+}
+
+.textbox-msg-sendbutton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.blocked-message {
+    margin-top: -15px; 
+    color: #181515cf;
+    font-size: 14px;
+}

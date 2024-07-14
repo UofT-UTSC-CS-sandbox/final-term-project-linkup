@@ -7,7 +7,7 @@ const getUser = require('./API/getUser');
 const loginUser = require('./API/loginUser');
 const newUser = require('./API/newUser');
 const verifyUser = require('./API/EmailVerification');
-const updatePreferences = require('./API/UpdatePreferences'); 
+const updatePreferences = require('./API/UpdatePreferences');
 const getUserBio = require('./API/getUserBio');
 const { upload, uploadResumes } = require('./API/uploadResumes');
 const getUserResumes = require('./API/getUserResumes');
@@ -19,13 +19,13 @@ const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
 const getPublicResumes = require('./API/getPublicResumes')
 const getResumebyId = require('./API/getResumebyId');
+const {blockUser, checkIfBlocked } = require('./API/BlockingUser');
 
 
 // Direct messaging api's
 const sendMessage = require('./API/sendMessage');
 const getMessages = require('./API/getMessages');
 const markMessagesAsRead = require('./API/markMessagesAsRead');
-const getNumberOfUnreadDms = require('./API/getNumberOfUnreadDms'); // Unused
 const deleteConversation = require('./API/deleteConversation');
 const deleteMessage = require('./API/deleteMessage');
 
@@ -108,13 +108,13 @@ conn.once('open', () => {
   app.get('/bucket/files/:filename', displayResumes(gfsBucket));
   app.post('/delete-resumes', deleteResumes(gfsBucket));
   app.post('/api/update-resume', updateResumePublicStatus);
+  app.post('/block-user', blockUser);
+  app.post('/check-blocked', checkIfBlocked);
   app.get('/api/resumes/public', getPublicResumes);
   app.get('/api/resume/:resumeId', getResumebyId);
 });
 
-
 // SIGN-UP
-// API call to create new object
 app.post('/test-page', async (req, res) => {
   try {
     const newUser = new User(req.body);
@@ -129,14 +129,12 @@ app.post('/test-page', async (req, res) => {
 app.get('/get-user', getUser);
 
 // SIGN-UP
-// API call to create new object
 app.post('/new-user', newUser);
 
 app.post('/verify-user', verifyUser);
 
 app.post('/login', loginUser);
 app.post('/api/updatePreferences', updatePreferences);
-// app.post('/api/updatePreferences', updateYourself);
 app.post('/getUserBio', getUserBio);
 app.get('/api/swiping-resumes/:userId', getSwipingResumes);
 app.post('/api/swipes/:userId', addSwipe);
@@ -146,9 +144,9 @@ app.post('/api/match/:userId', checkMatch);
 app.post('/send-message', sendMessage);
 app.post('/get-messages', getMessages);
 app.post('/mark-messages-as-read', markMessagesAsRead);
-// app.post('/get-number-of-unread-dms', getNumberOfUnreadDms); => unused
 app.post('/delete-conversation', deleteConversation);
 app.post('/delete-message', deleteMessage);
+app.post('/block-user', blockUser);
 
 // Listening on Port 3001
 const PORT = 3001;
