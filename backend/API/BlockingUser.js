@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const BlockedUser = require('../schema/blockedUsers'); // Ensure the path is correct
+const BlockedUser = require('../schema/blockedUsers'); 
 
 // API call to block a user
 const blockUser = async (req, res) => {

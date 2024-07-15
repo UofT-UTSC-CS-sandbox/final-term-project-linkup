@@ -1,5 +1,5 @@
 import React from 'react';
-import '../pages/DirectMessages.css'; // Ensure this path is correct
+import '../pages/DirectMessages.css'; 
 
 function BlockUserModal({ isOpen, onClose, currentUser, selectedUser, onBlock }) {
     if (!isOpen) return null;
