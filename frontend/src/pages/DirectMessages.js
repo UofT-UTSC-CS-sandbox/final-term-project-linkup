@@ -376,11 +376,27 @@ function App() {
             {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
           </div>)
       }
+      if(msg.deleted_by_from === true)
+      {
+        return (
+          <div key={msg._id} className="message-outer-single-block">
+            <div className="message-single-block-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
+            {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+          </div>)
+      }
       return (
       <div key={msg._id} className="message-outer-single-block">
         <div className="message-single-block" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
         {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
       </div>)
+    }
+    if(msg.deleted_by_from === true)
+    {
+      return (
+        <div key={msg._id} className="message-outer-single-block">
+          <div className="message-single-block-self-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
+          {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+        </div>)
     }
     return (
       <div key={msg._id} className="message-outer-single-block">

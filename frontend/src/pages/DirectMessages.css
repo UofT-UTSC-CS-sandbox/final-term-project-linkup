@@ -73,6 +73,27 @@
     font: normal 13px/1.18 "Inter", sans-serif;
 }
 
+.message-single-block-deleted {
+    display:flex;
+    position: relative;
+    background-color: #fab010;
+    color: #8c2a04;
+    text-align: left; /* Align text content to the left */
+    overflow: auto; /* Add overflow property */
+    width: auto; /* Let the width be determined by content */
+    max-width: 40%;
+    left: 2%;
+    padding: 15px;
+    margin-left: 0;
+    margin-right: auto;
+    border-radius: 10px;      /* Rounded corners */
+    margin-top: 10px; 
+    margin-bottom: 10px; /* Add margin bottom for space between blocks */
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    font: normal 13px/1.18 "Inter", sans-serif;
+    border: 2px solid #ad4703; /* Optional: Add a border to visualize the block */
+}
+
 .message-single-block-unread {
     display:flex;
     position: relative;
@@ -111,6 +132,26 @@
     margin-bottom: 10px; /* Add margin bottom for space between blocks */
     box-sizing: border-box; /* Ensure padding is included in the width/height */
     font: normal 13px/1.18 "Inter", sans-serif;
+}
+
+.message-single-block-self-deleted {
+    display:flex;
+    position: relative;
+    background-color: #fab010;
+    color: #8c2a04;
+    text-align: right; /* Align text content to the left */
+    overflow: auto; /* Add overflow property */
+    width: auto; /* Let the width be determined by content */
+    max-width: 47%;
+    padding: 15px;
+    border-radius: 10px;      /* Rounded corners */
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: 10px; 
+    margin-bottom: 10px; /* Add margin bottom for space between blocks */
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    font: normal 13px/1.18 "Inter", sans-serif;
+    border: 2px solid #ad4703; /* Optional: Add a border to visualize the block */
 }
 
 .message-timestamp-block {

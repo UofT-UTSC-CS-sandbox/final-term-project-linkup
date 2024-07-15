@@ -16,11 +16,19 @@ const deleteConversation = async (req, res) => {
     try {
       const passedInfo = req.body;
       
-      await Message.deleteMany({
-        $and: [
-          { from: passedInfo.me },
-          { to: passedInfo.other }
-        ]});
+      await Message.updateMany(
+        {
+          $and: [
+            { from: passedInfo.me },
+            { to: passedInfo.other }
+          ]
+        },
+        {
+          $set: {
+            message: "deleted by sender",
+            deleted_by_from: true
+          }
+        });
 
       // Send tokens to the frontend
       res.status(200).json({ message: "updated"});
