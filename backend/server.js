@@ -19,7 +19,7 @@ const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
 const getPublicResumes = require('./API/getPublicResumes')
 const getResumebyId = require('./API/getResumebyId');
-const {blockUser, checkIfBlocked } = require('./API/BlockingUser');
+const {blockUser, checkIfBlocked,getBlockedUsers } = require('./API/BlockingUser');
 
 
 // Direct messaging api's
@@ -139,7 +139,8 @@ app.post('/getUserBio', getUserBio);
 app.get('/api/swiping-resumes/:userId', getSwipingResumes);
 app.post('/api/swipes/:userId', addSwipe);
 app.post('/api/match/:userId', checkMatch);
-
+app.post('/check-if-blocked', checkIfBlocked);
+app.post('/get-blocked-users',getBlockedUsers);
 // Direct Messaging
 app.post('/send-message', sendMessage);
 app.post('/get-messages', getMessages);

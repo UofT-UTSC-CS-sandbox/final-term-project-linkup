@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import BlockUserModal from '../components/BlockUser';
+import BlockUserModal from '../components/BlockUser'; // Import BlockUserModal component
 
 // Styling
 import './DirectMessages.css';
@@ -11,7 +11,7 @@ import moreIcon from '../images/more-horizontal.svg';
 import deleteIcon from '../images/trash-2.svg';
 import slashIcon from '../images/slash.svg';
 import logo from '../images/linkup_logo_highquality.png';
-import Sidebar from '../components/Sidebar.js';
+import Sidebar from '../components/Sidebar.js'
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -44,8 +44,9 @@ function App() {
             setCurrentUser(auth.name);
             getUsers();
             getMessages();
+            checkBlockedUsers(auth.name, selectedUser); // Check blocked status on load
         }
-    }, [isAuthenticated, auth.name, navigate]);
+    }, [isAuthenticated, auth.name, navigate, selectedUser]);
 
     useEffect(() => {
         setMsgLimit(10);
@@ -89,6 +90,26 @@ function App() {
 
     const handleBlock = () => {
         setIsBlocked(true);
+    };
+
+    const checkBlockedUsers = async (username, selectedUser) => {
+        try {
+            const response = await fetch('http://localhost:3001/get-blocked-users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username })
+            });
+            const data = await response.json();
+            if (data.blockedUsernames.includes(selectedUser)) {
+                setIsBlocked(true);
+            } else {
+                setIsBlocked(false);
+            }
+        } catch (error) {
+            console.error('Error fetching blocked users:', error);
+        }
     };
 
     useEffect(() => {
@@ -386,6 +407,7 @@ function App() {
             console.log(selectedUser);
             setSelectedUser(user.anon_username);
             setMoreModalShow(false);
+            checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
         }}>
             <div className={outerBlockClass}>
                 <div className="circle"></div>
@@ -430,12 +452,12 @@ function App() {
                                 <img className='dm-more-modal-iconsize' src={slashIcon} alt="Slash Message Icon" />
                                 Block User
                             </div>
-                            <BlockUserModal 
-                            isOpen={isModalOpen} 
-                            onClose={closeModal} 
-                            currentUser={currentUser} 
-                            selectedUser={selectedUser} 
-                            onBlock={handleBlock}
+                            <BlockUserModal
+                                isOpen={isModalOpen}
+                                onClose={closeModal}
+                                currentUser={currentUser}
+                                selectedUser={selectedUser}
+                                onBlock={handleBlock}
                             />
                         </div>}
                 </div>
@@ -448,7 +470,7 @@ function App() {
                         .reverse()}
                 </div>
                 <div className="textbox-msg-block">
-                    <button onClick={() => { sendMessage(); markCurrMessagesAsRead(); }} className='textbox-msg-sendbutton' disabled={isBlocked}>
+                    <button onClick={() => { sendMessage(); markCurrMessagesAsRead() }} className='textbox-msg-sendbutton' disabled={isBlocked}>
                         <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
                     </button>
                     <input

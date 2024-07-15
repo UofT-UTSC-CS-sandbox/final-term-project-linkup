@@ -64,4 +64,26 @@ const checkIfBlocked = async (req, res) => {
     }
 };
 
-module.exports = { blockUser, checkIfBlocked };
+const getBlockedUsers = async (req, res) => {
+    try {
+        const { username } = req.body;
+
+        if (!username) {
+            return res.status(400).json({ message: 'Username is required' });
+        }
+
+        // Find blocked users for the current user
+        const blockedUserRecord = await BlockedUser.findOne({ username });
+
+        if (blockedUserRecord) {
+            return res.status(200).json({ blockedUsernames: blockedUserRecord.blockedUsernames });
+        } else {
+            return res.status(200).json({ blockedUsernames: [] });
+        }
+    } catch (error) {
+        console.error('Error fetching blocked users:', error);
+        res.status(500).send('Error fetching blocked users: ' + error.message);
+    }
+};
+
+module.exports = { blockUser, checkIfBlocked, getBlockedUsers};
