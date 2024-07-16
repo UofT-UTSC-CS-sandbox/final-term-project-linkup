@@ -3,6 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { cloneDeep } from 'lodash';
 import axios from "axios";
 
+// Routing and authentication
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
+
 // Styling
 import './DirectMessages.css';
 import sendIcon from '../images/Iconsax (1).png';
@@ -12,11 +16,7 @@ import deleteIcon from '../images/trash-2.svg';
 import slashIcon from '../images/slash.svg';
 import editIcon from '../images/edit.svg';
 import logo from '../images/linkup_logo_highquality.png';
-import Sidebar from '../components/Sidebar.js'
-
-// Routing and authentication
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
+import Sidebar from '../components/Sidebar.js';
 
 function App() {
   const [txtMsg, setTxtMsg] = useState('');
@@ -35,6 +35,12 @@ function App() {
   const [existMoreToLoad, setExistsMoreToLoad] = useState(true);
 
   const messagesEndRef = useRef(null);
+
+  // Delete Conversation Modal
+  const [delConvModalOpen, setDelConvModalOpen] = useState(false);
+  const toggleDelConvModal = () => {
+    setDelConvModalOpen(!delConvModalOpen);
+  };
 
   // Authentication and navigation
   const navigate = useNavigate();
@@ -366,6 +372,13 @@ function App() {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
 
+  // Key listeners
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
   // Components
   const messageComponent = (msg, index) => {
     if(msg.from !== auth.name) {
@@ -410,13 +423,6 @@ function App() {
         {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
       </div>)
   }
-
-  // Key listeners
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      sendMessage();
-    }
-  };
 
   const userComponent = (user) => {
     const latestDm = getLatestDm(user);
@@ -477,6 +483,55 @@ function App() {
     </div>)
   }
 
+  // Delete Conversations Modal Component
+  const deleteConversationModal = () => {
+    console.log(delConvModalOpen);
+    return (
+      <div>
+        <div onClick={toggleDelConvModal} className='overlay'></div>
+        <div className="modal-content">
+          <h4>Are you sure you want to delete the conversation?</h4>
+          <p>
+              NOTE: Only your messages will be deleted
+              NOTE: The other user can see that you have deleted the message
+          </p>
+          <button onClick={() => {
+              deleteConversation();
+              toggleDelConvModal()}}>
+              yes
+          </button>
+          <button onClick={toggleDelConvModal}>
+              no
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+   // Delete Conversations Modal Component
+   const deleteMessageModal = (msg) => {
+    console.log(delConvModalOpen);
+    return (
+      <div>
+        <div onClick={toggleDelConvModal} className='overlay'></div>
+        <div className="modal-content">
+          <h4>Are you sure you want to delete this message?</h4>
+          <p>
+              NOTE: The other user can see that you have deleted the message
+          </p>
+          <button onClick={() => {
+              deleteMessage(msg);
+              toggleDelConvModal()}}>
+              yes
+          </button>
+          <button onClick={toggleDelConvModal}>
+              no
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
      <div className="app-logo-container"> 
@@ -505,7 +560,10 @@ function App() {
             </div>}
           {moreModalShow &&
             <div className="dm-more-modal">
-              <div onClick={() => deleteConversation()} className='dm-more-modal-block-individualblock'>
+              <div onClick={() => 
+                {toggleDelConvModal(); 
+                 setMoreModalShow(!moreModalShow)
+                }} className='dm-more-modal-block-individualblock'>
                 <img className='dm-more-modal-iconsize' src={deleteIcon} alt="Delete Message Icon" />
                 Delete Conversation
               </div>
@@ -541,6 +599,10 @@ function App() {
           {matchedList.map((user) => (userComponent(user)))}
         </div>
       </div>
+      {delConvModalOpen && (
+                <div>
+                  {deleteConversationModal()}
+                </div>)}
     </div>
   );
 }

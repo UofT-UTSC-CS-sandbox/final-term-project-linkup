@@ -76,8 +76,8 @@
 .message-single-block-deleted {
     display:flex;
     position: relative;
-    background-color: #fab010;
-    color: #8c2a04;
+    background-color: #ffca57dd;
+    color: #cf7234;
     text-align: left; /* Align text content to the left */
     overflow: auto; /* Add overflow property */
     width: auto; /* Let the width be determined by content */
@@ -91,7 +91,7 @@
     margin-bottom: 10px; /* Add margin bottom for space between blocks */
     box-sizing: border-box; /* Ensure padding is included in the width/height */
     font: normal 13px/1.18 "Inter", sans-serif;
-    border: 2px solid #ad4703; /* Optional: Add a border to visualize the block */
+    border: 2px solid #cf7234; /* Optional: Add a border to visualize the block */
 }
 
 .message-single-block-unread {
@@ -137,8 +137,8 @@
 .message-single-block-self-deleted {
     display:flex;
     position: relative;
-    background-color: #fab010;
-    color: #8c2a04;
+    background-color: #ffca57dd;
+    color: #cf7234;
     text-align: right; /* Align text content to the left */
     overflow: auto; /* Add overflow property */
     width: auto; /* Let the width be determined by content */
@@ -151,7 +151,7 @@
     margin-bottom: 10px; /* Add margin bottom for space between blocks */
     box-sizing: border-box; /* Ensure padding is included in the width/height */
     font: normal 13px/1.18 "Inter", sans-serif;
-    border: 2px solid #ad4703; /* Optional: Add a border to visualize the block */
+    border: 2px solid #cf7234; /* Optional: Add a border to visualize the block */
 }
 
 .message-timestamp-block {
@@ -199,7 +199,7 @@
 
 .textbox-msg-textbox {
     position: absolute;
-    width: 94%;
+    width: 86%;
     height: 35%;
     left: 2%;
     border-radius: 10px;      /* Rounded corners */
@@ -221,11 +221,10 @@
 
 .textbox-msg-sendbutton {
     position: absolute;
-    z-index: 100; /* Bringing to front */
-    left: 90%;
+    left: 92%;
     top: 18%;
-    width: 8.3%;
-    height: 59.5%;
+    width: 55px;
+    height: 42px;
     border-radius: 10px;
     background-color: white;
     border: none;
@@ -236,9 +235,8 @@
 .send-msg-icon {
     position: relative;
     top: 5%;
-    left: 23%;
-    width: 55%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
 }
 
 .loadmore-messages-button {
@@ -420,7 +418,7 @@
     width: 25%; /* Adjust size of the circle */
     height: 120%; /* Adjust size of the circle */
     border-radius: 10px;
-    z-index: 100;
+    z-index: 50;
     border: 1.5px solid black; /* Optional: Add a border to visualize the block */
 }
 
@@ -471,4 +469,48 @@
 
 .dm-msgactions-size:hover {
     filter: invert(29%) sepia(100%) saturate(7000%) hue-rotate(356deg) brightness(70%) contrast(101%);
+}
+
+body.active-modal {
+    overflow-y: hidden;
+}
+
+.btn-modal {
+    padding: 10px 20px;
+    display: block;
+    margin: 100px auto 0;
+    font-size: 18px;
+}
+
+.modal, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.overlay {
+    background: rgba(38, 39, 47, 0.8);
+}
+
+.modal-content {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f1f1f1;
+    padding: 14px 28px;
+    border-radius: 10px;
+    max-width: 600px;
+    min-width: 300px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 7px;
 }
