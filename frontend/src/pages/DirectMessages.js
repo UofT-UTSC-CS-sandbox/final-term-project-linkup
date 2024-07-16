@@ -487,46 +487,14 @@ function App() {
   const deleteConversationModal = () => {
     console.log(delConvModalOpen);
     return (
-      <div>
-        <div onClick={toggleDelConvModal} className='overlay'></div>
-        <div className="modal-content">
-          <h4>Are you sure you want to delete the conversation?</h4>
-          <p>
-              NOTE: Only your messages will be deleted
-              NOTE: The other user can see that you have deleted the message
-          </p>
-          <button onClick={() => {
-              deleteConversation();
-              toggleDelConvModal()}}>
-              yes
-          </button>
-          <button onClick={toggleDelConvModal}>
-              no
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-   // Delete Conversations Modal Component
-   const deleteMessageModal = (msg) => {
-    console.log(delConvModalOpen);
-    return (
-      <div>
-        <div onClick={toggleDelConvModal} className='overlay'></div>
-        <div className="modal-content">
-          <h4>Are you sure you want to delete this message?</h4>
-          <p>
-              NOTE: The other user can see that you have deleted the message
-          </p>
-          <button onClick={() => {
-              deleteMessage(msg);
-              toggleDelConvModal()}}>
-              yes
-          </button>
-          <button onClick={toggleDelConvModal}>
-              no
-          </button>
+      <div className="modal-overlay-delete" onClick={toggleDelConvModal}>
+        <div className="modal-content-delete">
+            <h2 className="modal-header-delete"> Are you sure you want to delete this conversation?</h2>
+            <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
+            <div className="modal-buttons-delete">
+                <button className="cancel-button-delete modal-button-delete" onClick={toggleDelConvModal}>Cancel</button>
+                <button className="delete-button-delete modal-button-delete" onClick={deleteConversation}>Delete</button>
+            </div>
         </div>
       </div>
     );
