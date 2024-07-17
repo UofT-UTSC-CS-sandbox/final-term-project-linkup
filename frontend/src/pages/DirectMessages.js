@@ -42,6 +42,12 @@ function App() {
     setDelConvModalOpen(!delConvModalOpen);
   };
 
+  const [delMsgModalOpen, setDelMsgModalOpen] = useState(false);
+  const [msgToBeDeleted, setMsgToBeDeleted] = useState({});
+  const toggleDelMsgModal = () => {
+    setDelMsgModalOpen(!delMsgModalOpen);
+  };
+
   // Authentication and navigation
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
@@ -296,6 +302,11 @@ function App() {
       return;
     }
 
+    if(msg == {}) {
+      console.log("no message to be deleted");
+      return;
+    }
+
     try {
       await fetch('http://localhost:3001/delete-message', {
           method: 'POST',
@@ -416,7 +427,10 @@ function App() {
         {msgHovered === msg._id &&
           <div onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')} className='dm-msgactions-icons'>
             {/* <img className='dm-msgactions-size' src={editIcon} alt="Edit Message Icon" /> */}
-            <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {deleteMessage(msg)}} alt="Delete Message Icon" />
+            <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {
+              setMsgToBeDeleted(msg);
+              toggleDelMsgModal();
+            }} alt="Delete Message Icon" />
           </div>
         }
         <div className="message-single-block-self" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
@@ -485,7 +499,6 @@ function App() {
 
   // Delete Conversations Modal Component
   const deleteConversationModal = () => {
-    console.log(delConvModalOpen);
     return (
       <div className="modal-overlay-delete" onClick={toggleDelConvModal}>
         <div className="modal-content-delete">
@@ -494,6 +507,23 @@ function App() {
             <div className="modal-buttons-delete">
                 <button className="cancel-button-delete modal-button-delete" onClick={toggleDelConvModal}>Cancel</button>
                 <button className="delete-button-delete modal-button-delete" onClick={deleteConversation}>Delete</button>
+            </div>
+        </div>
+      </div>
+    );
+  }
+
+   // Delete Conversations Modal Component
+   const deleteMsgModal = () => {
+    console.log(msgToBeDeleted);
+    return (
+      <div className="modal-overlay-delete" onClick={toggleDelMsgModal}>
+        <div className="modal-content-delete">
+            <h2 className="modal-header-delete"> Are you sure you want to delete this message?</h2>
+            <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
+            <div className="modal-buttons-delete">
+                <button className="cancel-button-delete modal-button-delete" onClick={toggleDelMsgModal}>Cancel</button>
+                <button className="delete-button-delete modal-button-delete" onClick={() => {deleteMessage(msgToBeDeleted)}}>Delete</button>
             </div>
         </div>
       </div>
@@ -570,6 +600,10 @@ function App() {
       {delConvModalOpen && (
                 <div>
                   {deleteConversationModal()}
+                </div>)}
+      {delMsgModalOpen && (
+                <div>
+                  {deleteMsgModal()}
                 </div>)}
     </div>
   );
