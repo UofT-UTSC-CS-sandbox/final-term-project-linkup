@@ -21,6 +21,7 @@ function TrendingResumes() {
         const fetchResumesTrending = async () => {
             try {
                 const response = await axios.get(`http://localhost:3001/api/resumes/public`);
+                console.log(response.data);
                 setResumes(response.data);
             } catch (error) {
                 console.error('Failed to fetch public trending resumes', error);

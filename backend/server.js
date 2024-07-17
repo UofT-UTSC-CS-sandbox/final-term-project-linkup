@@ -17,7 +17,7 @@ const updateResumePublicStatus = require('./API/updateResume');
 const getSwipingResumes = require('./API/getSwipingResumes');
 const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
-const getPublicResumes = require('./API/getPublicResumes')
+const getPublicResumes = require('./API/getPublicResumes');
 const getResumebyId = require('./API/getResumebyId');
 
 
