@@ -72,12 +72,110 @@
 }
 
 .comments-container {
-    width: 350px;
-    min-height: 800px;
-    overflow-y: auto;
-    background-color: none;
-    padding: 50px;
-    box-sizing: border-box;
+    width: 400px; /* Adjust width as needed */
+    height: 780px; /* Set to match the PDF viewer height */
+    overflow-y: auto; /* Enables vertical scrolling when content overflows */
+    padding: 0px; /* Adjust padding as needed */
+    margin-top: 30px;
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+/* Styles for the comment input and send button */
+.comment-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Space above the input form */
+    background: #FFFFFF; /* Match the modal background for consistency */
+    border-radius: 5px; /* Rounded corners for the input box */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.comment-input {
+    flex-grow: 1; /* Allow input to fill the space */
+    border: none;
+    border-radius: 5px 0 0 5px; /* Rounded corners on the left side */
+    padding: 10px 15px; /* Padding inside the input */
+    font-size: 16px; /* Adequate font size for readability */
+    outline: none; /* Remove focus outline */
+}
+
+.comment-submit-button {
+    padding: 10px 15px; /* Padding matching the input */
+    border: none;
+    background-color: #26ACD6; /* Vibrant color for the button */
+    color: white; /* Text color for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 0 5px 5px 0; /* Rounded corners on the right side */
+    font-size: 16px; /* Match the input text size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-submit-button:hover {
+    background-color: #238fb5; /* Slightly darker on hover for feedback */
+}
+
+.comment-submit-button svg {
+    margin-left: 5px; /* Space between text and icon */
+}
+
+/* Ensuring that the input and button are visually connected */
+.comment-input:focus + .comment-submit-button {
+    border-color: #26ACD6; /* Highlight color when input is focused */
+}
+
+.comments-list {
+    height: 780px; /* Set to match the PDF viewer height */
+    padding: 20px; /* Adjust padding as needed */
+}
+
+.comment-item {
+    display: flex;
+    align-items: center;
+    background: #f7f7f7;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.comment-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.icon-holder {
+    width: 35px;  
+    height: 35px; 
+    background-color: #ccc;
+    border-radius: 50%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.comment-username {
+    font-weight: bold;
+    margin-right: -20px;
+    margin-top: -27px;
+}
+
+.comment-text {
+    margin-top: 20px;
+    text-align: left;
+    color: #333;
+}
+
+.comment-votes {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.comment-votes svg {
+    margin: 0 5px; /* Spacing around icons */
 }
 
 .comment-button {
@@ -99,3 +197,6 @@
 .comment-button:hover {
     background-color: #48abe4; /* Slightly darker blue on hover */
 }
+
+
+
