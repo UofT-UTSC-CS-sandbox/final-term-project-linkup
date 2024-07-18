@@ -17,12 +17,12 @@ const updateResumePublicStatus = require('./API/updateResume');
 const getSwipingResumes = require('./API/getSwipingResumes');
 const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
-const getPublicResumes = require('./API/getPublicResumes')
+const getPublicResumes = require('./API/getPublicResumes');
 const getResumebyId = require('./API/getResumebyId');
-const {blockUser, checkIfBlocked,getBlockedUsers } = require('./API/BlockingUser');
+const { blockUser, checkIfBlocked, getBlockedUsers } = require('./API/BlockingUser');
+const BlockedUser = require('./schema/blockedUsers');
 
-
-// Direct messaging api's
+// Direct messaging API's
 const sendMessage = require('./API/sendMessage');
 const getMessages = require('./API/getMessages');
 const markMessagesAsRead = require('./API/markMessagesAsRead');
@@ -38,20 +38,21 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 // Function to setup MongoDB Change Stream
 const eventEmitter = new EventEmitter();
 
 // MongoDB connection
-mongoose.connect(MONGO_DB, {dbName: "linkup"})
+mongoose.connect(MONGO_DB, { dbName: "linkup" })
   .then(() => {
     console.log('MongoDB connected');
-    setupChangeStream()})
+    setupChangeStream()
+  })
   .catch(err => console.error('MongoDB connection error:', err));
 
 const conn = mongoose.connection;
-var changeStream;
+let changeStream;
 
 // Listener for new messages
 function setupChangeStream() {
@@ -63,35 +64,44 @@ function setupChangeStream() {
 
   // Handle change events
   changeStream.on('change', (change) => {
-      if (change.operationType === 'insert') {
-          const newMessage = change.fullDocument;
-          eventEmitter.emit('newMessage', newMessage);
-      }
+    if (change.operationType === 'insert') {
+      const newMessage = change.fullDocument;
+      eventEmitter.emit('newMessage', newMessage);
+    }
   });
 }
 
-// Close change stream when your application shuts down
+// Close change stream when application shuts down
 process.on('SIGINT', () => {
   changeStream.close();
   mongoose.connection.close(() => {
-      console.log('MongoDB disconnected on app termination');
-      process.exit(0);
+    console.log('MongoDB disconnected on app termination');
+    process.exit(0);
   });
 });
 
-app.get('/sse', (req, res) => {
+app.get('/sse', async (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
 
+  const currUser = req.query.user;
+
+  // Fetch blocked users for the current user
+  const blockedUserEntry = await BlockedUser.findOne({ username: currUser });
+  const blockedUsers = blockedUserEntry ? blockedUserEntry.blockedUsernames : [];
+
   const listener = (message) => {
+    // Check if the message sender is blocked
+    if (!blockedUsers.includes(message.from)) {
       res.write(`data: ${JSON.stringify(message)}\n\n`);
+    }
   };
 
   eventEmitter.on('newMessage', listener);
 
   req.on('close', () => {
-      eventEmitter.off('newMessage', listener);
+    eventEmitter.off('newMessage', listener);
   });
 });
 
@@ -102,7 +112,7 @@ conn.once('open', () => {
     bucketName: 'bucket'
   });
 
-  //RESUMES
+  // RESUMES
   app.post('/upload', upload.single('file'), uploadResumes);
   app.get('/resumes/:userId', getUserResumes);
   app.get('/bucket/files/:filename', displayResumes(gfsBucket));
@@ -140,7 +150,8 @@ app.get('/api/swiping-resumes/:userId', getSwipingResumes);
 app.post('/api/swipes/:userId', addSwipe);
 app.post('/api/match/:userId', checkMatch);
 app.post('/check-if-blocked', checkIfBlocked);
-app.post('/get-blocked-users',getBlockedUsers);
+app.post('/get-blocked-users', getBlockedUsers);
+
 // Direct Messaging
 app.post('/send-message', sendMessage);
 app.post('/get-messages', getMessages);
