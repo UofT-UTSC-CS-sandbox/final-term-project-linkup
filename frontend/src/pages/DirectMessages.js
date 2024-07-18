@@ -9,6 +9,8 @@ import sendIcon from '../images/Iconsax (1).png';
 import messageIcon from '../images/message-square.svg';
 import logo from '../images/linkup_logo_highquality.png';
 import Sidebar from '../components/Sidebar.js'
+import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -28,6 +30,8 @@ function App() {
   const [currTimeStampShow, setCurrTimeStampShow] = useState('');
   
   const [existMoreToLoad, setExistsMoreToLoad] = useState(true);
+  const [showButtons, setShowButtons] = useState(false);
+  const [dmAccepted, setDmAccepted] = useState(null);
 
   const messagesEndRef = useRef(null);
 
@@ -56,6 +60,8 @@ function App() {
     setMsgLimit(10);
     checkMoreToLoad();
     scrollToBottom();
+    //fetchDmStatus(selectedUser); 
+    fetchDmStatus(selectedUser);
   }, [selectedUser]);
 
   useEffect(() => {
@@ -101,7 +107,7 @@ function App() {
     return () => {
         eventSource.close();
     };
-  });
+  },[]);
 
   // Checking if the user has left the page
   useEffect(() => {
@@ -165,6 +171,9 @@ function App() {
         console.log("retrieved messages");
         const data = await response.json();
         setMsgList(data);
+        // if (data.some(msg => msg.to === auth.name && msg.messageType === 'new_dm' && !msg.read_by_to)) {
+        //   setShowButtons(true);
+        // }
       } else {
         console.log("response was not ok");
           
@@ -306,27 +315,128 @@ function App() {
 
 
   // Components
+  // const messageComponent = (msg, index) => {
+  //   const isNewConversation = msg.message.includes('left comments on your resume') && !msg.read_by_to && dmAccepted === null;
+  //   if(msg.from !== auth.name) {
+  //     if (msg.read_by_to == false && msg.to == auth.name) {
+  //       return (
+  //         <div key={msg._id} className="message-outer-single-block">
+  //           <div className="message-single-block-unread" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}
+  //           {isNewConversation && (
+  //                       <div className="swipe-action-buttons">
+  //                           <button onClick={handleAccept}>Accept</button>
+  //                           <button onClick={handleDecline}>Decline</button>
+  //                       </div>
+  //                   )}
+  //           </div>
+  //           {currTimeStampShow === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
+  //         </div>)
+  //     }
+  //     return (
+  //     <div key={msg._id} className="message-outer-single-block">
+  //       <div className="message-single-block" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
+  //       {currTimeStampShow === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+  //     </div>)
+  //   }
+  //   return (
+  //     <div key={msg._id} className="message-outer-single-block">
+  //       <div className="message-single-block-self" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
+  //       {currTimeStampShow === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+  //     </div>)
+  // }
+
   const messageComponent = (msg, index) => {
-    if(msg.from !== auth.name) {
-      if (msg.read_by_to == false && msg.to == auth.name) {
+    
+    let messageContent;
+    try {
+        messageContent = JSON.parse(msg.message);
+    } catch (e) {
+        messageContent = { text: msg.message };
+    }
+    const { resumeUrl, resumeId, commenter, text: messageText } = messageContent;
+    // const resumeUrl = messageContent.resumeUrl;
+    // const messageText = messageContent.text;
+
+    const isNewConversation = messageText && messageText.includes('left comments on your resume') && dmAccepted === null;
+
+    const viewCommentsLink = resumeId && commenter 
+        ? `/view-resume-comments/${resumeId}/${commenter}` 
+        : null;
+
+    if (msg.from !== auth.name) {
+        if (msg.read_by_to === false && msg.to === auth.name) {
+            return (
+                <div key={msg._id} className="message-outer-single-block">
+                  {resumeUrl && (
+                    <div className="message-single-block resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                        <div className="resume-block">
+                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                                <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
+                            </Worker>
+                        </div>
+                        </div>
+                    )}
+                    <div className="message-single-block-unread"  onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                        {viewCommentsLink ? (
+                            <a href={viewCommentsLink}>{messageText}</a>
+                        ) : (
+                            messageText
+                        )}
+                        {isNewConversation && showButtons && (
+                <div className="swipe-action-buttons">
+                  <button onClick={handleAccept}>Accept</button>
+                  <button onClick={handleDecline}>Decline</button>
+                </div>
+              )}
+                    </div>
+                    {currTimeStampShow === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
+                </div>
+            );
+        }
         return (
-          <div key={msg._id} className="message-outer-single-block">
-            <div className="message-single-block-unread" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
-            {currTimeStampShow === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
-          </div>)
-      }
-      return (
-      <div key={msg._id} className="message-outer-single-block">
-        <div className="message-single-block" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
-        {currTimeStampShow === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
-      </div>)
+            <div key={msg._id} className="message-outer-single-block">
+              {resumeUrl && (
+                 <div className="message-single-block resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                    <div className="resume-block">
+                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                            <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
+                        </Worker>
+                    </div>
+                    </div>
+                )}
+                <div className="message-single-block" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                {viewCommentsLink ? (
+                            <a href={viewCommentsLink}>{messageText}</a>
+                        ) : (
+                            messageText
+                        )}
+                </div>
+                {currTimeStampShow === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+            </div>
+        );
     }
     return (
-      <div key={msg._id} className="message-outer-single-block">
-        <div className="message-single-block-self" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>{msg.message}</div>
-        {currTimeStampShow === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
-      </div>)
-  }
+        <div key={msg._id} className="message-outer-single-block">
+          {resumeUrl && (
+            <div className="message-single-block-self resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                <div className="resume-block">
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                        <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
+                    </Worker>
+                </div>
+              </div>
+            )}
+            <div className="message-single-block-self" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                {viewCommentsLink ? (
+                      <a href={viewCommentsLink}>{messageText}</a>
+                  ) : (
+                      messageText
+                  )}
+            </div>
+            {currTimeStampShow === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+        </div>
+    );
+}
 
   const userComponent = (user) => {
     const latestDm = getLatestDm(user);
@@ -386,6 +496,83 @@ function App() {
     </div>)
   }
 
+
+
+  // const checkDmStatus = async (otherUser) => {
+  //   const currUser = auth.name; // Use anon_username
+
+  //   try {
+  //     const response = await axios.get('http://localhost:3001/api/dm-status', {
+  //       params: { to: currUser, from: otherUser }
+  //     });
+
+  //     if (response.data.isNewConversation) {
+  //       setShowButtons(true);
+  //     } else {
+  //       setDmAccepted(response.data.accepted);
+  //       setShowButtons(false);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking DM status:', error);
+  //   }
+  // };
+
+  const fetchDmStatus = async (otherUser) => {
+    const currUser = auth.name; // Use anon_username
+
+    try {
+      const response = await axios.get('http://localhost:3001/api/dm-status', {
+        params: { to: currUser, from: otherUser }
+      });
+
+      if (response.data.isNewConversation) {
+        setShowButtons(true);
+        setDmAccepted(null);
+      } else {
+        setDmAccepted(response.data.accepted);
+        setShowButtons(false);
+      }
+    } catch (error) {
+      console.error('Error checking DM status:', error);
+    }
+  };
+
+  const handleAccept = async () => {
+    await updateDmStatus(true);
+    setShowButtons(false);
+    setDmAccepted(true);
+  };
+
+  const handleDecline = async () => {
+    await updateDmStatus(false);
+    setShowButtons(false);
+    setDmAccepted(false);
+  };
+
+  const updateDmStatus = async (accepted) => {
+    const currUser = auth.name; // Use anon_username
+    const otherUser = userList.find(user => user.anon_username === selectedUser).anon_username;
+
+    try {
+      await axios.post('http://localhost:3001/api/dm-status/update', {
+        to: currUser,
+        from: otherUser,
+        accepted
+      });
+
+      setMsgList(prev => prev.map(msg => {
+        if (msg.to === currUser && msg.from === otherUser) {
+          return { ...msg, accepted };
+        }
+        return msg;
+      }));
+    } catch (error) {
+      console.error('Error updating DM status:', error);
+    }
+  };
+
+
+
   return (
     <div className="container">
      <div className="app-logo-container"> 
@@ -417,9 +604,16 @@ function App() {
                   .slice(0, msgLimit)
                   .reverse()}
         </div>
+
+        {showButtons && (
+              <div className="swipe-action-buttons-container">
+                <button onClick={handleAccept}>Accept</button>
+                <button onClick={handleDecline}>Decline</button>
+              </div>
+            )}
         <div className="textbox-msg-block">
           <button onClick={() => {sendMessage();
-                                  markCurrMessagesAsRead()}} className='textbox-msg-sendbutton'>
+                                  markCurrMessagesAsRead()}} className='textbox-msg-sendbutton' disabled={dmAccepted === false || dmAccepted === null }>
             <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
           </button> 
           <input 
@@ -428,6 +622,7 @@ function App() {
             onChange={handleTxtChange} 
             placeholder={"   Type a message"}
             className="textbox-msg-textbox"
+            disabled={dmAccepted === false || dmAccepted === null}
           />
         </div>
         <div className="select-user-block">

@@ -17,15 +17,19 @@ const updateResumePublicStatus = require('./API/updateResume');
 const getSwipingResumes = require('./API/getSwipingResumes');
 const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
-const getPublicResumes = require('./API/getPublicResumes')
+const getPublicResumes = require('./API/getPublicResumes');
 const getResumebyId = require('./API/getResumebyId');
-
+const addComments = require('./API/addComments');
+const getComments = require('./API/getComments');
+const getUploaderName = require('./API/getUserName');
 
 // Direct messaging api's
 const sendMessage = require('./API/sendMessage');
 const getMessages = require('./API/getMessages');
 const markMessagesAsRead = require('./API/markMessagesAsRead');
 const getNumberOfUnreadDms = require('./API/getNumberOfUnreadDms');
+const updateDmStatus = require('./API/updateDmStatus');
+const getDmStatus = require('./API/getDmStatus');
 
 require('dotenv').config();
 
@@ -108,6 +112,8 @@ conn.once('open', () => {
   app.post('/api/update-resume', updateResumePublicStatus);
   app.get('/api/resumes/public', getPublicResumes);
   app.get('/api/resume/:resumeId', getResumebyId);
+  app.post('/api/resume/:resumeId/comments', addComments);
+  app.get('/api/resume/:resumeId/comments', getComments);
 });
 
 
@@ -145,6 +151,14 @@ app.post('/send-message', sendMessage);
 app.post('/get-messages', getMessages);
 app.post('/mark-messages-as-read', markMessagesAsRead);
 app.post('/get-number-of-unread-dms', getNumberOfUnreadDms);
+app.post('/api/dm-status/update', updateDmStatus);
+app.get('/api/dm-status', getDmStatus);
+
+app.get('/api/get-uploader-name/:userId', getUploaderName);
+
+// app.use('/api/resume', addComments);
+// app.use('/api/resume', getComments);
+
 
 // Listening on Port 3001
 const PORT = 3001;
