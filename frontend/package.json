@@ -33,12 +33,12 @@
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd .. && cd backend && npm install && node server.js ",
+    "server": "redis-server & cd .. && cd backend && npm install && node server.js",
     "client": "npm install && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
+},
   "eslintConfig": {
     "extends": [
       "react-app",
