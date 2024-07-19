@@ -144,7 +144,11 @@ const LandingPage = () => {
                 </div>
             </div>
         ) : (
-            <div>No more resumes to swipe</div>
+            <div className="no-results">
+                <p>No Resumes Found</p>
+                <br></br>
+                <p>Consider changing your swiping preferences to allow for more results.</p> 
+            </div>
         )}
     </div>
     );

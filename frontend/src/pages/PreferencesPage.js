@@ -123,7 +123,7 @@ function PreferencesForm() {
         placeholder: (base) => ({
             ...base,
             color: '#000',
-            textAlign: 'Left',
+            textAlign: 'center',
         }),
         dropdownIndicator: (base) => ({
             ...base,
@@ -155,9 +155,8 @@ function PreferencesForm() {
             </div>
             <Sidebar></Sidebar>
             <div className="preferences-form-container">
-                <h3>Select Your Preferences</h3>
-                <h10>Resumes shown to you will be tailored according to your preferences.</h10>
-                <br></br>
+                <h2>Select Your Preferences</h2>
+                <p class="preferences-desc">Resumes shown to you will be tailored according to your preferences.</p>
                 <form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>
                     <br></br>
                     <Select

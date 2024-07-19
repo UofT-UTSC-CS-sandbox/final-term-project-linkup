@@ -219,7 +219,7 @@ function capitalizeWords(str) {
                 <div className="profile-icon-section">
                     <div className="profile-icon-placeholder"></div>
                     <div className="username"> {auth.name} </div>
-                    <button className="settings-button" onClick={() => navigate('/edit-preferences')}>
+                    <button className="edit-preferences-button" onClick={() => navigate('/edit-preferences')}>
                         Edit Preferences
                     </button>
                 </div>
@@ -240,6 +240,7 @@ function capitalizeWords(str) {
                         <div className="field-label">Level of Experience: <span className="value-normal">{capitalizeWords(bio.preferences_workexp)}</span></div>
                     </div>
                 </div>
+
                 <div className="uploads-container">
                     <div className="uploads-info">MY UPLOADS</div>
                     <hr className="uploads-divider" />

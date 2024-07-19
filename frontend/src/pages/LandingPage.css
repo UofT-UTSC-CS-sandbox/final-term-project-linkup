@@ -96,4 +96,18 @@ p {
   margin-left: 20px;  
 }
   
-  
+.no-results {
+  margin: 50px;
+} 
+
+.no-results p:last-child{
+  font-weight: 300;
+  font-size: 1.3em;
+  margin: 1px;
+}
+
+.no-results p:first-child{
+  font-weight: 500;
+  font-size: 1.8em;
+  margin: 1px;
+}
