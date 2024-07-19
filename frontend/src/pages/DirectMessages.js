@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BlockUserModal from '../components/BlockUser'; // Import BlockUserModal component
 
+// Routing and authentication
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
+
 // Styling
 import './DirectMessages.css';
 import sendIcon from '../images/Iconsax (1).png';
@@ -12,10 +16,6 @@ import deleteIcon from '../images/trash-2.svg';
 import slashIcon from '../images/slash.svg';
 import logo from '../images/linkup_logo_highquality.png';
 import Sidebar from '../components/Sidebar.js';
-
-// Routing and authentication
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 function App() {
   const [txtMsg, setTxtMsg] = useState('');
@@ -32,6 +32,18 @@ function App() {
   const [isBlocked, setIsBlocked] = useState(false);
 
   const messagesEndRef = useRef(null);
+
+  // Delete Conversation Modal
+  const [delConvModalOpen, setDelConvModalOpen] = useState(false);
+  const toggleDelConvModal = () => {
+    setDelConvModalOpen(!delConvModalOpen);
+  };
+
+  const [delMsgModalOpen, setDelMsgModalOpen] = useState(false);
+  const [msgToBeDeleted, setMsgToBeDeleted] = useState({});
+  const toggleDelMsgModal = () => {
+    setDelMsgModalOpen(!delMsgModalOpen);
+  };
 
   // Authentication and navigation
   const navigate = useNavigate();
@@ -289,6 +301,11 @@ function App() {
   const deleteMessage = async (msg) => {
     if (selectedUser === "") return;
 
+    if(msg == {}) {
+      console.log("no message to be deleted");
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:3001/delete-message', {
         method: 'POST',
@@ -362,7 +379,17 @@ function App() {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
 
+
   // Component to render each message
+
+  // Key listeners
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
+  // Components
   const messageComponent = (msg, index) => {
     if (msg.from !== auth.name) {
       if (msg.read_by_to === false && msg.to === auth.name) {
@@ -372,31 +399,45 @@ function App() {
             {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
           </div>);
       }
+      if(msg.deleted_by_from === true)
+      {
+        return (
+          <div key={msg._id} className="message-outer-single-block">
+            <div className="message-single-block-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
+            {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+          </div>)
+      }
       return (
         <div key={msg._id} className="message-outer-single-block">
           <div className="message-single-block" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
           {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
         </div>);
     }
+    if(msg.deleted_by_from === true)
+    {
+      return (
+        <div key={msg._id} className="message-outer-single-block">
+          <div className="message-single-block-self-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
+          {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+        </div>)
+    }
     return (
       <div key={msg._id} className="message-outer-single-block">
         {msgHovered === msg._id &&
           <div onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')} className='dm-msgactions-icons'>
-            <img className='dm-msgactions-size' src={deleteIcon} onClick={() => { deleteMessage(msg) }} alt="Delete Message Icon" />
-          </div>}
+
+            {/* <img className='dm-msgactions-size' src={editIcon} alt="Edit Message Icon" /> */}
+            <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {
+              setMsgToBeDeleted(msg);
+              toggleDelMsgModal();
+            }} alt="Delete Message Icon" />
+          </div>
+        }
         <div className="message-single-block-self" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
         {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
       </div>);
   };
 
-  // Key listeners
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      sendMessage();
-    }
-  };
-
-  // Component to render each user in the user list
   const userComponent = (user) => {
     const latestDm = getLatestDm(user);
     const numUnreadDms = getNumberOfUnreadDms(user);
@@ -435,6 +476,39 @@ function App() {
     </div>);
   };
 
+  // Delete Conversations Modal Component
+  const deleteConversationModal = () => {
+    return (
+      <div className="modal-overlay-delete" onClick={toggleDelConvModal}>
+        <div className="modal-content-delete">
+            <h2 className="modal-header-delete"> Are you sure you want to delete this conversation?</h2>
+            <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
+            <div className="modal-buttons-delete">
+                <button className="cancel-button-delete modal-button-delete" onClick={toggleDelConvModal}>Cancel</button>
+                <button className="delete-button-delete modal-button-delete" onClick={deleteConversation}>Delete</button>
+            </div>
+        </div>
+      </div>
+    );
+  }
+
+   // Delete Conversations Modal Component
+   const deleteMsgModal = () => {
+    console.log(msgToBeDeleted);
+    return (
+      <div className="modal-overlay-delete" onClick={toggleDelMsgModal}>
+        <div className="modal-content-delete">
+            <h2 className="modal-header-delete"> Are you sure you want to delete this message?</h2>
+            <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
+            <div className="modal-buttons-delete">
+                <button className="cancel-button-delete modal-button-delete" onClick={toggleDelMsgModal}>Cancel</button>
+                <button className="delete-button-delete modal-button-delete" onClick={() => {deleteMessage(msgToBeDeleted)}}>Delete</button>
+            </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <div className="app-logo-container">
@@ -460,7 +534,10 @@ function App() {
             </div>}
           {moreModalShow &&
             <div className="dm-more-modal">
-              <div onClick={() => deleteConversation()} className='dm-more-modal-block-individualblock'>
+              <div onClick={() => 
+                {toggleDelConvModal(); 
+                 setMoreModalShow(!moreModalShow)
+                }} className='dm-more-modal-block-individualblock'>
                 <img className='dm-more-modal-iconsize' src={deleteIcon} alt="Delete Message Icon" />
                 Delete Conversation
               </div>
@@ -504,6 +581,14 @@ function App() {
           {matchedList.map((user) => (userComponent(user)))}
         </div>
       </div>
+      {delConvModalOpen && (
+                <div>
+                  {deleteConversationModal()}
+                </div>)}
+      {delMsgModalOpen && (
+                <div>
+                  {deleteMsgModal()}
+                </div>)}
     </div>
   );
 }

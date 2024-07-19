@@ -16,7 +16,15 @@ const deleteMessage = async (req, res) => {
     try {
       const passedInfo = req.body;
       
-      await Message.deleteOne({_id : passedInfo.msgId});
+      await Message.updateOne(
+        {_id : passedInfo.msgId},
+        {
+          $set: {
+            message: "deleted by sender",
+            deleted_by_from: true
+          }
+        }
+      );
 
       // Send tokens to the frontend
       res.status(200).json({ message: "updated"});
