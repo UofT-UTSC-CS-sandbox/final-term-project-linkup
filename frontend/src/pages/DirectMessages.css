@@ -73,6 +73,27 @@
     font: normal 13px/1.18 "Inter", sans-serif;
 }
 
+.message-single-block-deleted {
+    display:flex;
+    position: relative;
+    background-color: #ffca57dd;
+    color: #cf7234;
+    text-align: left; /* Align text content to the left */
+    overflow: auto; /* Add overflow property */
+    width: auto; /* Let the width be determined by content */
+    max-width: 40%;
+    left: 2%;
+    padding: 15px;
+    margin-left: 0;
+    margin-right: auto;
+    border-radius: 10px;      /* Rounded corners */
+    margin-top: 10px; 
+    margin-bottom: 10px; /* Add margin bottom for space between blocks */
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    font: normal 13px/1.18 "Inter", sans-serif;
+    border: 2px solid #cf7234; /* Optional: Add a border to visualize the block */
+}
+
 .message-single-block-unread {
     display:flex;
     position: relative;
@@ -111,6 +132,26 @@
     margin-bottom: 10px; /* Add margin bottom for space between blocks */
     box-sizing: border-box; /* Ensure padding is included in the width/height */
     font: normal 13px/1.18 "Inter", sans-serif;
+}
+
+.message-single-block-self-deleted {
+    display:flex;
+    position: relative;
+    background-color: #ffca57dd;
+    color: #cf7234;
+    text-align: right; /* Align text content to the left */
+    overflow: auto; /* Add overflow property */
+    width: auto; /* Let the width be determined by content */
+    max-width: 47%;
+    padding: 15px;
+    border-radius: 10px;      /* Rounded corners */
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: 10px; 
+    margin-bottom: 10px; /* Add margin bottom for space between blocks */
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    font: normal 13px/1.18 "Inter", sans-serif;
+    border: 2px solid #cf7234; /* Optional: Add a border to visualize the block */
 }
 
 .message-timestamp-block {
@@ -158,7 +199,7 @@
 
 .textbox-msg-textbox {
     position: absolute;
-    width: 94%;
+    width: 86%;
     height: 35%;
     left: 2%;
     border-radius: 10px;      /* Rounded corners */
@@ -180,11 +221,10 @@
 
 .textbox-msg-sendbutton {
     position: absolute;
-    z-index: 100; /* Bringing to front */
-    left: 90%;
+    left: 92%;
     top: 18%;
-    width: 8.3%;
-    height: 59.5%;
+    width: 55px;
+    height: 42px;
     border-radius: 10px;
     background-color: white;
     border: none;
@@ -195,9 +235,8 @@
 .send-msg-icon {
     position: relative;
     top: 5%;
-    left: 23%;
-    width: 55%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
 }
 
 .loadmore-messages-button {
@@ -355,3 +394,165 @@
     background-color: #768799; /* Random color for demonstration */
     margin-left: 10px; /* Adjust spacing from the message block */
   }
+
+/* User Story LC-30 Styling*/
+.dm-more-button-block {
+    position: absolute;
+    top: 30%;
+    left: 93.5%;
+    width: 35px; /* Adjust size of the circle */
+    height: 20px; /* Adjust size of the circle */
+    border-radius: 5px;
+}
+
+/* User Story LC-30 Styling*/
+.dm-more-button-block:hover {
+    background-color: #F2EFEF;
+}
+
+.dm-more-modal {
+    background-color: white;
+    position: absolute;
+    top: 90%;
+    left: 73%;
+    width: 25%; /* Adjust size of the circle */
+    height: 120%; /* Adjust size of the circle */
+    border-radius: 10px;
+    z-index: 50;
+    border: 1.5px solid black; /* Optional: Add a border to visualize the block */
+}
+
+.dm-more-modal-block-individualblock {
+    position: relative;
+    display: flex;
+    width: 93%;
+    height: 45%;
+    left: 2%;
+    margin-bottom: 2%;
+    align-items: center;
+    justify-content: left;
+    font: normal 13px/1.18 "Inter", sans-serif;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    padding-left: 3%;
+    border-radius: 5px;
+}
+
+.dm-more-modal-block-individualblock:hover {
+    background-color: rgb(216, 90, 90);
+}
+
+.dm-more-modal-iconsize {
+    width: 10%;
+    height: auto;
+    margin-right: 3%;
+}
+
+.dm-msgactions-icons {
+    position: absolute;
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px;
+    width: 3%;
+    height: 5%;
+    left: 96.5%;
+    z-index: 100;
+}
+
+.dm-msgactions-size {
+    width: 55%;
+    height: auto;
+}
+
+.dm-msgactions-size:hover {
+    filter: invert(29%) sepia(100%) saturate(7000%) hue-rotate(356deg) brightness(70%) contrast(101%);
+}
+
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #e0f7fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-header {
+    background-color: #237993;
+    color: white;
+    width: calc(100% + 40px);
+    margin: -20px -40px 20px -40px;
+    padding: 20px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 22px;
+    border-radius: 10px 10px 0 0;
+}
+
+.modal-content p {
+    margin-top: 0px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 18px;
+    color: #333333;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center; 
+    gap: 15px;  /* Space between buttons */
+}
+
+.modal-button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-button {
+    background-color: #26ACD6;
+    color: white;
+    font-size: 18px;
+}
+
+.delete-button {
+    background-color: #748D95;
+    color: white;
+    font-size: 18px;
+}
+
+.textbox-msg-sendbutton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.blocked-message {
+    margin-top: -20px; 
+    color: #181515cf;
+    font-size: 14px;
+}
+

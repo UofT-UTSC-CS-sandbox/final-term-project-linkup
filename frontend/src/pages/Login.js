@@ -102,7 +102,7 @@ const Login = () => {
         <label className='password-text-posit'> 
           Password
         </label>
-        <input className='password-custom-textboxx' type="text" value={txtPassword} onChange={handleChangeInPassword} />
+        <input className='password-custom-textboxx' type="password" value={txtPassword} onChange={handleChangeInPassword} />
         {loginError && (
           <div>
             <label className='login-validation-error'>  {loginErrorMsg} </label>
