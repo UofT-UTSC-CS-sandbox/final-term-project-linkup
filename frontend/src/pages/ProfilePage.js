@@ -55,7 +55,7 @@ const Profile = () => {
         }
         retrieveBio();
         fetchResumes();
-    }, [userId]);
+    }, [userId, isAuthenticated, auth.id]);
 
     // Handle horizontal scrolling of PDF container via mouse wheel
     useEffect(() => {
@@ -74,8 +74,8 @@ const Profile = () => {
   
   // Refresh resumes on successful upload
   const handleResumeUploadSuccess = (newResume) => {
-    console.log('Adding new resume:', newResume);
-    fetchResumes();
+    setResumes(prevResumes => [...prevResumes, newResume]);
+    window.location.reload();
   };
 
   // Open/close modals for resume upload and deletion

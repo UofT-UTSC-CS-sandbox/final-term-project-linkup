@@ -17,9 +17,12 @@ const updateResumePublicStatus = require('./API/updateResume');
 const getSwipingResumes = require('./API/getSwipingResumes');
 const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
-const getPublicResumes = require('./API/getPublicResumes')
+const getPublicResumes = require('./API/getPublicResumes');
 const getResumebyId = require('./API/getResumebyId');
 const getUserbyId = require('./API/getUserbyId');
+const getTrendingComments = require('./API/getTrendingComments');
+const postTrendingComment = require('./API/postTrendingComment');
+const voteOnComment = require('./API/votes');
 
 
 // Direct messaging api's
@@ -147,6 +150,11 @@ app.post('/send-message', sendMessage);
 app.post('/get-messages', getMessages);
 app.post('/mark-messages-as-read', markMessagesAsRead);
 app.post('/get-number-of-unread-dms', getNumberOfUnreadDms);
+
+// Trending comments
+app.get('/api/trending/get-comments/:resumeId', getTrendingComments);
+app.post('/trending/post-comments', postTrendingComment);
+app.post('/api/comments/vote', voteOnComment);
 
 // Listening on Port 3001
 const PORT = 3001;
