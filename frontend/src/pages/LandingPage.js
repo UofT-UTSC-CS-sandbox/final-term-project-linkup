@@ -138,7 +138,7 @@ const LandingPage = () => {
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
                         <Viewer
                             fileUrl={`http://localhost:3001/bucket/files/${currentResume.file_path}`}
-                            defaultScale={0.62}
+                            defaultScale={1.0}
                         />
                     </Worker>
                 </div>

@@ -1,4 +1,5 @@
 import React, {useEffect, useState } from 'react';
+import axios from "axios";
 import logo from '../images/linkup_logo_highquality.png'; 
 import Select from 'react-select';
 import './Preferences.css'; 
@@ -30,14 +31,28 @@ function PreferencesForm() {
     }
     });
     
+    const [currentUserInfo, setUser] = useState([]);
+
     const [preferences, setPreferences] = useState({
         preferences_edu: '',
         preferences_interest: '',
         preferences_loc: '',
         preferences_workexp: '',
     });
+
+    const getUser = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/api/${userId}`);
+            const userInfo = response.data[0];
+            setUser(userInfo);
+        } catch (error) {
+            console.error('Failed to get User', error);
+        }
+    }
    // Handle changes in the select dropdowns
     const handleChange = (selectedOption, action) => {
+        console.log("Selected Option:", selectedOption);
+        console.log("Action:", action);
         setPreferences(prevState => ({
             ...prevState,
             [action.name]: selectedOption ? selectedOption.value : '' 
@@ -117,6 +132,10 @@ function PreferencesForm() {
         }),
     };
 
+    useEffect(() =>  {
+        getUser();
+    }, [userId, navigate]);
+
     return (
         <div className="container">
             <div className="app-logo-container"> 
@@ -135,60 +154,64 @@ function PreferencesForm() {
                     <Select
                         name="preferences_interest"
                         options={[
-                            { value: 'computer science', label: 'Computer Science' },
-                            { value: 'business', label: 'Business' },
-                            { value: 'biology', label: 'Biology' },
-                            { value: 'economics', label: 'Economics' },
-                            { value: 'law', label: 'Law' },
-                            { value: 'art', label: 'Art' }
+                            { value: '', label: '- All -' },
+                            { value: 'Computer Science', label: 'Computer Science' },
+                            { value: 'Business', label: 'Business' },
+                            { value: 'Biology', label: 'Biology' },
+                            { value: 'Economics', label: 'Economics' },
+                            { value: 'Law', label: 'Law' },
+                            { value: 'Art', label: 'Art' }
                         ]}
                         onChange={handleChange}
                         styles={customStyles}
-                        placeholder="Field of Interest (Optional)"
+                        placeholder={currentUserInfo.preferences_interest || "Field of Interest (Optional)"}
                         isClearable
                     />
                     <Select
                         name="preferences_workexp"
                         options={[
-                            { value: 'entry', label: 'Entry Level' },
-                            { value: 'intermediate', label: 'Intermediate Level' },
-                            { value: 'senior', label: 'Senior Level' }
+                            { value: '', label: '- All -' },
+                            { value: 'Entry Level', label: 'Entry Level' },
+                            { value: 'Intermediate Level', label: 'Intermediate Level' },
+                            { value: 'Senior Level', label: 'Senior Level' }
                         ]}
                         onChange={handleChange}
                         styles={customStyles}
-                        placeholder="Experience Level (Optional)"
+                        placeholder={currentUserInfo.preferences_workexp || "Experience Level (Optional)"}
                         isClearable
                     />
                     <Select
                         name="preferences_edu"
                         options={[
-                            { value: 'diploma', label: 'Diploma' },
-                            { value: 'bachelor', label: 'Bachelor' },
-                            { value: 'master', label: 'Master' },
-                            { value: 'phd', label: 'PHD' }
+                            { value: " ", label: '- All -' },
+                            { value: 'Diploma', label: 'Diploma' },
+                            { value: 'Bachelor', label: 'Bachelor' },
+                            { value: 'Master', label: 'Master' },
+                            { value: 'PHD', label: 'PHD' }
                         ]}
                         onChange={handleChange}
                         styles={customStyles}
-                        placeholder="Education Level (Optional)"
+                        placeholder={currentUserInfo.preferences_edu || "Education Level (Optional)"}
                         isClearable
                     />
                     <Select
                         name="preferences_loc"
                         options={[
-                            { value: 'usa', label: 'USA' },
-                            { value: 'canada', label: 'Canada' },
-                            { value: 'europe', label: 'Europe' },
-                            { value: 'india', label: 'India' },
-                            { value: 'turkey', label: 'Turkey' },
-                            { value: 'mexico', label: 'Mexico' },
-                            { value: 'brazil', label: 'Brazil' },
-                            { value: 'argentina', label: 'Argentina' },
-                            { value: 'colombia', label: 'Colombia' },
-                            { value: 'uk', label: 'United Kingdom' },
+                            { value: null, label: '- All -' },
+                            { value: 'USA', label: 'USA' },
+                            { value: 'Canada', label: 'Canada' },
+                            { value: 'Europe', label: 'Europe' },
+                            { value: 'India', label: 'India' },
+                            { value: 'Turkey', label: 'Turkey' },
+                            { value: 'Mexico', label: 'Mexico' },
+                            { value: 'Brazil', label: 'Brazil' },
+                            { value: 'Argentina', label: 'Argentina' },
+                            { value: 'Colombia', label: 'Colombia' },
+                            { value: 'United Kingdom', label: 'United Kingdom' },
                         ]}
                         onChange={handleChange}
                         styles={customStyles}
-                        placeholder="Geographic Location (Optional)"
+                        placeholder={currentUserInfo.preferences_loc || "Geographic Location (Optional)"}
                         isClearable
                     />
                     <button type="submit" className="submit-button">FINISH</button>

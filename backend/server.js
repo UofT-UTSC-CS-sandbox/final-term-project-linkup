@@ -19,6 +19,7 @@ const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
 const getPublicResumes = require('./API/getPublicResumes')
 const getResumebyId = require('./API/getResumebyId');
+const getUserbyId = require('./API/getUserbyId');
 
 
 // Direct messaging api's
@@ -125,6 +126,7 @@ app.post('/test-page', async (req, res) => {
 
 // API call to get existing users
 app.get('/get-user', getUser);
+app.get('/api/:userId', getUserbyId);
 
 // SIGN-UP
 // API call to create new object
@@ -134,7 +136,7 @@ app.post('/verify-user', verifyUser);
 
 app.post('/login', loginUser);
 app.post('/api/updatePreferences', updatePreferences);
-// app.post('/api/updatePreferences', updateYourself);
+//app.post('/api/:userId/preferences', getPreferences);
 app.post('/getUserBio', getUserBio);
 app.get('/api/swiping-resumes/:userId', getSwipingResumes);
 app.post('/api/swipes/:userId', addSwipe);

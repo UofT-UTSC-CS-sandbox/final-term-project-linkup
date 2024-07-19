@@ -17,7 +17,6 @@ import AboutForm from "./pages/AboutYourself.js";
 import CheckEmail from "./pages/CheckEmail.js";
 import CheckUserLoggedIn  from "./pages/CheckUserLoggedIn.js";
 import MatchPage  from "./pages/MatchPage";
-
 import TrendingResumes from './pages/TrendingResumes.js';
 
 
@@ -51,6 +50,7 @@ function App() {
               <Route path="/profile" element={<Profile/>} />
               <Route path="/direct-messages" element={<DirectMessages/>} />
               <Route path="/TrendingResumes" element={<TrendingResumes/>} />
+              <Route path="/edit-preferences" element={<PreferencesPage/>} />
             </Routes>
         </div>
       </BrowserRouter>

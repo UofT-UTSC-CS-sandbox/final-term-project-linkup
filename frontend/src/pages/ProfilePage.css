@@ -98,7 +98,7 @@
 /* Username text styling */
 .username {
     margin-top: 10px;
-    font-size: 25px;
+    font-size: 1.2em;
     color: black;
     font-weight: bold;
 }
@@ -136,7 +136,7 @@
     background-color: #26ACD6;
     position:absolute;
     top: 60px;
-    left: -30%;
+    margin-left: 45px;
 }
 
 /* Container for field labels and values */
@@ -147,20 +147,21 @@
     align-items: flex-start;
     position: relative;
     top: 50px;
-    left: -10%;
+    padding: 20px;
+    margin-left: 45px;
 }
 
 /* Styling for "MY INFORMATION" label */
 .profile-info {
     padding: 20px 0;
-    font-size: 25px;
+    font-size: 1.2em;
     color: #26ACD6;
     font-weight: bold;
 }
 
 /* Styling for individual field labels */
 .field-label {
-    font-size: 23px;
+    font-size: 1.1em;
     color: black;
     margin: 5px 0;
     font-weight: bold;

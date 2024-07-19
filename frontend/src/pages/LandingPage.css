@@ -27,7 +27,7 @@ p {
 
 .swiping-pdf-item {
     position: relative;
-    width: 30vw; /* Fixed width for each PDF item */
+    width: 35vw; /* Fixed width for each PDF item */
     height: 80vh; /* Fixed height for each PDF item to represent a page */
     overflow: hidden; /* Prevent overflow */
     border: 1px solid #ccc; /* Optional: Add a border for visual separation */
