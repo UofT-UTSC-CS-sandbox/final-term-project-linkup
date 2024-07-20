@@ -16,7 +16,6 @@ const newMessage = async (req, res) => {
     const passedUser = req.body;
 
     const newMsg = new Message({
-
         to: passedUser.to,
         from: passedUser.from,
         timestamp: passedUser.timestamp,

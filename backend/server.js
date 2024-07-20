@@ -32,6 +32,11 @@ const getMessages = require('./API/getMessages');
 const markMessagesAsRead = require('./API/markMessagesAsRead');
 const deleteConversation = require('./API/deleteConversation');
 const deleteMessage = require('./API/deleteMessage');
+const addComments = require('./API/addComments');
+const getComments = require('./API/getComments');
+const getUploaderName = require('./API/getUserName');
+const updateDmStatus = require('./API/updateDmStatus');
+const getDmStatus = require('./API/getDmStatus');
 
 require('dotenv').config();
 
@@ -126,6 +131,10 @@ conn.once('open', () => {
   app.post('/check-blocked', checkIfBlocked);
   app.get('/api/resumes/public', getPublicResumes);
   app.get('/api/resume/:resumeId', getResumebyId);
+  app.get('/api/resumes/public', getPublicResumes);
+  app.get('/api/resume/:resumeId', getResumebyId);
+  app.post('/api/resume/:resumeId/comments', addComments);
+  app.get('/api/resume/:resumeId/comments', getComments);
 });
 
 // SIGN-UP
@@ -169,6 +178,15 @@ app.post('/block-user', blockUser);
 app.get('/api/trending/get-comments/:resumeId', getTrendingComments);
 app.post('/trending/post-comments', postTrendingComment);
 app.post('/api/comments/vote', voteOnComment);
+//app.post('/get-number-of-unread-dms', getNumberOfUnreadDms);
+app.post('/api/dm-status/update', updateDmStatus);
+app.get('/api/dm-status', getDmStatus);
+
+app.get('/api/get-uploader-name/:userId', getUploaderName);
+
+// app.use('/api/resume', addComments);
+// app.use('/api/resume', getComments);
+
 
 // Listening on Port 3001
 const PORT = 3001;

@@ -16,11 +16,16 @@ import deleteIcon from '../images/trash-2.svg';
 import slashIcon from '../images/slash.svg';
 import logo from '../images/linkup_logo_highquality.png';
 import Sidebar from '../components/Sidebar.js';
+import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+
 
 function App() {
   const [txtMsg, setTxtMsg] = useState('');
+
   const [userList, setUserList] = useState([]);
   const [matchedList, setMatchedList] = useState([]);
+
   const [msgList, setMsgList] = useState([]);
   const [msgLimit, setMsgLimit] = useState(10);
   const [selectedUser, setSelectedUser] = useState('');
@@ -45,6 +50,12 @@ function App() {
     setDelMsgModalOpen(!delMsgModalOpen);
   };
 
+  
+  const [currTimeStampShow, setCurrTimeStampShow] = useState('');
+  
+  const [showButtons, setShowButtons] = useState(false);
+  const [dmAccepted, setDmAccepted] = useState(null);
+
   // Authentication and navigation
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
@@ -67,6 +78,8 @@ function App() {
     setMsgLimit(10);
     checkMoreToLoad();
     scrollToBottom();
+    //fetchDmStatus(selectedUser); 
+    fetchDmStatus(selectedUser);
   }, [selectedUser]);
 
   useEffect(() => {
@@ -166,50 +179,59 @@ function App() {
   // Communicating Email and password to server
   const getUsers = async () => {
     try {
-      const response = await fetch('http://localhost:3001/get-user', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+        await fetch('http://localhost:3001/get-user', {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json'
+            }
+        }).then(async (response) => {
+          if (response.ok) {
+            const data = await response.json();
+            
+            // Setting user list
+            setUserList(data);
+          } else {
+            console.log("response was not ok");
+              
+          }
+        })
 
-      if (response.ok) {
-        const data = await response.json();
-        setUserList(data);
-      } else {
-        console.log("response was not ok");
-      }
     } catch (error) {
-      console.log("error here>", error);
+      console.log("error here>");
     }
   };
 
   // Communicating Email and password to server
   const getMessages = async () => {
+
     try {
-      const response = await fetch('http://localhost:3001/get-messages', {
+      await fetch('http://localhost:3001/get-messages', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ currUser: auth.name })
-      });
-
-      if (response.ok) {
+        body: JSON.stringify({currUser : auth.name})
+      }).then(async (response) => { 
+        if (response.ok) {
+        console.log("retrieved messages");
         const data = await response.json();
         setMsgList(data);
-        console.log("retrieved messages");
+        // if (data.some(msg => msg.to === auth.name && msg.messageType === 'new_dm' && !msg.read_by_to)) {
+        //   setShowButtons(true);
+        // }
       } else {
         console.log("response was not ok");
-      }
+          
+      }});
     } catch (error) {
-      console.log("error here>", error);
+      console.log("error here>0");
     }
   };
 
-  // Function to send message
   const sendMessage = async () => {
-    if (selectedUser === "" || txtMsg === "" || isBlocked) return;
+    if(selectedUser === "") {
+      return;
+    }
 
     const newMsg = {
       to: selectedUser,
@@ -219,31 +241,39 @@ function App() {
     };
 
     try {
-      const response = await fetch('http://localhost:3001/send-message', {
-        method: 'POST',
-        headers: {
+      await fetch('http://localhost:3001/send-message', {
+          method: 'POST',
+          headers: {
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newMsg)
-      });
+          },
+          body: JSON.stringify(newMsg)
+      }).then(async (response) => {
+        if (response.ok) {
+          setTxtMsg('');
+          getMessages();
+          console.log("Message sent!");
+        } else {
+        
+            
+        }
+      })
 
-      if (response.ok) {
-        setTxtMsg('');
-        getMessages();
-        console.log("Message sent!");
-      }
     } catch (error) {
-      console.log("error here>", error);
+  
     }
-  };
+  }
 
-  // Function to mark messages as read
   const markCurrMessagesAsRead = async () => {
-    if (selectedUser === "") return;
+    if(selectedUser === "") {
+      return;
+    }
 
-    const numUnread = msgList.filter((msg) => (msg.to === auth.name && msg.from === selectedUser && msg.read_by_to === false)).length;
-    if (numUnread === 0) return;
-
+    // Checking if messages are already read
+    const numUnread = msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser && msg.read_by_to == false)).length;
+    if(numUnread === 0)
+    {
+      return;
+    }
     console.log("there exists unread");
 
     const parties = {
@@ -390,53 +420,164 @@ function App() {
   };
 
   // Components
+  // const messageComponent = (msg, index) => {
+       
+  //   let messageContent;
+  //   try {
+  //       messageContent = JSON.parse(msg.message);
+  //   } catch (e) {
+  //       messageContent = { text: msg.message };
+  //   }
+  //   const { resumeUrl, resumeId, commenter, text: messageText } = messageContent;
+  //   // const resumeUrl = messageContent.resumeUrl;
+  //   // const messageText = messageContent.text;
+
+  //   const isNewConversation = messageText && messageText.includes('left comments on your resume') && dmAccepted === null;
+
+  //   const viewCommentsLink = resumeId && commenter 
+  //       ? `/view-resume-comments/${resumeId}/${commenter}` 
+  //       : null;
+
+  //   if (msg.from !== auth.name) {
+  //     if (msg.read_by_to === false && msg.to === auth.name) {
+  //       return (
+  //         <div key={msg._id} className="message-outer-single-block">
+  //           <div className="message-single-block-unread" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
+  //           {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
+  //         </div>);
+  //     }
+  //     if(msg.deleted_by_from === true)
+  //     {
+  //       return (
+  //         <div key={msg._id} className="message-outer-single-block">
+  //           <div className="message-single-block-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
+  //           {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+  //         </div>)
+  //     }
+  //     return (
+  //       <div key={msg._id} className="message-outer-single-block">
+  //         <div className="message-single-block" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
+  //         {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+  //       </div>);
+  //   }
+  //   if(msg.deleted_by_from === true)
+  //   {
+  //     return (
+  //       <div key={msg._id} className="message-outer-single-block">
+  //         <div className="message-single-block-self-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
+  //         {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+  //       </div>)
+  //   }
+  //   return (
+  //     <div key={msg._id} className="message-outer-single-block">
+  //       {msgHovered === msg._id &&
+  //         <div onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')} className='dm-msgactions-icons'>
+
+  //           {/* <img className='dm-msgactions-size' src={editIcon} alt="Edit Message Icon" /> */}
+  //           <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {
+  //             setMsgToBeDeleted(msg);
+  //             toggleDelMsgModal();
+  //           }} alt="Delete Message Icon" />
+  //         </div>
+  //       }
+  //       <div className="message-single-block-self" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
+  //       {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+  //     </div>);
+  // };
+
+
   const messageComponent = (msg, index) => {
-    if (msg.from !== auth.name) {
-      if (msg.read_by_to === false && msg.to === auth.name) {
-        return (
-          <div key={msg._id} className="message-outer-single-block">
-            <div className="message-single-block-unread" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-            {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
-          </div>);
-      }
-      if(msg.deleted_by_from === true)
-      {
-        return (
-          <div key={msg._id} className="message-outer-single-block">
-            <div className="message-single-block-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
-            {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
-          </div>)
-      }
-      return (
-        <div key={msg._id} className="message-outer-single-block">
-          <div className="message-single-block" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-          {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
-        </div>);
+    
+    let messageContent;
+    try {
+        messageContent = JSON.parse(msg.message);
+    } catch (e) {
+        messageContent = { text: msg.message };
     }
-    if(msg.deleted_by_from === true)
-    {
-      return (
-        <div key={msg._id} className="message-outer-single-block">
-          <div className="message-single-block-self-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
-          {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
-        </div>)
+    const { resumeUrl, resumeId, commenter, text: messageText } = messageContent;
+    // const resumeUrl = messageContent.resumeUrl;
+    // const messageText = messageContent.text;
+
+    const isNewConversation = messageText && messageText.includes('left comments on your resume') && dmAccepted === null;
+
+    const viewCommentsLink = resumeId && commenter 
+        ? `/view-resume-comments/${resumeId}/${commenter}` 
+        : null;
+
+    if (msg.from !== auth.name) {
+        if (msg.read_by_to === false && msg.to === auth.name) {
+            return (
+                <div key={msg._id} className="message-outer-single-block">
+                  {resumeUrl && (
+                    <div className="message-single-block resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                        <div className="resume-block">
+                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                                <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
+                            </Worker>
+                        </div>
+                        </div>
+                    )}
+                    <div className="message-single-block-unread"  onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                        {viewCommentsLink ? (
+                            <a href={viewCommentsLink}>{messageText}</a>
+                        ) : (
+                            messageText
+                        )}
+                        {isNewConversation && showButtons && (
+                <div className="swipe-action-buttons">
+                  <button onClick={handleAccept}>Accept</button>
+                  <button onClick={handleDecline}>Decline</button>
+                </div>
+              )}
+                    </div>
+                    {currTimeStampShow === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
+                </div>
+            );
+        }
+        return (
+            <div key={msg._id} className="message-outer-single-block">
+              {resumeUrl && (
+                 <div className="message-single-block resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                    <div className="resume-block">
+                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                            <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
+                        </Worker>
+                    </div>
+                    </div>
+                )}
+                <div className="message-single-block" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                {viewCommentsLink ? (
+                            <a href={viewCommentsLink}>{messageText}</a>
+                        ) : (
+                            messageText
+                        )}
+                </div>
+                {currTimeStampShow === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+            </div>
+        );
     }
     return (
-      <div key={msg._id} className="message-outer-single-block">
-        {msgHovered === msg._id &&
-          <div onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')} className='dm-msgactions-icons'>
-
-            {/* <img className='dm-msgactions-size' src={editIcon} alt="Edit Message Icon" /> */}
-            <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {
-              setMsgToBeDeleted(msg);
-              toggleDelMsgModal();
-            }} alt="Delete Message Icon" />
-          </div>
-        }
-        <div className="message-single-block-self" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-        {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
-      </div>);
-  };
+        <div key={msg._id} className="message-outer-single-block">
+          {resumeUrl && (
+            <div className="message-single-block-self resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                <div className="resume-block">
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                        <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
+                    </Worker>
+                </div>
+              </div>
+            )}
+            <div className="message-single-block-self" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                {viewCommentsLink ? (
+                      <a href={viewCommentsLink}>{messageText}</a>
+                  ) : (
+                      messageText
+                  )}
+            </div>
+            {currTimeStampShow === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+        </div>
+    );
+}
 
   const userComponent = (user) => {
     const latestDm = getLatestDm(user);
@@ -454,69 +595,188 @@ function App() {
       latestTimestamp = "";
     }
 
-    if (user.anon_username === selectedUser) {
+  //   if (user.anon_username === selectedUser) {
+  //     outerBlockClass = 'individual-user-block-selected';
+  //   }
+
+  //   return (<div onClick={() => {
+  //     markCurrMessagesAsRead();
+  //     setTxtMsg('');
+  //     console.log(selectedUser);
+  //     setSelectedUser(user.anon_username);
+  //     setMoreModalShow(false);
+  //     checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
+  //   }}>
+  //     <div className={outerBlockClass}>
+  //       <div className="circle"></div>
+  //       <div className='individual-user-block-name'>{user.anon_username}</div>
+  //       {numUnreadDms > 0 && <div className='individual-user-block-unread-dm'>{numUnreadDms}</div>}
+  //       <div className='individual-user-block-latest-msg'>{latestMessage}</div>
+  //       <div className='individual-user-block-latest-timestamp'>{latestTimestamp}</div>
+  //     </div>
+  //   </div>);
+  // };
+
+  // // Delete Conversations Modal Component
+  // const deleteConversationModal = () => {
+  //   return (
+  //     <div className="modal-overlay-delete" onClick={toggleDelConvModal}>
+  //       <div className="modal-content-delete">
+  //           <h2 className="modal-header-delete"> Are you sure you want to delete this conversation?</h2>
+  //           <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
+  //           <div className="modal-buttons-delete">
+  //               <button className="cancel-button-delete modal-button-delete" onClick={toggleDelConvModal}>Cancel</button>
+  //               <button className="delete-button-delete modal-button-delete" onClick={deleteConversation}>Delete</button>
+  //           </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  //  // Delete Conversations Modal Component
+  //  const deleteMsgModal = () => {
+  //   console.log(msgToBeDeleted);
+  //   return (
+  //     <div className="modal-overlay-delete" onClick={toggleDelMsgModal}>
+  //       <div className="modal-content-delete">
+  //           <h2 className="modal-header-delete"> Are you sure you want to delete this message?</h2>
+  //           <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
+  //           <div className="modal-buttons-delete">
+  //               <button className="cancel-button-delete modal-button-delete" onClick={toggleDelMsgModal}>Cancel</button>
+  //               <button className="delete-button-delete modal-button-delete" onClick={() => {deleteMessage(msgToBeDeleted)}}>Delete</button>
+  //           </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  // return (
+  //   <div className="container">
+  //     <div className="app-logo-container">
+  //       <a href="/">
+  //         <img src={logo} className="logo" alt="LinkUp Logo" />
+  //       </a>
+  //     </div>
+  //     <Sidebar />
+    if (user.anon_username === selectedUser)
+    {
       outerBlockClass = 'individual-user-block-selected';
     }
 
-    return (<div onClick={() => {
-      markCurrMessagesAsRead();
-      setTxtMsg('');
-      console.log(selectedUser);
-      setSelectedUser(user.anon_username);
-      setMoreModalShow(false);
-      checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
-    }}>
+    return (<div onClick={() => 
+      { 
+        markCurrMessagesAsRead();
+        setTxtMsg('');
+        console.log(selectedUser);
+        setSelectedUser(user.anon_username);
+      }}>
       <div className={outerBlockClass}>
-        <div className="circle"></div>
-        <div className='individual-user-block-name'>{user.anon_username}</div>
-        {numUnreadDms > 0 && <div className='individual-user-block-unread-dm'>{numUnreadDms}</div>}
-        <div className='individual-user-block-latest-msg'>{latestMessage}</div>
-        <div className='individual-user-block-latest-timestamp'>{latestTimestamp}</div>
+        <div className="circle">
+
+        </div>
+        <div className='individual-user-block-name'>
+          {user.anon_username}
+        </div>
+        {numUnreadDms > 0 &&
+          <div className='individual-user-block-unread-dm'>
+          {numUnreadDms}
+          </div>
+        }
+        <div className='individual-user-block-latest-msg'>
+          {latestMessage}
+        </div>
+        <div className='individual-user-block-latest-timestamp'>
+          {latestTimestamp}
+        </div>
       </div>
-    </div>);
+    </div>)
+  }
+
+
+
+  // const checkDmStatus = async (otherUser) => {
+  //   const currUser = auth.name; // Use anon_username
+
+  //   try {
+  //     const response = await axios.get('http://localhost:3001/api/dm-status', {
+  //       params: { to: currUser, from: otherUser }
+  //     });
+
+  //     if (response.data.isNewConversation) {
+  //       setShowButtons(true);
+  //     } else {
+  //       setDmAccepted(response.data.accepted);
+  //       setShowButtons(false);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking DM status:', error);
+  //   }
+  // };
+
+  const fetchDmStatus = async (otherUser) => {
+    const currUser = auth.name; // Use anon_username
+
+    try {
+      const response = await axios.get('http://localhost:3001/api/dm-status', {
+        params: { to: currUser, from: otherUser }
+      });
+
+      if (response.data.isNewConversation) {
+        setShowButtons(true);
+        setDmAccepted(null);
+      } else {
+        setDmAccepted(response.data.accepted);
+        setShowButtons(false);
+      }
+    } catch (error) {
+      console.error('Error checking DM status:', error);
+    }
   };
 
-  // Delete Conversations Modal Component
-  const deleteConversationModal = () => {
-    return (
-      <div className="modal-overlay-delete" onClick={toggleDelConvModal}>
-        <div className="modal-content-delete">
-            <h2 className="modal-header-delete"> Are you sure you want to delete this conversation?</h2>
-            <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
-            <div className="modal-buttons-delete">
-                <button className="cancel-button-delete modal-button-delete" onClick={toggleDelConvModal}>Cancel</button>
-                <button className="delete-button-delete modal-button-delete" onClick={deleteConversation}>Delete</button>
-            </div>
-        </div>
-      </div>
-    );
-  }
+  const handleAccept = async () => {
+    await updateDmStatus(true);
+    setShowButtons(false);
+    setDmAccepted(true);
+  };
 
-   // Delete Conversations Modal Component
-   const deleteMsgModal = () => {
-    console.log(msgToBeDeleted);
-    return (
-      <div className="modal-overlay-delete" onClick={toggleDelMsgModal}>
-        <div className="modal-content-delete">
-            <h2 className="modal-header-delete"> Are you sure you want to delete this message?</h2>
-            <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
-            <div className="modal-buttons-delete">
-                <button className="cancel-button-delete modal-button-delete" onClick={toggleDelMsgModal}>Cancel</button>
-                <button className="delete-button-delete modal-button-delete" onClick={() => {deleteMessage(msgToBeDeleted)}}>Delete</button>
-            </div>
-        </div>
-      </div>
-    );
-  }
+  const handleDecline = async () => {
+    await updateDmStatus(false);
+    setShowButtons(false);
+    setDmAccepted(false);
+  };
+
+  const updateDmStatus = async (accepted) => {
+    const currUser = auth.name; // Use anon_username
+    const otherUser = userList.find(user => user.anon_username === selectedUser).anon_username;
+
+    try {
+      await axios.post('http://localhost:3001/api/dm-status/update', {
+        to: currUser,
+        from: otherUser,
+        accepted
+      });
+
+      setMsgList(prev => prev.map(msg => {
+        if (msg.to === currUser && msg.from === otherUser) {
+          return { ...msg, accepted };
+        }
+        return msg;
+      }));
+    } catch (error) {
+      console.error('Error updating DM status:', error);
+    }
+  };
+
+
 
   return (
     <div className="container">
-      <div className="app-logo-container">
+     <div className="app-logo-container"> 
         <a href="/">
           <img src={logo} className="logo" alt="LinkUp Logo" />
-        </a>
+        </a> 
       </div>
-      <Sidebar />
+      <Sidebar/>
       <div className="messages-window-block">
         <div className="my-conversations-header-block">
           <img className="my-conversations-header-icon" src={messageIcon} alt="sendIcon" />
@@ -525,7 +785,7 @@ function App() {
           </div>
         </div>
         <div className="current-selected-user-info-block">
-          {selectedUser !== "" &&
+          {/* {selectedUser !== "" &&
             <div className="current-select-user-info-block-name-circle"></div>}
           <div className="current-select-user-info-block-name">{selectedUser}</div>
           {selectedUser !== "" &&
@@ -575,7 +835,42 @@ function App() {
             className="textbox-msg-textbox"
             disabled={isBlocked}
           />
-          {isBlocked && <div className="blocked-message">This user has been blocked.</div>}
+          {isBlocked && <div className="blocked-message">This user has been blocked.</div>} */}
+          <div className="current-select-user-info-block-name-circle">
+
+          </div>
+          <div className="current-select-user-info-block-name">
+            {selectedUser}
+          </div>
+        </div>
+        <div className="direct-messages-block" ref={messagesEndRef}>
+          {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)} className="loadmore-messages-button"> Load More </button>}
+          {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
+                                    (msg.to == selectedUser && msg.from == auth.name))
+                  .map((msg, index) => messageComponent(msg, index))
+                  .slice(0, msgLimit)
+                  .reverse()}
+        </div>
+
+        {showButtons && (
+              <div className="swipe-action-buttons-container">
+                <button onClick={handleAccept}>Accept</button>
+                <button onClick={handleDecline}>Decline</button>
+              </div>
+            )}
+        <div className="textbox-msg-block">
+          <button onClick={() => {sendMessage();
+                                  markCurrMessagesAsRead()}} className='textbox-msg-sendbutton' disabled={dmAccepted === false || dmAccepted === null }>
+            <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
+          </button> 
+          <input 
+            type="text" 
+            value={txtMsg} 
+            onChange={handleTxtChange} 
+            placeholder={"   Type a message"}
+            className="textbox-msg-textbox"
+            disabled={dmAccepted === false || dmAccepted === null}
+          />
         </div>
         <div className="select-user-block">
           {matchedList.map((user) => (userComponent(user)))}
