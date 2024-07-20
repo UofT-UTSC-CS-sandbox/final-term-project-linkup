@@ -7,7 +7,8 @@ const MessageSchema = new mongoose.Schema({
     from: String,
     timestamp: String,
     message: String,
-    read_by_to: Boolean
+    read_by_to: Boolean,
+    deleted_by_from: Boolean
   }, { collection: 'messages' });
 
 const Message = mongoose.model('Message', MessageSchema);

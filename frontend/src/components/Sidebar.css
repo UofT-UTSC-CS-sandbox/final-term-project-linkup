@@ -1,0 +1,3 @@
+.sidebar-link.active {
+    color: #53D1F9; /* Corrected missing semicolon */
+}

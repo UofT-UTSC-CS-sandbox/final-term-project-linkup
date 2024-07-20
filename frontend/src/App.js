@@ -17,13 +17,16 @@ import AboutForm from "./pages/AboutYourself.js";
 import CheckEmail from "./pages/CheckEmail.js";
 import CheckUserLoggedIn  from "./pages/CheckUserLoggedIn.js";
 import MatchPage  from "./pages/MatchPage";
-
+import ResumeComment from './pages/ResumeComment';
+import ViewResumeComments from './pages/ViewResumeComments';
 import TrendingResumes from './pages/TrendingResumes.js';
 
 
 // React Auth Kit
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
+import { UserProvider } from './pages/UserContext';
+
 const store = createStore({
   authName:'_auth',
   authType:'cookie',
@@ -34,26 +37,31 @@ const store = createStore({
 function App() {
   return (
     <AuthProvider store={store}>
-      <BrowserRouter>
-        <div className="App">
-            <Routes>
-              <Route path="/" element={<CheckUserLoggedIn/>} />
-              <Route path="/swiping" element={<LandingPage/>} />
-              <Route path="/match-found/:resumeId" element={<MatchPage/>} />
-              <Route path="/upload-first-resume" element={<ResumeUpload/>} />
-              <Route path="/test-page" element={<TestPage/>} />
-              <Route path="/login-page" element={<LoginPage/>} />
-              <Route path="/signup-page" element={<SignUpPage/>} />
-              <Route path="/about-form" element={<AboutForm/>} />
-              <Route path="/check-email" element={<CheckEmail />} />
-              <Route path="/verification/:token" element={<VerificationPage/>} />
-              <Route path="/preferences" element={<PreferencesPage />} />
-              <Route path="/profile" element={<Profile/>} />
-              <Route path="/direct-messages" element={<DirectMessages/>} />
-              <Route path="/TrendingResumes" element={<TrendingResumes/>} />
-            </Routes>
-        </div>
-      </BrowserRouter>
+       <UserProvider>
+        <BrowserRouter>
+          <div className="App">
+              <Routes>
+                <Route path="/" element={<CheckUserLoggedIn/>} />
+                <Route path="/swiping" element={<LandingPage/>} />
+                <Route path="/match-found/:resumeId" element={<MatchPage/>} />
+                <Route path="/upload-first-resume" element={<ResumeUpload/>} />
+                <Route path="/test-page" element={<TestPage/>} />
+                <Route path="/login-page" element={<LoginPage/>} />
+                <Route path="/signup-page" element={<SignUpPage/>} />
+                <Route path="/about-form" element={<AboutForm/>} />
+                <Route path="/check-email" element={<CheckEmail />} />
+                <Route path="/verification/:token" element={<VerificationPage/>} />
+                <Route path="/preferences" element={<PreferencesPage />} />
+                <Route path="/profile" element={<Profile/>} />
+                <Route path="/direct-messages" element={<DirectMessages/>} />
+                <Route path="/TrendingResumes" element={<TrendingResumes/>} />
+                <Route path="/resume-comment/:resumeId" element={<ResumeComment/>} />
+                <Route path="/view-resume-comments/:resumeId/:commenter" element={<ViewResumeComments />} />
+                <Route path="/edit-preferences" element={<PreferencesPage/>} />
+              </Routes>
+          </div>
+        </BrowserRouter>
+      </UserProvider>
     </AuthProvider>
   );
 }

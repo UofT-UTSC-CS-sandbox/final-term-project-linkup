@@ -125,7 +125,7 @@ const AboutForm = () => {
   };
  /* All fields similar to preferences fields*/
   return (
-    <div className="preferences-container">
+    <div className="container">
       <img src={logo} alt="LinkUp Logo" className="logo-block" />
       <h3 className="slogan">Tell us about yourself.</h3>
       <div className="preferences-form-container">
@@ -133,12 +133,12 @@ const AboutForm = () => {
           <Select
             name="field_of_interest"
             options={[
-              { value: 'computer science', label: 'Computer Science' },
-              { value: 'business', label: 'Business' },
-              { value: 'biology', label: 'Biology' },
-              { value: 'economics', label: 'Economics' },
-              { value: 'law', label: 'Law' },
-              { value: 'art', label: 'Art' }
+              { value: 'Computer Science', label: 'Computer Science' },
+              { value: 'Business', label: 'Business' },
+              { value: 'Biology', label: 'Biology' },
+              { value: 'Economics', label: 'Economics' },
+              { value: 'Law', label: 'Law' },
+              { value: 'Art', label: 'Art' }
             ]}
             onChange={handleChange}
             styles={customStyles}
@@ -149,9 +149,9 @@ const AboutForm = () => {
           <Select
             name="work_experience_level"
             options={[
-              { value: 'entry', label: 'Entry Level' },
-              { value: 'intermediate', label: 'Intermediate Level' },
-              { value: 'senior', label: 'Senior Level' }
+              { value: 'Entry Level', label: 'Entry Level' },
+              { value: 'Intermediate Level', label: 'Intermediate Level' },
+              { value: 'Senior Level', label: 'Senior Level' }
             ]}
             onChange={handleChange}
             styles={customStyles}
@@ -162,10 +162,10 @@ const AboutForm = () => {
           <Select
             name="education"
             options={[
-              { value: 'diploma', label: 'Diploma' },
-              { value: 'bachelor', label: 'Bachelor' },
-              { value: 'master', label: 'Master' },
-              { value: 'phd', label: 'PHD' }
+              { value: 'Diploma', label: 'Diploma' },
+              { value: 'Bachelor', label: 'Bachelor' },
+              { value: 'Master', label: 'Master' },
+              { value: 'PHD', label: 'PHD' }
             ]}
             onChange={handleChange}
             styles={customStyles}
@@ -176,16 +176,16 @@ const AboutForm = () => {
           <Select
             name="location"
             options={[
-              { value: 'usa', label: 'USA' },
-              { value: 'canada', label: 'Canada' },
-              { value: 'europe', label: 'Europe' },
-              { value: 'india', label: 'India' },
-              { value: 'turkey', label: 'Turkey' },
-              { value: 'mexico', label: 'Mexico' },
-              { value: 'brazil', label: 'Brazil' },
-              { value: 'argentina', label: 'Argentina' },
-              { value: 'colombia', label: 'Colombia' },
-              { value: 'uk', label: 'United Kingdom' },
+              { value: 'USA', label: 'USA' },
+              { value: 'Canada', label: 'Canada' },
+              { value: 'Europe', label: 'Europe' },
+              { value: 'India', label: 'India' },
+              { value: 'Turkey', label: 'Turkey' },
+              { value: 'Mexico', label: 'Mexico' },
+              { value: 'Brazil', label: 'Brazil' },
+              { value: 'Argentina', label: 'Argentina' },
+              { value: 'Colombia', label: 'Colombia' },
+              { value: 'United Kingdom', label: 'United Kingdom' },
             ]}
             onChange={handleChange}
             styles={customStyles}

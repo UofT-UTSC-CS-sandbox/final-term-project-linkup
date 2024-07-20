@@ -1,20 +1,10 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900);
 
-/* formatting for the preference - container*/
-.preferences-container {
-    background-color: #bfe7f6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 110vh;
-    padding-top: 20px;
-    font-family:'Roboto';
-}
 /* formatting for the preference - form - container*/
 .preferences-form-container {
-    position: absolute;
+    position: relative;
+    margin: 100px;
     background-color: #FFFFFF;
-    top: 22%;
     padding: 20px 40px 40px 40px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -54,3 +44,8 @@ h2 {
     color: #146c98;
     text-decoration: none;
   }
+
+.preferences-desc {
+    font-size: 1em;
+    font-weight: 300;
+}

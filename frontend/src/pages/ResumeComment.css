@@ -1,0 +1,129 @@
+.finish-commenting-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.resume-comment-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #e0f7fa;
+    padding: 20px;
+    position: relative;
+}
+
+.pdf-viewer-container {
+    flex: 3;
+    position: relative;
+    max-width: 70%;
+    box-shadow: none;  
+}
+
+.comments-section {
+    flex: 1;
+    padding: 20px;
+    background-color: #e0f7fa;
+    overflow-y: auto;
+    max-width: 25%;
+}
+
+.comments-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.comment-input-box {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
+}
+
+.comment-input-box input {
+    margin-bottom: 10px;
+}
+
+.comment-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 250px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.comment-user {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.comment-user .avatar {
+    background-color: #f44336;
+    border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-size: 16px;
+    height: 24px;
+    margin-right: 8px;
+    text-align: center;
+    width: 24px;
+}
+
+.comment-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* .highlight-overlay {
+    position: absolute;
+    background-color: rgba(255, 255, 0, 0.6); 
+    opacity: 0.6;
+    pointer-events: none; 
+    z-index: 5; 
+} */
+
+.highlight-overlay {
+    position: absolute;
+    background-color: yellow;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.comment-box.selected-comment {
+    border: 2px solid #007BFF;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.highlight-overlay.selected-highlight {
+    background-color: green;
+}
+
+
+.highlight {
+    background-color: yellow;
+}
+
+.comment-box.focused {
+    border: 2px solid #000;
+    background-color: #f0f0f0;
+}

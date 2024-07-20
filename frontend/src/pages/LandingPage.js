@@ -55,6 +55,14 @@ const LandingPage = () => {
         }
         
         const currentResume = swipingResumes[currentIndex];
+
+        
+        console.log('Current Resume:', JSON.stringify(currentResume, null, 2)); // Log current resume
+    
+    if (!currentResume || !currentResume._id || !currentResume.uploader_id) {
+        console.error('Invalid current resume structure:', currentResume);
+        return;
+    }
         
         try {
             let axiosConfig = {
@@ -71,7 +79,7 @@ const LandingPage = () => {
             }, axiosConfig);
 
             setCurrentIndex(prevIndex => prevIndex + 1);
-            await checkMatches(userId, currentResume.uploader_id, currentResume._id);
+            await checkMatches(userId, currentResume.uploader_id._id, currentResume._id);
         } catch (error) {
             console.error('Failed to swipe resume', error);
         }
@@ -135,16 +143,20 @@ const LandingPage = () => {
                     </div>
                 </div>
                 <div className="swiping-pdf-item" onClick={() => openZoomModal(currentResume)}>
-                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
                         <Viewer
                             fileUrl={`http://localhost:3001/bucket/files/${currentResume.file_path}`}
-                            defaultScale={0.62}
+                            defaultScale={1.0}
                         />
                     </Worker>
                 </div>
             </div>
         ) : (
-            <div>No more resumes to swipe</div>
+            <div className="no-results">
+                <p>No Resumes Found</p>
+                <br></br>
+                <p>Consider changing your swiping preferences to allow for more results.</p> 
+            </div>
         )}
     </div>
     );

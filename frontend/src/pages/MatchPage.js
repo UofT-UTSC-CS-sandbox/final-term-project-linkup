@@ -34,9 +34,9 @@ function MatchPage() {
       <h1 className="match-title">Linked Up!</h1>
       <p>You two have swiped right on each other.</p>
       <div className="pdf-item-match">
-          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+          <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
               <Viewer
-                  fileUrl={`http://localhost:3001/bucket/files/${matchedResume[0].file_path}`}
+                  fileUrl={`http://localhost:3001/bucket/files/${matchedResume.file_path}`}
                   defaultScale={0.3}
               />
           </Worker>
@@ -45,7 +45,7 @@ function MatchPage() {
         <button onClick={() => navigate('/swiping')}>
           Keep Swiping
         </button>
-        <button onClick={() => navigate('/swiping')}>
+        <button onClick={() => navigate(`/resume-comment/${matchedResume._id}`)}>
             Start a Conversation
         </button>
       </div>

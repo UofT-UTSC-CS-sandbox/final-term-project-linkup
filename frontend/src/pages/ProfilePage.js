@@ -55,7 +55,7 @@ const Profile = () => {
         }
         retrieveBio();
         fetchResumes();
-    }, [userId]);
+    }, [userId, isAuthenticated, auth.id]);
 
     // Handle horizontal scrolling of PDF container via mouse wheel
     useEffect(() => {
@@ -74,8 +74,8 @@ const Profile = () => {
   
   // Refresh resumes on successful upload
   const handleResumeUploadSuccess = (newResume) => {
-    console.log('Adding new resume:', newResume);
-    fetchResumes();
+    setResumes(prevResumes => [...prevResumes, newResume]);
+    window.location.reload();
   };
 
   // Open/close modals for resume upload and deletion
@@ -219,21 +219,28 @@ function capitalizeWords(str) {
                 <div className="profile-icon-section">
                     <div className="profile-icon-placeholder"></div>
                     <div className="username"> {auth.name} </div>
-                    <button className="settings-button">
-                        <SettingsIcon />
-                        Settings
+                    <button className="edit-preferences-button" onClick={() => navigate('/edit-preferences')}>
+                        Edit Preferences
                     </button>
                 </div>
                 <div className="horizontal-container">
                     <div className="vertical-line"></div>
                     <div className="fields-container">
-                        <div className="profile-info">MY INFORMATION</div>
+                        <div className="profile-info">PROFILE</div>
                         <div className="field-label">Industry: <span className="value-normal">{capitalizeWords(bio.field_of_interest)}</span></div>
                         <div className="field-label">Location: <span className="value-normal">{capitalizeWords(bio.location)}</span></div>
                         <div className="field-label">Education: <span className="value-normal">{capitalizeWords(bio.education)}</span> </div>
                         <div className="field-label">Level of Experience: <span className="value-normal">{capitalizeWords(bio.work_experience_level)}</span></div>
                     </div>
+                    <div className="fields-container">
+                        <div className="profile-info">SWIPING PREFERENCES</div>
+                        <div className="field-label">Industry: <span className="value-normal">{capitalizeWords(bio.preferences_interest)}</span></div>
+                        <div className="field-label">Location: <span className="value-normal">{capitalizeWords(bio.preferences_loc)}</span></div>
+                        <div className="field-label">Education: <span className="value-normal">{capitalizeWords(bio.preferences_edu)}</span> </div>
+                        <div className="field-label">Level of Experience: <span className="value-normal">{capitalizeWords(bio.preferences_workexp)}</span></div>
+                    </div>
                 </div>
+
                 <div className="uploads-container">
                     <div className="uploads-info">MY UPLOADS</div>
                     <hr className="uploads-divider" />

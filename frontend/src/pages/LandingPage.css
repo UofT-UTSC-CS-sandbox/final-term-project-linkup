@@ -27,7 +27,7 @@ p {
 
 .swiping-pdf-item {
     position: relative;
-    width: 30vw; /* Fixed width for each PDF item */
+    width: 35vw; /* Fixed width for each PDF item */
     height: 80vh; /* Fixed height for each PDF item to represent a page */
     overflow: hidden; /* Prevent overflow */
     border: 1px solid #ccc; /* Optional: Add a border for visual separation */
@@ -96,4 +96,18 @@ p {
   margin-left: 20px;  
 }
   
-  
+.no-results {
+  margin: 50px;
+} 
+
+.no-results p:last-child{
+  font-weight: 300;
+  font-size: 1.3em;
+  margin: 1px;
+}
+
+.no-results p:first-child{
+  font-weight: 500;
+  font-size: 1.8em;
+  margin: 1px;
+}

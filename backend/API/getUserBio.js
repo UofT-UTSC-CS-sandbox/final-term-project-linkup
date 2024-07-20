@@ -22,7 +22,12 @@ const getPreferences = async (req, res) => {
         field_of_interest: user.field_of_interest,
         education: user.education,
         location: user.location,
-        work_experience_level: user.work_experience_level});
+        work_experience_level: user.work_experience_level,
+        preferences_interest: user.preferences_interest,
+        preferences_loc: user.preferences_loc,
+        preferences_edu: user.preferences_edu,
+        preferences_workexp: user.preferences_workexp
+      });
   
     } catch (error) {
       res.status(500).send('Error retrieving data: ' + error.message);

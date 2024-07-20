@@ -1,7 +1,8 @@
-import React, {useEffect, useState } from 'react';
-import logo from '../images/linkup_logo_highquality.png'; 
+import React, { useEffect, useState } from 'react';
+import axios from "axios";
+import logo from '../images/linkup_logo_highquality.png';
 import Select from 'react-select';
-import './Preferences.css'; 
+import './Preferences.css';
 import Sidebar from '../components/Sidebar.js';
 
 // Routing and authentication
@@ -9,10 +10,10 @@ import { useNavigate } from "react-router-dom";
 
 // Routing and authentication
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 function PreferencesForm() {
-     // Hook to get authenticated user info
+    // Hook to get authenticated user info
     const user = useAuthUser();
     const navigate = useNavigate();
     const isAuthenticated = useIsAuthenticated();
@@ -21,32 +22,53 @@ function PreferencesForm() {
 
     // Redirect user to login page if not authenticated
     useEffect(() => {
-    if(!isAuthenticated) {
-        navigate('/login-page');
-    }
-    else
-    {
-        userId = auth.id;
-    }
+        if (!isAuthenticated) {
+            navigate('/login-page');
+        } else {
+            userId = auth.id;
+        }
     });
-    
+
+    const [currentUserInfo, setUser] = useState([]);
+
     const [preferences, setPreferences] = useState({
         preferences_edu: '',
         preferences_interest: '',
         preferences_loc: '',
         preferences_workexp: '',
     });
-   // Handle changes in the select dropdowns
+
+    // Function to get the current user info from the backend
+    const getUser = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/api/user/${userId}`);
+            const userInfo = response.data[0];
+            setUser(userInfo);
+            setPreferences({
+                preferences_edu: userInfo.preferences_edu || '',
+                preferences_interest: userInfo.preferences_interest || '',
+                preferences_loc: userInfo.preferences_loc || '',
+                preferences_workexp: userInfo.preferences_workexp || '',
+            });
+        } catch (error) {
+            console.error('Failed to get User', error);
+        }
+    }
+
+    // Handle changes in the select dropdowns
     const handleChange = (selectedOption, action) => {
+        console.log("Selected Option:", selectedOption);
+        console.log("Action:", action);
         setPreferences(prevState => ({
             ...prevState,
-            [action.name]: selectedOption ? selectedOption.value : '' 
+            [action.name]: selectedOption ? selectedOption.value : ''
         }));
     };
+
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-    // Ensure user is authenticated and email is available
+        // Ensure user is authenticated and email is available
         if (!user || !user.email) {
             console.error('User is not authenticated or email is not available');
             return;
@@ -54,7 +76,7 @@ function PreferencesForm() {
 
         console.log("Submitting for user:", user.email);
         console.log(preferences);
-      // Send updated preferences to the backend
+        // Send updated preferences to the backend
         try {
             const response = await fetch('http://localhost:3001/api/updatePreferences', {
                 method: 'POST',
@@ -101,7 +123,7 @@ function PreferencesForm() {
         placeholder: (base) => ({
             ...base,
             color: '#000',
-            textAlign: 'Left',
+            textAlign: 'center',
         }),
         dropdownIndicator: (base) => ({
             ...base,
@@ -117,78 +139,91 @@ function PreferencesForm() {
         }),
     };
 
+    // Fetch user info when component mounts
+    useEffect(() =>  {
+        if (userId) {
+            getUser();
+        }
+    }, [userId]);
+
     return (
         <div className="container">
             <div className="app-logo-container"> 
                 <a href="/">
-                <img src={logo} className="logo" alt="LinkUp Logo" />
+                    <img src={logo} className="logo" alt="LinkUp Logo" />
                 </a> 
             </div>
             <Sidebar></Sidebar>
             <div className="preferences-form-container">
-                <h3>Select Your Preferences</h3>
-                
-                <h10>Resumes shown to you will be tailored according to your preferences.</h10>
-                <br></br>
+                <h2>Select Your Preferences</h2>
+                <p class="preferences-desc">Resumes shown to you will be tailored according to your preferences.</p>
                 <form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>
-                < br></br>
+                    <br></br>
                     <Select
                         name="preferences_interest"
                         options={[
-                            { value: 'computer science', label: 'Computer Science' },
-                            { value: 'business', label: 'Business' },
-                            { value: 'biology', label: 'Biology' },
-                            { value: 'economics', label: 'Economics' },
-                            { value: 'law', label: 'Law' },
-                            { value: 'art', label: 'Art' }
+                            { value: '', label: '- All -' },
+                            { value: 'Computer Science', label: 'Computer Science' },
+                            { value: 'Business', label: 'Business' },
+                            { value: 'Biology', label: 'Biology' },
+                            { value: 'Economics', label: 'Economics' },
+                            { value: 'Law', label: 'Law' },
+                            { value: 'Art', label: 'Art' }
                         ]}
                         onChange={handleChange}
                         styles={customStyles}
-                        placeholder="Field of Interest (Optional)"
+                        value={preferences.preferences_interest ? { value: preferences.preferences_interest, label: preferences.preferences_interest } : null}
+                        placeholder={preferences.preferences_interest ? "" : "Field of Interest (Optional)"}
                         isClearable
                     />
                     <Select
                         name="preferences_workexp"
                         options={[
-                            { value: 'entry', label: 'Entry Level' },
-                            { value: 'intermediate', label: 'Intermediate Level' },
-                            { value: 'senior', label: 'Senior Level' }
+                            { value: '', label: '- All -' },
+                            { value: 'Entry Level', label: 'Entry Level' },
+                            { value: 'Intermediate Level', label: 'Intermediate Level' },
+                            { value: 'Senior Level', label: 'Senior Level' }
                         ]}
                         onChange={handleChange}
                         styles={customStyles}
-                        placeholder="Experience Level (Optional)"
+                        value={preferences.preferences_workexp ? { value: preferences.preferences_workexp, label: preferences.preferences_workexp } : null}
+                        placeholder={preferences.preferences_workexp ? "" : "Experience Level (Optional)"}
                         isClearable
                     />
                     <Select
                         name="preferences_edu"
                         options={[
-                            { value: 'diploma', label: 'Diploma' },
-                            { value: 'bachelor', label: 'Bachelor' },
-                            { value: 'master', label: 'Master' },
-                            { value: 'phd', label: 'PHD' }
+                            { value: '', label: '- All -' },
+                            { value: 'Diploma', label: 'Diploma' },
+                            { value: 'Bachelor', label: 'Bachelor' },
+                            { value: 'Master', label: 'Master' },
+                            { value: 'PHD', label: 'PHD' }
                         ]}
                         onChange={handleChange}
                         styles={customStyles}
-                        placeholder="Education Level (Optional)"
+                        value={preferences.preferences_edu ? { value: preferences.preferences_edu, label: preferences.preferences_edu } : null}
+                        placeholder={preferences.preferences_edu ? "" : "Education Level (Optional)"}
                         isClearable
                     />
                     <Select
                         name="preferences_loc"
                         options={[
-                            { value: 'usa', label: 'USA' },
-                            { value: 'canada', label: 'Canada' },
-                            { value: 'europe', label: 'Europe' },
-                            { value: 'india', label: 'India' },
-                            { value: 'turkey', label: 'Turkey' },
-                            { value: 'mexico', label: 'Mexico' },
-                            { value: 'brazil', label: 'Brazil' },
-                            { value: 'argentina', label: 'Argentina' },
-                            { value: 'colombia', label: 'Colombia' },
-                            { value: 'uk', label: 'United Kingdom' },
+                            { value: '', label: '- All -' },
+                            { value: 'USA', label: 'USA' },
+                            { value: 'Canada', label: 'Canada' },
+                            { value: 'Europe', label: 'Europe' },
+                            { value: 'India', label: 'India' },
+                            { value: 'Turkey', label: 'Turkey' },
+                            { value: 'Mexico', label: 'Mexico' },
+                            { value: 'Brazil', label: 'Brazil' },
+                            { value: 'Argentina', label: 'Argentina' },
+                            { value: 'Colombia', label: 'Colombia' },
+                            { value: 'United Kingdom', label: 'United Kingdom' },
                         ]}
                         onChange={handleChange}
                         styles={customStyles}
-                        placeholder="Geographic Location (Optional)"
+                        value={preferences.preferences_loc ? { value: preferences.preferences_loc, label: preferences.preferences_loc } : null}
+                        placeholder={preferences.preferences_loc ? "" : "Geographic Location (Optional)"}
                         isClearable
                     />
                     <button type="submit" className="submit-button">FINISH</button>
