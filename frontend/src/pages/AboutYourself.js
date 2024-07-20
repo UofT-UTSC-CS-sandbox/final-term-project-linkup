@@ -125,7 +125,7 @@ const AboutForm = () => {
   };
  /* All fields similar to preferences fields*/
   return (
-    <div className="preferences-container">
+    <div className="container">
       <img src={logo} alt="LinkUp Logo" className="logo-block" />
       <h3 className="slogan">Tell us about yourself.</h3>
       <div className="preferences-form-container">

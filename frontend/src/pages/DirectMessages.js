@@ -233,7 +233,7 @@ function App() {
       return;
     }
 
-    if(txtMsg === "") {
+    if(txtMsg.trim() ==="") {
       return;
     }
 
