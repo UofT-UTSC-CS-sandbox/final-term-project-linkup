@@ -150,7 +150,7 @@ app.post('/test-page', async (req, res) => {
 
 // API call to get existing users
 app.get('/get-user', getUser);
-app.get('/api/:userId', getUserbyId);
+app.get('/api/user/:userId', getUserbyId);
 
 // SIGN-UP
 app.post('/new-user', newUser);

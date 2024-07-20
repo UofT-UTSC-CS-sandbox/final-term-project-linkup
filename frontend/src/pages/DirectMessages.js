@@ -356,13 +356,12 @@ function App() {
   // Function to check matched users
   const checkMatched = async() => {
     const currUserId = auth.id;
-    console.log(currUserId);
 
     try {
       for (const user of userList) {
         const otherUserId = user._id;
         console.log("trying to match " + user._id);
-
+        
         if (otherUserId !== currUserId) {
           try {
             const response = await axios.post(`http://localhost:3001/api/match/${currUserId}`, {
@@ -809,7 +808,7 @@ function App() {
               </div>
             )}
         <div className="textbox-msg-block">
-          <button onClick={() => { sendMessage(); markCurrMessagesAsRead() }} className='textbox-msg-sendbutton' disabled={isBlocked}>
+          <button onClick={() => { sendMessage(); markCurrMessagesAsRead() }} className='textbox-msg-sendbutton' disabled={isBlocked || !dmAccepted || dmAccepted===false}>
             <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
           </button>
           <input
@@ -819,7 +818,7 @@ function App() {
             onKeyDown={handleKeyDown}
             placeholder={"   Type a message"}
             className="textbox-msg-textbox"
-            disabled={dmAccepted === false || isBlocked}
+            disabled={dmAccepted === false || isBlocked || dmAccepted === null}
           />
           {isBlocked && <div className="blocked-message">This user has been blocked.</div>}
           {/* <div className="current-select-user-info-block-name-circle"></div>

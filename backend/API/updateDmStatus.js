@@ -6,7 +6,7 @@ const updateDmStatus = async (req, res) => {
   const { to, from, accepted } = req.body;
 
   try {
-    let connection = await Connection.findOneAndUpdate(
+    const connection = await Connection.findOneAndUpdate(
       {
         $or: [
           { user1: to, user2: from },
@@ -17,7 +17,7 @@ const updateDmStatus = async (req, res) => {
       { new: true, upsert: true }
     );
 
-    res.json({ success: true });
+    res.json({ success: true, connection  });
   } catch (error) {
     console.error('Error updating DM status:', error);
     res.status(500).json({ error: 'Internal Server Error' });
