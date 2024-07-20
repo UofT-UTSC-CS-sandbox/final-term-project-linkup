@@ -55,6 +55,14 @@ const LandingPage = () => {
         }
         
         const currentResume = swipingResumes[currentIndex];
+
+        
+        console.log('Current Resume:', JSON.stringify(currentResume, null, 2)); // Log current resume
+    
+    if (!currentResume || !currentResume._id || !currentResume.uploader_id) {
+        console.error('Invalid current resume structure:', currentResume);
+        return;
+    }
         
         try {
             let axiosConfig = {
@@ -71,7 +79,7 @@ const LandingPage = () => {
             }, axiosConfig);
 
             setCurrentIndex(prevIndex => prevIndex + 1);
-            await checkMatches(userId, currentResume.uploader_id, currentResume._id);
+            await checkMatches(userId, currentResume.uploader_id._id, currentResume._id);
         } catch (error) {
             console.error('Failed to swipe resume', error);
         }

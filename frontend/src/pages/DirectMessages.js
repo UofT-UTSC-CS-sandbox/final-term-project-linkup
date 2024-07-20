@@ -354,12 +354,12 @@ function App() {
   };
 
   // Function to check matched users
-  const checkMatched = () => {
+  const checkMatched = async() => {
     const currUserId = auth.id;
     console.log(currUserId);
 
     try {
-      userList.forEach(async (user) => {
+      for (const user of userList) {
         const otherUserId = user._id;
         console.log("trying to match " + user._id);
 
@@ -375,8 +375,10 @@ function App() {
             });
 
             const hasMatch = response.data.hasMatch;
+            
             if (hasMatch) {
               setMatchedList((prevList) => {
+                
                 const ids = prevList.map(someOtherUser => someOtherUser._id === user._id).filter(mapping => mapping === true).length;
                 if (!ids) {
                   return [...prevList, user];
@@ -388,7 +390,7 @@ function App() {
             console.error('Failed to check for matches', error);
           }
         }
-      });
+      };
     } catch (error) {
       console.log("error here>", error);
     }
