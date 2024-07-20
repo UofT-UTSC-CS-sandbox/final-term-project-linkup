@@ -185,7 +185,7 @@ const ResumeComment = () => {
             const dmData = {
                 to: uploaderName, // Adjust as per your data structure
                 from: userName,
-                timestamp: new Date().toISOString(),
+                timestamp: new Date().toLocaleString(),
                 message: messageContent,
             };
 
