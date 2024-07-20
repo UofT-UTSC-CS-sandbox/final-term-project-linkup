@@ -556,3 +556,65 @@
     font-size: 14px;
 }
 
+/* Other existing styles */
+
+.swipe-action-buttons-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    position: absolute;
+    top: 50%; /* Center vertically within the direct-messages-block */
+    left: 65%; /* Center horizontally within the direct-messages-block */
+    transform: translate(-50%, -50%); /* Adjust for the size of the container */
+    width: auto; /* Adjust width as needed */
+    height: auto; /* Adjust height as needed */
+}
+
+.swipe-action-buttons-container button {
+    margin: 0 5px;
+    padding: 10px 20px; /* Increase padding for larger buttons */
+    border: none;
+    border-radius: 5px;
+    background-color: #53a7d0;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.swipe-action-buttons-container button:hover {
+    background-color: #3b8bbd;
+}
+
+.swipe-action-buttons-container button:focus {
+    outline: none;
+    box-shadow: 0 0 3px 2px #53a7d0;
+}
+
+
+.resume-block {
+    width: 150px; /* Adjust the width as needed */
+    height: 200px; /* Adjust the height as needed */
+    overflow: hidden;
+    position: relative;
+    
+}
+
+.resume-block .react-pdf__Page__canvas {
+    width: 100% !important;
+    height: auto !important;
+    overflow: hidden
+}
+
+ 
+
+.resume-message {
+    padding: 9px;
+}
+
+.pdf-viewer-container {
+    margin-bottom: 10px; /* Add margin bottom for space between the PDF viewer and the message */
+    width: 100%; /* Adjust width to your needs */
+    height: auto; /* Adjust height to your needs */
+    overflow: auto; /* Add overflow property */
+}

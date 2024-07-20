@@ -419,7 +419,8 @@ function App() {
     }
   };
 
-  // Components
+  // // Components
+
   // const messageComponent = (msg, index) => {
        
   //   let messageContent;
@@ -509,7 +510,7 @@ function App() {
             return (
                 <div key={msg._id} className="message-outer-single-block">
                   {resumeUrl && (
-                    <div className="message-single-block resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                    <div className="message-single-block resume-message" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>
                         <div className="resume-block">
                             <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
                                 <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
@@ -517,7 +518,7 @@ function App() {
                         </div>
                         </div>
                     )}
-                    <div className="message-single-block-unread"  onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                    <div className="message-single-block-unread"  onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>
                         {viewCommentsLink ? (
                             <a href={viewCommentsLink}>{messageText}</a>
                         ) : (
@@ -530,14 +531,22 @@ function App() {
                 </div>
               )}
                     </div>
-                    {currTimeStampShow === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
+                    {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
                 </div>
             );
         }
+        if(msg.deleted_by_from === true)
+          {
+            return (
+              <div key={msg._id} className="message-outer-single-block">
+                <div className="message-single-block-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
+                {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+              </div>)
+          }
         return (
             <div key={msg._id} className="message-outer-single-block">
               {resumeUrl && (
-                 <div className="message-single-block resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                 <div className="message-single-block resume-message" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>
                     <div className="resume-block">
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
                             <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
@@ -545,21 +554,29 @@ function App() {
                     </div>
                     </div>
                 )}
-                <div className="message-single-block" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+                <div className="message-single-block" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>
                 {viewCommentsLink ? (
                             <a href={viewCommentsLink}>{messageText}</a>
                         ) : (
                             messageText
                         )}
                 </div>
-                {currTimeStampShow === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
+                {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
             </div>
         );
     }
+    if(msg.deleted_by_from === true)
+      {
+        return (
+          <div key={msg._id} className="message-outer-single-block">
+            <div className="message-single-block-self-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
+            {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+          </div>)
+      }
     return (
         <div key={msg._id} className="message-outer-single-block">
           {resumeUrl && (
-            <div className="message-single-block-self resume-message" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+            <div className="message-single-block-self resume-message" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>
                 <div className="resume-block">
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
                         <Viewer fileUrl={resumeUrl} defaultScale={SpecialZoomLevel.PageWidth} />
@@ -567,14 +584,24 @@ function App() {
                 </div>
               </div>
             )}
-            <div className="message-single-block-self" onMouseOver={() => setCurrTimeStampShow(msg._id)} onMouseOut={() => setCurrTimeStampShow('')}>
+            {msgHovered === msg._id &&
+          <div onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')} className='dm-msgactions-icons'>
+
+            {/* <img className='dm-msgactions-size' src={editIcon} alt="Edit Message Icon" /> */}
+            <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {
+              setMsgToBeDeleted(msg);
+              toggleDelMsgModal();
+            }} alt="Delete Message Icon" />
+          </div>
+        }
+            <div className="message-single-block-self" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>
                 {viewCommentsLink ? (
                       <a href={viewCommentsLink}>{messageText}</a>
                   ) : (
                       messageText
                   )}
             </div>
-            {currTimeStampShow === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
+            {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
         </div>
     );
 }
@@ -595,69 +622,7 @@ function App() {
       latestTimestamp = "";
     }
 
-  //   if (user.anon_username === selectedUser) {
-  //     outerBlockClass = 'individual-user-block-selected';
-  //   }
 
-  //   return (<div onClick={() => {
-  //     markCurrMessagesAsRead();
-  //     setTxtMsg('');
-  //     console.log(selectedUser);
-  //     setSelectedUser(user.anon_username);
-  //     setMoreModalShow(false);
-  //     checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
-  //   }}>
-  //     <div className={outerBlockClass}>
-  //       <div className="circle"></div>
-  //       <div className='individual-user-block-name'>{user.anon_username}</div>
-  //       {numUnreadDms > 0 && <div className='individual-user-block-unread-dm'>{numUnreadDms}</div>}
-  //       <div className='individual-user-block-latest-msg'>{latestMessage}</div>
-  //       <div className='individual-user-block-latest-timestamp'>{latestTimestamp}</div>
-  //     </div>
-  //   </div>);
-  // };
-
-  // // Delete Conversations Modal Component
-  // const deleteConversationModal = () => {
-  //   return (
-  //     <div className="modal-overlay-delete" onClick={toggleDelConvModal}>
-  //       <div className="modal-content-delete">
-  //           <h2 className="modal-header-delete"> Are you sure you want to delete this conversation?</h2>
-  //           <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
-  //           <div className="modal-buttons-delete">
-  //               <button className="cancel-button-delete modal-button-delete" onClick={toggleDelConvModal}>Cancel</button>
-  //               <button className="delete-button-delete modal-button-delete" onClick={deleteConversation}>Delete</button>
-  //           </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  //  // Delete Conversations Modal Component
-  //  const deleteMsgModal = () => {
-  //   console.log(msgToBeDeleted);
-  //   return (
-  //     <div className="modal-overlay-delete" onClick={toggleDelMsgModal}>
-  //       <div className="modal-content-delete">
-  //           <h2 className="modal-header-delete"> Are you sure you want to delete this message?</h2>
-  //           <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
-  //           <div className="modal-buttons-delete">
-  //               <button className="cancel-button-delete modal-button-delete" onClick={toggleDelMsgModal}>Cancel</button>
-  //               <button className="delete-button-delete modal-button-delete" onClick={() => {deleteMessage(msgToBeDeleted)}}>Delete</button>
-  //           </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // return (
-  //   <div className="container">
-  //     <div className="app-logo-container">
-  //       <a href="/">
-  //         <img src={logo} className="logo" alt="LinkUp Logo" />
-  //       </a>
-  //     </div>
-  //     <Sidebar />
     if (user.anon_username === selectedUser)
     {
       outerBlockClass = 'individual-user-block-selected';
@@ -669,6 +634,8 @@ function App() {
         setTxtMsg('');
         console.log(selectedUser);
         setSelectedUser(user.anon_username);
+        setMoreModalShow(false);
+        checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
       }}>
       <div className={outerBlockClass}>
         <div className="circle">
@@ -690,28 +657,41 @@ function App() {
         </div>
       </div>
     </div>)
+  };
+
+
+  // Delete Conversations Modal Component
+  const deleteConversationModal = () => {
+    return (
+      <div className="modal-overlay-delete" onClick={toggleDelConvModal}>
+        <div className="modal-content-delete">
+            <h2 className="modal-header-delete"> Are you sure you want to delete this conversation?</h2>
+            <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
+            <div className="modal-buttons-delete">
+                <button className="cancel-button-delete modal-button-delete" onClick={toggleDelConvModal}>Cancel</button>
+                <button className="delete-button-delete modal-button-delete" onClick={deleteConversation}>Delete</button>
+            </div>
+        </div>
+      </div>
+    );
   }
 
-
-
-  // const checkDmStatus = async (otherUser) => {
-  //   const currUser = auth.name; // Use anon_username
-
-  //   try {
-  //     const response = await axios.get('http://localhost:3001/api/dm-status', {
-  //       params: { to: currUser, from: otherUser }
-  //     });
-
-  //     if (response.data.isNewConversation) {
-  //       setShowButtons(true);
-  //     } else {
-  //       setDmAccepted(response.data.accepted);
-  //       setShowButtons(false);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error checking DM status:', error);
-  //   }
-  // };
+   // Delete Conversations Modal Component
+   const deleteMsgModal = () => {
+    console.log(msgToBeDeleted);
+    return (
+      <div className="modal-overlay-delete" onClick={toggleDelMsgModal}>
+        <div className="modal-content-delete">
+            <h2 className="modal-header-delete"> Are you sure you want to delete this message?</h2>
+            <p> The recepient will be able to see that you have deleted your messages <br /> You can’t undo this action.</p>
+            <div className="modal-buttons-delete">
+                <button className="cancel-button-delete modal-button-delete" onClick={toggleDelMsgModal}>Cancel</button>
+                <button className="delete-button-delete modal-button-delete" onClick={() => {deleteMessage(msgToBeDeleted)}}>Delete</button>
+            </div>
+        </div>
+      </div>
+    );
+  }
 
   const fetchDmStatus = async (otherUser) => {
     const currUser = auth.name; // Use anon_username
@@ -767,8 +747,6 @@ function App() {
     }
   };
 
-
-
   return (
     <div className="container">
      <div className="app-logo-container"> 
@@ -785,7 +763,7 @@ function App() {
           </div>
         </div>
         <div className="current-selected-user-info-block">
-          {/* {selectedUser !== "" &&
+          {selectedUser !== "" &&
             <div className="current-select-user-info-block-name-circle"></div>}
           <div className="current-select-user-info-block-name">{selectedUser}</div>
           {selectedUser !== "" &&
@@ -822,6 +800,12 @@ function App() {
             .slice(0, msgLimit)
             .reverse()}
         </div>
+        {showButtons && (
+              <div className="swipe-action-buttons-container">
+                <button onClick={handleAccept}>Accept</button>
+                <button onClick={handleDecline}>Decline</button>
+              </div>
+            )}
         <div className="textbox-msg-block">
           <button onClick={() => { sendMessage(); markCurrMessagesAsRead() }} className='textbox-msg-sendbutton' disabled={isBlocked}>
             <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
@@ -833,16 +817,15 @@ function App() {
             onKeyDown={handleKeyDown}
             placeholder={"   Type a message"}
             className="textbox-msg-textbox"
-            disabled={isBlocked}
+            disabled={dmAccepted === false || isBlocked}
           />
-          {isBlocked && <div className="blocked-message">This user has been blocked.</div>} */}
-          <div className="current-select-user-info-block-name-circle">
-
-          </div>
-          <div className="current-select-user-info-block-name">
-            {selectedUser}
-          </div>
+          {isBlocked && <div className="blocked-message">This user has been blocked.</div>}
+          {/* <div className="current-select-user-info-block-name-circle"></div>
+          <div className="current-select-user-info-block-name">{selectedUser}</div> */}
         </div>
+
+
+{/*         
         <div className="direct-messages-block" ref={messagesEndRef}>
           {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)} className="loadmore-messages-button"> Load More </button>}
           {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
@@ -871,7 +854,7 @@ function App() {
             className="textbox-msg-textbox"
             disabled={dmAccepted === false || dmAccepted === null}
           />
-        </div>
+        </div> */}
         <div className="select-user-block">
           {matchedList.map((user) => (userComponent(user)))}
         </div>
