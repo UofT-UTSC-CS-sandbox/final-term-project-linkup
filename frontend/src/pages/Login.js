@@ -97,6 +97,13 @@ const Login = () => {
     setTxtPassword(e.target.value);
   }
 
+  // Key listeners
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      attemptLogin();
+    }
+  };
+
   return (
     <header className='App-header'>
       <img className='logo-block' src={logo} alt="logo" />
@@ -105,11 +112,11 @@ const Login = () => {
         <label className='email-text-posit'> 
           Email 
         </label>
-        <input className='email-custom-textboxx' type="email" value={txtEmail} onChange={handleChangeInEmail} />
+        <input className='email-custom-textboxx' type="email" value={txtEmail} onKeyDown={handleKeyDown} onChange={handleChangeInEmail} />
         <label className='password-text-posit'> 
           Password
         </label>
-        <input className='password-custom-textboxx' type="password" value={txtPassword} onChange={handleChangeInPassword} />
+        <input className='password-custom-textboxx' type="password" value={txtPassword} onKeyDown={handleKeyDown} onChange={handleChangeInPassword} />
         {loginError && (
           <div>
             <label className='login-validation-error'>  {loginErrorMsg} </label>

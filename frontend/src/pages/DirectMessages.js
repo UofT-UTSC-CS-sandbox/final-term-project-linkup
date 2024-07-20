@@ -233,6 +233,10 @@ function App() {
       return;
     }
 
+    if(txtMsg === "") {
+      return;
+    }
+
     const newMsg = {
       to: selectedUser,
       from: currentUser,
