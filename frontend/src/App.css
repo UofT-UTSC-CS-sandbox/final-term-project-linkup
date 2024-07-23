@@ -141,7 +141,6 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  padding-bottom: 30px;
   background-color: #bfe7f6; /* Same as your container background color */
   font-family: 'Roboto', sans-serif;
 }
