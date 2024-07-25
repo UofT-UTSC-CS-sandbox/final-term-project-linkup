@@ -3,9 +3,10 @@ import axios from 'axios';
 import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import { useParams, useNavigate } from 'react-router-dom';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; 
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import './ResumeComment.css';
+import HatefulCommentModal from '../components/MsgFilter';
 
 const ResumeComment = () => {
     const { resumeId } = useParams();
@@ -24,6 +25,7 @@ const ResumeComment = () => {
     const [commentBoxVisible, setCommentBoxVisible] = useState(false);
     const [highlights, setHighlights] = useState([]);
     const [selectedCommentId, setSelectedCommentId] = useState(null);
+    const [isModalOpen, setModalOpen] = useState(false);
     const viewerRef = useRef(null);
     const commentBoxRef = useRef(null);
 
@@ -95,7 +97,14 @@ const ResumeComment = () => {
             setHighlights(prevHighlights => [...prevHighlights, { position: commentPosition, highlightedText }]);
         } catch (error) {
             console.error('Error adding comment:', error);
+            if (error.response && error.response.data.error === 'Your comment contains inappropriate language.') {
+                setModalOpen(true); // Open the modal on error
+            }
         }
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
     };
 
     const handleTextSelection = useCallback(() => {
@@ -269,6 +278,10 @@ const ResumeComment = () => {
                 </ul>
             </div>
             <button onClick={handleFinishCommenting} className="finish-commenting-button">Finish Commenting</button>
+            <HatefulCommentModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+            />
         </div>
     );
 };
