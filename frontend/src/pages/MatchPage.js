@@ -49,7 +49,7 @@ function MatchPage() {
   }
 
   return(
-    <div className="container">
+    <div className="match-container">
       <h1 className="match-title">Linked Up!</h1>
       <p className="match-desc">You two have swiped right on each other!</p>
       <p className="match-anon-username">{matchedUsername ? matchedUsername.anon_username : 'Loading username...'}</p>
