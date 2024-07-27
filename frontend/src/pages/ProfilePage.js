@@ -257,11 +257,7 @@ const getProfilePic = async () => {
     }).then(async (response) => {
       if (response.ok) {
         const data = await response.json();
-        console.log(data.profilePic);
         setCurrProfilePic(data.profilePic);
-        console.log("Profile Pic updated");
-        console.log(currProfilePic);
-        console.log(profilePicDictionary[currProfilePic]);
       } else {
       
       }

@@ -19,6 +19,16 @@ import Sidebar from '../components/Sidebar.js';
 import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 
+// Profile Pics
+import bearTwemoji from '../images/profilePics/bearTwemoji.png';
+import bunnyTwemoji from '../images/profilePics/bunnyTwemoji.png';
+import catTwemoji from '../images/profilePics/catTwemoji.png';
+import cowTwemoji from '../images/profilePics/cowTwemoji.png';
+import dogTwemoji from '../images/profilePics/dogTwemoji.png';
+import horseTwemoji from '../images/profilePics/horseTwemoji.png';
+import pigTwemoji from '../images/profilePics/pigTwemoji.png';
+import tigerTwemoji from '../images/profilePics/tigerTwemoji.png';
+
 
 function App() {
   const [txtMsg, setTxtMsg] = useState('');
@@ -29,6 +39,7 @@ function App() {
   const [msgList, setMsgList] = useState([]);
   const [msgLimit, setMsgLimit] = useState(10);
   const [selectedUser, setSelectedUser] = useState('');
+  const [selectedUserProfilePic, setSelectedUserProfilePic] = useState('');
   const [currentUser, setCurrentUser] = useState('');
   const [msgHovered, setMsgHovered] = useState('');
   const [moreModalShow, setMoreModalShow] = useState(false);
@@ -37,6 +48,18 @@ function App() {
   const [isBlocked, setIsBlocked] = useState(false);
 
   const messagesEndRef = useRef(null);
+
+  // A dictionary that maps profile picture STRINGS to IMAGES
+  const profilePicDictionary = {
+    "bearTwemoji.png": bearTwemoji,
+    "bunnyTwemoji.png": bunnyTwemoji,
+    "catTwemoji.png": catTwemoji,
+    "cowTwemoji.png": cowTwemoji,
+    "dogTwemoji.png": dogTwemoji,
+    "horseTwemoji.png": horseTwemoji,
+    "pigTwemoji.png": pigTwemoji,
+    "tigerTwemoji.png": tigerTwemoji
+  };
 
   // Delete Conversation Modal
   const [delConvModalOpen, setDelConvModalOpen] = useState(false);
@@ -49,9 +72,6 @@ function App() {
   const toggleDelMsgModal = () => {
     setDelMsgModalOpen(!delMsgModalOpen);
   };
-
-  
-  const [currTimeStampShow, setCurrTimeStampShow] = useState('');
   
   const [showButtons, setShowButtons] = useState(false);
   const [dmAccepted, setDmAccepted] = useState(null);
@@ -414,7 +434,6 @@ function App() {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
 
-
   // Component to render each message
 
   // Key listeners
@@ -424,74 +443,7 @@ function App() {
     }
   };
 
-  // // Components
-
-  // const messageComponent = (msg, index) => {
-       
-  //   let messageContent;
-  //   try {
-  //       messageContent = JSON.parse(msg.message);
-  //   } catch (e) {
-  //       messageContent = { text: msg.message };
-  //   }
-  //   const { resumeUrl, resumeId, commenter, text: messageText } = messageContent;
-  //   // const resumeUrl = messageContent.resumeUrl;
-  //   // const messageText = messageContent.text;
-
-  //   const isNewConversation = messageText && messageText.includes('left comments on your resume') && dmAccepted === null;
-
-  //   const viewCommentsLink = resumeId && commenter 
-  //       ? `/view-resume-comments/${resumeId}/${commenter}` 
-  //       : null;
-
-  //   if (msg.from !== auth.name) {
-  //     if (msg.read_by_to === false && msg.to === auth.name) {
-  //       return (
-  //         <div key={msg._id} className="message-outer-single-block">
-  //           <div className="message-single-block-unread" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-  //           {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
-  //         </div>);
-  //     }
-  //     if(msg.deleted_by_from === true)
-  //     {
-  //       return (
-  //         <div key={msg._id} className="message-outer-single-block">
-  //           <div className="message-single-block-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
-  //           {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
-  //         </div>)
-  //     }
-  //     return (
-  //       <div key={msg._id} className="message-outer-single-block">
-  //         <div className="message-single-block" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-  //         {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
-  //       </div>);
-  //   }
-  //   if(msg.deleted_by_from === true)
-  //   {
-  //     return (
-  //       <div key={msg._id} className="message-outer-single-block">
-  //         <div className="message-single-block-self-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
-  //         {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
-  //       </div>)
-  //   }
-  //   return (
-  //     <div key={msg._id} className="message-outer-single-block">
-  //       {msgHovered === msg._id &&
-  //         <div onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')} className='dm-msgactions-icons'>
-
-  //           {/* <img className='dm-msgactions-size' src={editIcon} alt="Edit Message Icon" /> */}
-  //           <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {
-  //             setMsgToBeDeleted(msg);
-  //             toggleDelMsgModal();
-  //           }} alt="Delete Message Icon" />
-  //         </div>
-  //       }
-  //       <div className="message-single-block-self" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-  //       {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
-  //     </div>);
-  // };
-
-
+  // Components
   const messageComponent = (msg, index) => {
     
     let messageContent;
@@ -627,7 +579,6 @@ function App() {
       latestTimestamp = "";
     }
 
-
     if (user.anon_username === selectedUser)
     {
       outerBlockClass = 'individual-user-block-selected';
@@ -639,12 +590,13 @@ function App() {
         setTxtMsg('');
         console.log(selectedUser);
         setSelectedUser(user.anon_username);
+        setSelectedUserProfilePic(user.avatar);
         setMoreModalShow(false);
         checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
       }}>
       <div className={outerBlockClass}>
         <div className="circle">
-
+          {profilePicDisplay(user.avatar)}
         </div>
         <div className='individual-user-block-name'>
           {user.anon_username}
@@ -694,6 +646,17 @@ function App() {
                 <button className="delete-button-delete modal-button-delete" onClick={() => {deleteMessage(msgToBeDeleted)}}>Delete</button>
             </div>
         </div>
+      </div>
+    );
+  }
+
+  const profilePicDisplay = (avatar) => {
+    return (
+      <div>
+        <img
+            src={profilePicDictionary[avatar]}
+            style={{ margin: '5px', width: '26px', height: '26px'}}
+          />
       </div>
     );
   }
@@ -769,7 +732,9 @@ function App() {
         </div>
         <div className="current-selected-user-info-block">
           {selectedUser !== "" &&
-            <div className="current-select-user-info-block-name-circle"></div>}
+            <div className="current-select-user-info-block-name-circle">
+              {profilePicDisplay(selectedUserProfilePic)}
+            </div>}
           <div className="current-select-user-info-block-name">{selectedUser}</div>
           {selectedUser !== "" &&
             <div className="dm-more-button-block" onClick={() => setMoreModalShow(!moreModalShow)}>
