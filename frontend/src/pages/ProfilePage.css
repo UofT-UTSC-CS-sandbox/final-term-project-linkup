@@ -365,3 +365,18 @@
     color: #e0f7fa;
 }
 
+/* PROFILE PIC STUFF BELOW*/
+.profile-pic-selection-modal-block {
+    position: absolute;
+    background-color:white;
+    top: 35%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    border-radius: 20px;      /* Rounded corners */
+    overflow: auto; /* Add overflow property */
+    padding: 5px;
+    margin-bottom: 50px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    border: 2px solid #363636; /* Optional: Add a border to visualize the block */; /* Optional: Add a border to visualize the block */
+}

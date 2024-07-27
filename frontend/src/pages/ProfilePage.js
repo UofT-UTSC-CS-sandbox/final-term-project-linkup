@@ -10,6 +10,16 @@ import useZoomModal from '../hooks/useZoomModal';
 import './ProfilePage.css'; 
 import Sidebar from '../components/Sidebar.js';
 
+// Profile Pics
+import bearTwemoji from '../images/profilePics/bearTwemoji.png';
+import bunnyTwemoji from '../images/profilePics/bunnyTwemoji.png';
+import catTwemoji from '../images/profilePics/catTwemoji.png';
+import cowTwemoji from '../images/profilePics/cowTwemoji.png';
+import dogTwemoji from '../images/profilePics/dogTwemoji.png';
+import horseTwemoji from '../images/profilePics/horseTwemoji.png';
+import pigTwemoji from '../images/profilePics/pigTwemoji.png';
+import tigerTwemoji from '../images/profilePics/tigerTwemoji.png';
+
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -30,47 +40,65 @@ const Profile = () => {
   const navigate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
+  const [currProfilePic, setCurrProfilePic] = useState('');
   var userId = null;
   const [openZoomModal, ZoomModal] = useZoomModal();
 
-    // Fetch resumes from the server for the logged-in user
-    const fetchResumes = async () => {
-        if (!userId) return;  
-        try {
-            const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
-            setResumes(response.data);
-        } catch (error) {
-            console.error('Error fetching resumes:', error);
-        }
-    };
+  // A dictionary that maps profile picture STRINGS to IMAGES
+  const profilePicDictionary = {
+      "bearTwemoji.png": bearTwemoji,
+      "bunnyTwemoji.png": bunnyTwemoji,
+      "catTwemoji.png": catTwemoji,
+      "cowTwemoji.png": cowTwemoji,
+      "dogTwemoji.png": dogTwemoji,
+      "horseTwemoji.png": horseTwemoji,
+      "pigTwemoji.png": pigTwemoji,
+      "tigerTwemoji.png": tigerTwemoji
+  };
 
-    // Redirect to login if not authenticated and fetch data on component mount
-    useEffect(() => {
-        if(!isAuthenticated) {
-            navigate('/login-page');
-        }
-        else
-        {
-            userId = auth.id;
-        }
-        retrieveBio();
-        fetchResumes();
-    }, [userId, isAuthenticated, auth.id]);
+  // Managing profile modal state
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const toggleProfileModal = () => {setIsProfileModalOpen(!isProfileModalOpen)};
 
-    // Handle horizontal scrolling of PDF container via mouse wheel
-    useEffect(() => {
-    const container = pdfContainerRef.current;
-    const handleWheel = (e) => {
-        e.preventDefault();
-        container.scrollLeft += e.deltaX;
-    };
+  // Fetch resumes from the server for the logged-in user
+  const fetchResumes = async () => {
+      if (!userId) return;  
+      try {
+          const response = await axios.get(`http://localhost:3001/resumes/${userId}`);
+          setResumes(response.data);
+      } catch (error) {
+          console.error('Error fetching resumes:', error);
+      }
+  };
 
-    container.addEventListener('wheel', handleWheel, { passive: false });
+  // Redirect to login if not authenticated and fetch data on component mount
+  useEffect(() => {
+      if(!isAuthenticated) {
+          navigate('/login-page');
+      }
+      else
+      {
+          userId = auth.id;
+      }
+      getProfilePic();
+      retrieveBio();
+      fetchResumes();
+  }, [userId, isAuthenticated, auth.id]);
 
-    return () => {
-        container.removeEventListener('wheel', handleWheel);
-    };
-    }, []);
+  // Handle horizontal scrolling of PDF container via mouse wheel
+  useEffect(() => {
+  const container = pdfContainerRef.current;
+  const handleWheel = (e) => {
+      e.preventDefault();
+      container.scrollLeft += e.deltaX;
+  };
+
+  container.addEventListener('wheel', handleWheel, { passive: false });
+
+  return () => {
+      container.removeEventListener('wheel', handleWheel);
+  };
+  }, []);
   
   // Refresh resumes on successful upload
   const handleResumeUploadSuccess = (newResume) => {
@@ -182,6 +210,69 @@ const Profile = () => {
     }
 };
 
+// Setting Profile Pic
+const setProfilePic = async (filename) => {
+
+  const info = {
+    username: auth.name,
+    filename: filename
+  };
+
+  try {
+    await fetch('http://localhost:3001/set-profile-pic', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(async (response) => {
+      if (response.ok) {
+        getProfilePic();
+        console.log("Profile Pic updated");
+      } else {
+      
+          
+      }
+    })
+
+  } catch (error) {
+
+  }
+}
+
+// Getting Profile Pic
+const getProfilePic = async () => {
+
+  const info = {
+    username: auth.name
+  };
+
+  try {
+    await fetch('http://localhost:3001/get-profile-pic', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(async (response) => {
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.profilePic);
+        setCurrProfilePic(data.profilePic);
+        console.log("Profile Pic updated");
+        console.log(currProfilePic);
+        console.log(profilePicDictionary[currProfilePic]);
+      } else {
+      
+      }
+    })
+
+  } catch (error) {
+
+  }
+}
+
+// Components
 const NotificationModal = ({ isOpen, header, body, onClose }) => {
     if (!isOpen) return null;
 
@@ -197,6 +288,33 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
         </div>
     );
 };
+
+const profileModal = () => {
+  return (
+    <div className='profile-pic-selection-modal-block'>
+      {Object.entries(profilePicDictionary).map(([filename, image]) => (
+        <img
+          key={filename}
+          src={image}
+          alt={filename}
+          onClick={() => setProfilePic(filename)}
+          style={{ cursor: 'pointer', margin: '10px', width: '125px', height: '125px' }}
+        />
+      ))}
+    </div>
+  );
+}
+
+const profilePicDisplay = () => {
+  return (
+    <div>
+      <img
+          src={profilePicDictionary[currProfilePic]}
+          style={{ cursor: 'pointer', margin: '10px', width: '125px', height: '125px'}}
+        />
+    </div>
+  );
+}
 
 const hasPublicResume = resumes.some(resume => resume.public);
 
@@ -217,7 +335,9 @@ function capitalizeWords(str) {
             <div className="profile-content">
                 <div className="blue-header"></div>
                 <div className="profile-icon-section">
-                    <div className="profile-icon-placeholder"></div>
+                    <div className="profile-icon-placeholder" onClick={() => toggleProfileModal()}>
+                        {profilePicDisplay()}
+                    </div>
                     <div className="username"> {auth.name} </div>
                     <button className="edit-preferences-button" onClick={() => navigate('/edit-preferences')}>
                         Edit Preferences
@@ -279,6 +399,8 @@ function capitalizeWords(str) {
                 </div>
             </div>
         )}
+        {isProfileModalOpen && profileModal()}
+        
         <NotificationModal
             isOpen={isNotificationModalOpen}
             header={notificationHeader}
