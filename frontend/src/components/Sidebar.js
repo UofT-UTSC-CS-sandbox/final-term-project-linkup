@@ -32,6 +32,7 @@ const Sidebar = () => {
             <Link to="/profile" className={`sidebar-link ${location.pathname === '/profile' ? 'active' : ''}`}>Your Profile</Link>
             <Link to="/TrendingResumes" className={`sidebar-link ${location.pathname === '/TrendingResumes' ? 'active' : ''}`}>Trending Resumes</Link>
             <Link to="/direct-messages" className={`sidebar-link ${location.pathname === '/direct-messages' ? 'active' : ''}`}>Conversations</Link>
+            <Link to="/reviewed-resumes" className={`sidebar-link ${location.pathname === '/reviewed-resumes' ? 'active' : ''}`}>Reviewed Resumes</Link>
             <Link to="/login-page" className={`sidebar-link ${location.pathname === '/login-page' ? 'active' : ''}`} onClick={signOutAndRedirect}>Sign Out</Link>
         </div>
     );

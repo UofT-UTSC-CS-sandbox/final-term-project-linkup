@@ -28,6 +28,54 @@
     margin: 10px;
 }
 
+
+.feedback-button-container {
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 100px;
+}
+
+.feedback-button {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+}
+
+.feedback-button .comment-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.feedback-writing {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px
+}
+
+.feedback-text {
+    font-size: 1em;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.feedback-note {
+    font-size: 0.9em;
+    color: #FFFFFF;
+    margin: 0;
+}
+
 .match-button-container{
     display: flex;
     flex-direction: column;
@@ -83,4 +131,11 @@
     font-size: 1.1em;
     font-weight: 500;
     margin-bottom: 0px;
+}
+
+.pdf-and-feedback {
+  display: flex;
+  margin-left: 230px;
+  justify-content: center;
+  width: 100%;
 }
