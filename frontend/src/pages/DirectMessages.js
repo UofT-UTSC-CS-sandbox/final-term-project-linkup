@@ -28,6 +28,7 @@ import dogTwemoji from '../images/profilePics/dogTwemoji.png';
 import horseTwemoji from '../images/profilePics/horseTwemoji.png';
 import pigTwemoji from '../images/profilePics/pigTwemoji.png';
 import tigerTwemoji from '../images/profilePics/tigerTwemoji.png';
+import { extractColors } from 'extract-colors'
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
 
   const [userList, setUserList] = useState([]);
   const [matchedList, setMatchedList] = useState([]);
+  const [matchedListProfileColorDict, setMatchedListProfileColorDict] = useState({});
 
   const [msgList, setMsgList] = useState([]);
   const [msgLimit, setMsgLimit] = useState(10);
@@ -60,6 +62,95 @@ function App() {
     "pigTwemoji.png": pigTwemoji,
     "tigerTwemoji.png": tigerTwemoji
   };
+
+  // Profile pic background colour
+  const [bgColor, setBgColor] = useState('#D0D0D0'); // Default grey color
+
+  const hslToHex = (h, s, l) => {
+    l /= 100;
+    const a = s * Math.min(l, 1 - l) / 100;
+    const f = n => {
+      const k = (n + h / 30) % 12;
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
+  const loadImageAndExtractColor = async (profilePic) => {
+    try {
+      const imgSrc = profilePicDictionary[profilePic];
+      if (imgSrc) {
+        const img = new Image();
+        img.src = imgSrc;
+        img.crossOrigin = 'anonymous';
+
+        return new Promise((resolve, reject) => {
+          img.onload = async () => {
+            try {
+              const returnedColors = await extractColors(imgSrc);
+              const colors = returnedColors.sort((a, b) => b.area - a.area); // Sorting by most prominent colors
+              if (colors.length > 0) {
+                const { hue, saturation, lightness } = colors[0];
+                const adjustedSaturation = Math.min(1, saturation + 0.7);
+                const adjustedLightness = Math.min(0.85, lightness + 0.5); // Increase the brightness
+                const adjustedColor = hslToHex(
+                  hue * 360, // Convert hue to degrees
+                  adjustedSaturation * 100, // Convert to percentage
+                  adjustedLightness * 100 // Convert to percentage
+                );
+                resolve(adjustedColor);
+              } else {
+                reject('No colors found');
+              }
+            } catch (err) {
+              reject('Error extracting color:', err);
+            }
+          }
+        });
+      }
+    }
+    catch (error) {
+
+    }
+  };
+
+  const fetchColor = async () => {
+    try {
+      const color = await loadImageAndExtractColor(selectedUserProfilePic);
+      setBgColor(color);
+    } catch (err) {
+      console.error('Error fetching color:', err);
+    }
+  };
+
+  const fetchColorOthers = async () => {
+    try {
+      // Create an array of promises
+      const colorPromises = matchedList.map(async (user) => {
+        const color = await loadImageAndExtractColor(user.avatar);
+        return { username: user.anon_username, color };
+      });
+  
+      // Wait for all promises to resolve
+      const userToColor = await Promise.all(colorPromises);
+  
+      // Update the state with the color dictionary
+      const newMatchedListProfileColorDict = {};
+      userToColor.forEach(({ username, color }) => {
+        newMatchedListProfileColorDict[username] = color;
+      });
+  
+      console.log(newMatchedListProfileColorDict);
+      setMatchedListProfileColorDict(newMatchedListProfileColorDict);
+    } catch (err) {
+      console.error('Error fetching color:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchColor();
+  }, [selectedUserProfilePic]);
 
   // Delete Conversation Modal
   const [delConvModalOpen, setDelConvModalOpen] = useState(false);
@@ -128,6 +219,10 @@ function App() {
     scrollToBottom();
     checkMoreToLoad();
   }, [msgList]);
+
+  useEffect(() => {
+    fetchColorOthers();
+  }, [matchedList]); 
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -570,6 +665,8 @@ function App() {
     let latestTimestamp;
     let outerBlockClass = 'individual-user-block';
 
+    const profilePicColor = matchedListProfileColorDict[user.anon_username];
+
     if (latestDm) {
       latestMessage = latestDm.message.length >= 30 ? latestDm.message.slice(0, 30) + "..." : latestDm.message;
       latestTimestamp = latestDm.timestamp.slice(0, latestDm.timestamp.length - 9) +
@@ -588,14 +685,14 @@ function App() {
       { 
         markCurrMessagesAsRead();
         setTxtMsg('');
-        console.log(selectedUser);
+        console.log(matchedListProfileColorDict);
         setSelectedUser(user.anon_username);
         setSelectedUserProfilePic(user.avatar);
         setMoreModalShow(false);
         checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
       }}>
       <div className={outerBlockClass}>
-        <div className="circle">
+        <div className="circle" style={{ backgroundColor : profilePicColor }}>
           {profilePicDisplay(user.avatar)}
         </div>
         <div className='individual-user-block-name'>
@@ -732,7 +829,7 @@ function App() {
         </div>
         <div className="current-selected-user-info-block">
           {selectedUser !== "" &&
-            <div className="current-select-user-info-block-name-circle">
+            <div className="current-select-user-info-block-name-circle" style={{ backgroundColor: bgColor}}>
               {profilePicDisplay(selectedUserProfilePic)}
             </div>}
           <div className="current-select-user-info-block-name">{selectedUser}</div>
