@@ -19,6 +19,7 @@ import dogTwemoji from '../images/profilePics/dogTwemoji.png';
 import horseTwemoji from '../images/profilePics/horseTwemoji.png';
 import pigTwemoji from '../images/profilePics/pigTwemoji.png';
 import tigerTwemoji from '../images/profilePics/tigerTwemoji.png';
+import { extractColors } from 'extract-colors'
 
 // Routing and authentication
 import { useNavigate } from "react-router-dom";
@@ -55,6 +56,62 @@ const Profile = () => {
       "pigTwemoji.png": pigTwemoji,
       "tigerTwemoji.png": tigerTwemoji
   };
+
+  // Profile pic background colour
+  const [bgColor, setBgColor] = useState('#D0D0D0'); // Default grey color
+
+  function hslToHex(h, s, l) {
+    l /= 100;
+    const a = s * Math.min(l, 1 - l) / 100;
+    const f = n => {
+      const k = (n + h / 30) % 12;
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
+  useEffect(() => {
+    const loadImageAndExtractColor = async () => {
+      try {
+        const imgSrc = profilePicDictionary[currProfilePic];
+        if (imgSrc) {
+          const img = new Image();
+          img.src = imgSrc;
+          img.crossOrigin = 'anonymous';
+
+          img.onload = async () => {
+            try {
+              const returnedColors = await extractColors(imgSrc);
+              const colors = returnedColors.sort((a, b) => b.area - a.area); // Sorting by most prominent colors
+              if (colors.length > 0) {
+                const { hue, saturation, lightness } = colors[0];
+                const adjustedSaturation = Math.max(0, saturation - 0.15); // Lower the saturation
+                const adjustedLightness = Math.min(0.7, lightness + 0.15); // Increase the brightness
+                const adjustedColor = hslToHex(
+                  hue * 360, // Convert hue to degrees
+                  adjustedSaturation * 100, // Convert to percentage
+                  adjustedLightness * 100 // Convert to percentage
+                );
+                setBgColor(adjustedColor);
+              }
+            } catch (err) {
+              console.error('Error extracting color:', err);
+            }
+          };
+
+          img.onerror = (err) => {
+            console.error('Error loading image:', err);
+          };
+        }
+      } catch (err) {
+        console.error('Error in loadImageAndExtractColor:', err);
+      }
+    };
+
+    loadImageAndExtractColor();
+  }, [currProfilePic, profilePicDictionary]);
+
 
   // Managing profile modal state
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -287,16 +344,25 @@ const NotificationModal = ({ isOpen, header, body, onClose }) => {
 
 const profileModal = () => {
   return (
-    <div className='profile-pic-selection-modal-block'>
-      {Object.entries(profilePicDictionary).map(([filename, image]) => (
-        <img
-          key={filename}
-          src={image}
-          alt={filename}
-          onClick={() => setProfilePic(filename)}
-          style={{ cursor: 'pointer', margin: '10px', width: '125px', height: '125px' }}
-        />
-      ))}
+    <div className="modal-overlay-delete" onClick={toggleProfileModal}>
+      <div className='profile-pic-selection-modal-block'>
+        <div className='profile-pic-selection-title'>
+          Choose Icon 
+        </div>
+        <div className='profile-pic-selection-pic-block'>
+          {Object.entries(profilePicDictionary).map(([filename, image]) => (
+            <div className='profile-pic-selection-border'>
+              <img
+                key={filename}
+                src={image}
+                alt={filename}
+                onClick={() => {setProfilePic(filename)}}
+                style={{ cursor: 'pointer', margin: '10px', width: '75px', height: '75px' }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -306,7 +372,7 @@ const profilePicDisplay = () => {
     <div>
       <img
           src={profilePicDictionary[currProfilePic]}
-          style={{ cursor: 'pointer', margin: '10px', width: '125px', height: '125px'}}
+          style={{ cursor: 'pointer', margin: '37px', width: '125px', height: '125px'}}
         />
     </div>
   );
@@ -331,7 +397,9 @@ function capitalizeWords(str) {
             <div className="profile-content">
                 <div className="blue-header"></div>
                 <div className="profile-icon-section">
-                    <div className="profile-icon-placeholder" onClick={() => toggleProfileModal()}>
+                    <div className="profile-icon-placeholder" 
+                          onClick={() => toggleProfileModal()}
+                          style={{ backgroundColor: bgColor}}>
                         {profilePicDisplay()}
                     </div>
                     <div className="username"> {auth.name} </div>
