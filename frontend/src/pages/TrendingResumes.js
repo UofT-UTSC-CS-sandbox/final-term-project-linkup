@@ -36,19 +36,50 @@ function TrendingResumes() {
                 console.error('Failed to fetch public trending resumes', error);
             }
         };
-
+    
         fetchResumesTrending();
     }, []);
-
+    
+    const fetchVoteStatus = async (commentId, userId) => {
+        try {
+            const response = await axios.get('http://localhost:3001/comments/vote-status', {
+                params: { userId, commentId }
+            });
+            setVoteStatus(prev => ({
+                ...prev,
+                [commentId]: response.data.voteType === 1 ? 'up' : response.data.voteType === -1 ? 'down' : null
+            }));
+        } catch (error) {
+            console.error('Error fetching vote status:', error);
+        }
+    };
+    
     const fetchComments = async (resumeId) => {
         try {
             const response = await axios.get(`http://localhost:3001/api/trending/get-comments/${resumeId}`);
-            setComments(prev => ({ ...prev, [resumeId]: response.data }));
+            const commentsData = response.data;
+            const newVotes = {};
+            const userId = auth.id; // Ensure you are correctly retrieving the user's ID
+            commentsData.forEach(comment => {
+                newVotes[comment._id] = comment.votes;
+                if (userId) {
+                    fetchVoteStatus(comment._id, userId);
+                }
+            });
+
+            commentsData.sort((a, b) => {
+                const votesA = newVotes[a._id] || 0;
+                const votesB = newVotes[b._id] || 0;
+                return votesB - votesA;
+            });
+    
+            setComments(prev => ({ ...prev, [resumeId]: commentsData }));
+            setVotes(prev => ({ ...prev, ...newVotes }));
         } catch (error) {
             console.error('Error fetching comments:', error);
         }
-    };
-
+    };    
+    
     const handleAddCommentClick = (resumeId) => {
         setActiveCommentInput(resumeId === activeCommentInput ? null : resumeId);
     };
@@ -87,48 +118,73 @@ function TrendingResumes() {
     const closeModal = () => {
         setModalOpen(false);
     };
-
+    
     const handleVote = async (commentId, type) => {
-        const existingVote = voteStatus[commentId];
-        let delta = 0;
-
-        if (type === 'up') {
-            delta = existingVote === 'up' ? -1 : 1; // Toggle the upvote or set an upvote
-        } else if (type === 'down') {
-            delta = existingVote === 'down' ? 1 : -1; // Toggle the downvote or set a downvote
+        const userId = auth.id; // Ensure user ID is correctly retrieved
+        if (!userId) {
+            console.error("User ID is missing");
+            alert("Please log in to vote.");
+            return;
         }
+    
+        const currentVote = voteStatus[commentId]; // Get the current vote status for this comment
+        let newVoteType = 0; // Default to no vote
+        let delta = 0; // Change in vote count
+    
+        switch (type) {
+            case 'up':
+                if (currentVote === 'up') {
+                    delta = -1;
+                    newVoteType = 0;
+                } else {
+                    delta = currentVote === 'down' ? 2 : 1;
+                    newVoteType = 1;
+                }
+                break;
+            case 'down':
+                if (currentVote === 'down') {
+                    delta = 1;
+                    newVoteType = 0;
+                } else {
+                    delta = currentVote === 'up' ? -2 : -1;
+                    newVoteType = -1;
+                }
+                break;
+        }
+    
+        console.log(`Current vote: ${currentVote}, New vote type: ${newVoteType}, Delta: ${delta}`);
 
-        // Update the votes count optimistically
-        setVotes(prev => ({
-            ...prev,
-            [commentId]: (prev[commentId] || 0) + delta
+        // Optimistically update UI
+        setVotes(prevVotes => ({
+            ...prevVotes,
+            [commentId]: (prevVotes[commentId] || 0) + delta
         }));
 
-        // Update the vote status
-        setVoteStatus(prev => ({
-            ...prev,
-            [commentId]: existingVote === type ? null : type // Toggle or set the vote type
+        setVoteStatus(prevStatus => ({
+            ...prevStatus,
+            [commentId]: newVoteType === 0 ? null : type
         }));
-
-        // Send the vote change to the backend
+    
         try {
             await axios.post('http://localhost:3001/api/comments/vote', {
+                userId,
                 commentId,
-                delta: existingVote === type ? -delta : delta
+                voteType: newVoteType
             });
+            console.log('Vote updated successfully');
         } catch (error) {
             console.error('Failed to update vote:', error);
-            // Rollback optimistic updates in case of failure
-            setVotes(prev => ({
-                ...prev,
-                [commentId]: (prev[commentId] || 0) - delta
+            // Roll back optimistic updates in case of a server error
+            setVotes(prevVotes => ({
+                ...prevVotes,
+                [commentId]: (prevVotes[commentId] || 0) - delta
             }));
-            setVoteStatus(prev => ({
-                ...prev,
-                [commentId]: existingVote // Reset to the original vote status
+            setVoteStatus(prevStatus => ({
+                ...prevStatus,
+                [commentId]: currentVote
             }));
         }
-    };
+    };    
 
     return (
         <div className="container-trending">
