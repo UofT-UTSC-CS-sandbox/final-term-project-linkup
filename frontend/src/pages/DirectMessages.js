@@ -53,8 +53,6 @@ function App() {
   
   const [currTimeStampShow, setCurrTimeStampShow] = useState('');
   
-  const [showButtons, setShowButtons] = useState(false);
-  const [dmAccepted, setDmAccepted] = useState(null);
 
   // Authentication and navigation
   const navigate = useNavigate();
@@ -78,8 +76,6 @@ function App() {
     setMsgLimit(10);
     checkMoreToLoad();
     scrollToBottom();
-    //fetchDmStatus(selectedUser); 
-    fetchDmStatus(selectedUser);
   }, [selectedUser]);
 
   useEffect(() => {
@@ -216,9 +212,6 @@ function App() {
         console.log("retrieved messages");
         const data = await response.json();
         setMsgList(data);
-        // if (data.some(msg => msg.to === auth.name && msg.messageType === 'new_dm' && !msg.read_by_to)) {
-        //   setShowButtons(true);
-        // }
       } else {
         console.log("response was not ok");
           
@@ -426,71 +419,6 @@ function App() {
 
   // // Components
 
-  // const messageComponent = (msg, index) => {
-       
-  //   let messageContent;
-  //   try {
-  //       messageContent = JSON.parse(msg.message);
-  //   } catch (e) {
-  //       messageContent = { text: msg.message };
-  //   }
-  //   const { resumeUrl, resumeId, commenter, text: messageText } = messageContent;
-  //   // const resumeUrl = messageContent.resumeUrl;
-  //   // const messageText = messageContent.text;
-
-  //   const isNewConversation = messageText && messageText.includes('left comments on your resume') && dmAccepted === null;
-
-  //   const viewCommentsLink = resumeId && commenter 
-  //       ? `/view-resume-comments/${resumeId}/${commenter}` 
-  //       : null;
-
-  //   if (msg.from !== auth.name) {
-  //     if (msg.read_by_to === false && msg.to === auth.name) {
-  //       return (
-  //         <div key={msg._id} className="message-outer-single-block">
-  //           <div className="message-single-block-unread" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-  //           {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
-  //         </div>);
-  //     }
-  //     if(msg.deleted_by_from === true)
-  //     {
-  //       return (
-  //         <div key={msg._id} className="message-outer-single-block">
-  //           <div className="message-single-block-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
-  //           {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
-  //         </div>)
-  //     }
-  //     return (
-  //       <div key={msg._id} className="message-outer-single-block">
-  //         <div className="message-single-block" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-  //         {msgHovered === msg._id && <div className="message-timestamp-block">{msg.timestamp}</div>}
-  //       </div>);
-  //   }
-  //   if(msg.deleted_by_from === true)
-  //   {
-  //     return (
-  //       <div key={msg._id} className="message-outer-single-block">
-  //         <div className="message-single-block-self-deleted" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}><i>{msg.message}</i></div>
-  //         {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
-  //       </div>)
-  //   }
-  //   return (
-  //     <div key={msg._id} className="message-outer-single-block">
-  //       {msgHovered === msg._id &&
-  //         <div onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')} className='dm-msgactions-icons'>
-
-  //           {/* <img className='dm-msgactions-size' src={editIcon} alt="Edit Message Icon" /> */}
-  //           <img className='dm-msgactions-size' src={deleteIcon} onClick={() => {
-  //             setMsgToBeDeleted(msg);
-  //             toggleDelMsgModal();
-  //           }} alt="Delete Message Icon" />
-  //         </div>
-  //       }
-  //       <div className="message-single-block-self" onMouseOver={() => setMsgHovered(msg._id)} onMouseOut={() => setMsgHovered('')}>{msg.message}</div>
-  //       {msgHovered === msg._id && <div className="message-timestamp-block-self">{msg.timestamp}</div>}
-  //     </div>);
-  // };
-
 
   const messageComponent = (msg, index) => {
     
@@ -501,10 +429,6 @@ function App() {
         messageContent = { text: msg.message };
     }
     const { resumeUrl, resumeId, commenter, text: messageText } = messageContent;
-    // const resumeUrl = messageContent.resumeUrl;
-    // const messageText = messageContent.text;
-
-    const isNewConversation = messageText && messageText.includes('left comments on your resume') && dmAccepted === null;
 
     const viewCommentsLink = resumeId && commenter 
         ? `/view-resume-comments/${resumeId}/${commenter}` 
@@ -529,12 +453,6 @@ function App() {
                         ) : (
                             messageText
                         )}
-                        {isNewConversation && showButtons && (
-                <div className="swipe-action-buttons">
-                  <button onClick={handleAccept}>Accept</button>
-                  <button onClick={handleDecline}>Decline</button>
-                </div>
-              )}
                     </div>
                     {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
                 </div>
@@ -698,60 +616,6 @@ function App() {
     );
   }
 
-  const fetchDmStatus = async (otherUser) => {
-    const currUser = auth.name; // Use anon_username
-
-    try {
-      const response = await axios.get('http://localhost:3001/api/dm-status', {
-        params: { to: currUser, from: otherUser }
-      });
-
-      if (response.data.isNewConversation) {
-        setShowButtons(true);
-        setDmAccepted(null);
-      } else {
-        setDmAccepted(response.data.accepted);
-        setShowButtons(false);
-      }
-    } catch (error) {
-      console.error('Error checking DM status:', error);
-    }
-  };
-
-  const handleAccept = async () => {
-    await updateDmStatus(true);
-    setShowButtons(false);
-    setDmAccepted(true);
-  };
-
-  const handleDecline = async () => {
-    await updateDmStatus(false);
-    setShowButtons(false);
-    setDmAccepted(false);
-  };
-
-  const updateDmStatus = async (accepted) => {
-    const currUser = auth.name; // Use anon_username
-    const otherUser = userList.find(user => user.anon_username === selectedUser).anon_username;
-
-    try {
-      await axios.post('http://localhost:3001/api/dm-status/update', {
-        to: currUser,
-        from: otherUser,
-        accepted
-      });
-
-      setMsgList(prev => prev.map(msg => {
-        if (msg.to === currUser && msg.from === otherUser) {
-          return { ...msg, accepted };
-        }
-        return msg;
-      }));
-    } catch (error) {
-      console.error('Error updating DM status:', error);
-    }
-  };
-
   return (
     <div className="container">
      <div className="app-logo-container"> 
@@ -805,14 +669,8 @@ function App() {
             .slice(0, msgLimit)
             .reverse()}
         </div>
-        {showButtons && (
-              <div className="swipe-action-buttons-container">
-                <button onClick={handleAccept}>Accept</button>
-                <button onClick={handleDecline}>Decline</button>
-              </div>
-            )}
         <div className="textbox-msg-block">
-          <button onClick={() => { sendMessage(); markCurrMessagesAsRead() }} className='textbox-msg-sendbutton' disabled={isBlocked || !dmAccepted || dmAccepted===false}>
+          <button onClick={() => { sendMessage(); markCurrMessagesAsRead() }} className='textbox-msg-sendbutton' disabled={isBlocked}>
             <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
           </button>
           <input
@@ -822,44 +680,11 @@ function App() {
             onKeyDown={handleKeyDown}
             placeholder={"   Type a message"}
             className="textbox-msg-textbox"
-            disabled={dmAccepted === false || isBlocked || dmAccepted === null}
+            disabled={isBlocked}
           />
           {isBlocked && <div className="blocked-message">This user has been blocked.</div>}
-          {/* <div className="current-select-user-info-block-name-circle"></div>
-          <div className="current-select-user-info-block-name">{selectedUser}</div> */}
         </div>
 
-
-{/*         
-        <div className="direct-messages-block" ref={messagesEndRef}>
-          {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)} className="loadmore-messages-button"> Load More </button>}
-          {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
-                                    (msg.to == selectedUser && msg.from == auth.name))
-                  .map((msg, index) => messageComponent(msg, index))
-                  .slice(0, msgLimit)
-                  .reverse()}
-        </div>
-
-        {showButtons && (
-              <div className="swipe-action-buttons-container">
-                <button onClick={handleAccept}>Accept</button>
-                <button onClick={handleDecline}>Decline</button>
-              </div>
-            )}
-        <div className="textbox-msg-block">
-          <button onClick={() => {sendMessage();
-                                  markCurrMessagesAsRead()}} className='textbox-msg-sendbutton' disabled={dmAccepted === false || dmAccepted === null }>
-            <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
-          </button> 
-          <input 
-            type="text" 
-            value={txtMsg} 
-            onChange={handleTxtChange} 
-            placeholder={"   Type a message"}
-            className="textbox-msg-textbox"
-            disabled={dmAccepted === false || dmAccepted === null}
-          />
-        </div> */}
         <div className="select-user-block">
           {matchedList.map((user) => (userComponent(user)))}
         </div>

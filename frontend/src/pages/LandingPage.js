@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from "react";
 import axios from "axios";
-import { Worker, Viewer } from '@react-pdf-viewer/core';
+import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import { useNavigate} from "react-router-dom";
 import logo from '../images/linkup_logo_highquality.png';
 import Sidebar from '../components/Sidebar.js'
@@ -146,7 +146,7 @@ const LandingPage = () => {
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
                         <Viewer
                             fileUrl={`http://localhost:3001/bucket/files/${currentResume.file_path}`}
-                            defaultScale={1.0}
+                            defaultScale={SpecialZoomLevel.PageWidth}
                         />
                     </Worker>
                 </div>
