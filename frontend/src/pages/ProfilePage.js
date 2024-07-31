@@ -118,8 +118,9 @@ const Profile = () => {
     const container = pdfContainerRef.current;
     const handleWheel = (e) => {
         e.preventDefault();
-        container.scrollLeft += e.deltaX;
-  // Managing profile modal state
+        container.scrollLeft += e.deltaX;}});
+
+        // Managing profile modal state
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const toggleProfileModal = () => {setIsProfileModalOpen(!isProfileModalOpen)};
 
@@ -273,125 +274,126 @@ const Profile = () => {
     }
 };
 
-// Setting Profile Pic
-const setProfilePic = async (filename) => {
+  // Setting Profile Pic
+  const setProfilePic = async (filename) => {
 
-  const info = {
-    username: auth.name,
-    filename: filename
+    const info = {
+      username: auth.name,
+      filename: filename
+    };
+
+    try {
+      await fetch('http://localhost:3001/set-profile-pic', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(info)
+      }).then(async (response) => {
+        if (response.ok) {
+          getProfilePic();
+          console.log("Profile Pic updated");
+        } else {
+        
+            
+        }
+      })
+
+    } catch (error) {
+
+    }
+  }
+
+  // Getting Profile Pic
+  const getProfilePic = async () => {
+
+    const info = {
+      username: auth.name
+    };
+
+    try {
+      await fetch('http://localhost:3001/get-profile-pic', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(info)
+      }).then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          setCurrProfilePic(data.profilePic);
+        } else {
+        
+        }
+      })
+
+    } catch (error) {
+
+    }
+  }
+
+  // Components
+  const NotificationModal = ({ isOpen, header, body, onClose }) => {
+      if (!isOpen) return null;
+
+      return (
+          <div className="modal-overlay-delete">
+              <div className="modal-content-delete modal-content-notification">
+                  <h2 className="modal-header-delete modal-header-notification">{header}</h2>
+                  <p>{body}</p>
+                  <div className="notification-buttons">
+                      <button className="modal-button-delete modal-button-notification" onClick={onClose}>Close</button>
+                  </div>
+              </div>
+          </div>
+      );
   };
 
-  try {
-    await fetch('http://localhost:3001/set-profile-pic', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(info)
-    }).then(async (response) => {
-      if (response.ok) {
-        getProfilePic();
-        console.log("Profile Pic updated");
-      } else {
-      
-          
-      }
-    })
-
-  } catch (error) {
-
-  }
-}
-
-// Getting Profile Pic
-const getProfilePic = async () => {
-
-  const info = {
-    username: auth.name
-  };
-
-  try {
-    await fetch('http://localhost:3001/get-profile-pic', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(info)
-    }).then(async (response) => {
-      if (response.ok) {
-        const data = await response.json();
-        setCurrProfilePic(data.profilePic);
-      } else {
-      
-      }
-    })
-
-  } catch (error) {
-
-  }
-}
-
-// Components
-const NotificationModal = ({ isOpen, header, body, onClose }) => {
-    if (!isOpen) return null;
-
+  const profileModal = () => {
     return (
-        <div className="modal-overlay-delete">
-            <div className="modal-content-delete modal-content-notification">
-                <h2 className="modal-header-delete modal-header-notification">{header}</h2>
-                <p>{body}</p>
-                <div className="notification-buttons">
-                    <button className="modal-button-delete modal-button-notification" onClick={onClose}>Close</button>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const profileModal = () => {
-  return (
-    <div className="modal-overlay-delete" onClick={toggleProfileModal}>
-      <div className='profile-pic-selection-modal-block'>
-        <div className='profile-pic-selection-title'>
-          Choose Icon 
-        </div>
-        <div className='profile-pic-selection-pic-block'>
-          {Object.entries(profilePicDictionary).map(([filename, image]) => (
-            <div className='profile-pic-selection-border'>
-              <img
-                key={filename}
-                src={image}
-                alt={filename}
-                onClick={() => {setProfilePic(filename)}}
-                style={{ cursor: 'pointer', margin: '10px', width: '75px', height: '75px' }}
-              />
-            </div>
-          ))}
+      <div className="modal-overlay-delete" onClick={toggleProfileModal}>
+        <div className='profile-pic-selection-modal-block'>
+          <div className='profile-pic-selection-title'>
+            Choose Icon 
+          </div>
+          <div className='profile-pic-selection-pic-block'>
+            {Object.entries(profilePicDictionary).map(([filename, image]) => (
+              <div className='profile-pic-selection-border'>
+                <img
+                  key={filename}
+                  src={image}
+                  alt={filename}
+                  onClick={() => {setProfilePic(filename)}}
+                  style={{ cursor: 'pointer', margin: '10px', width: '75px', height: '75px' }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-const profilePicDisplay = () => {
-  return (
-    <div>
-      <img
-          src={profilePicDictionary[currProfilePic]}
-          style={{ cursor: 'pointer', margin: '37px', width: '125px', height: '125px'}}
-        />
-    </div>
-  );
-}
+  const profilePicDisplay = () => {
+    return (
+      <div>
+        <img
+            src={profilePicDictionary[currProfilePic]}
+            style={{ cursor: 'pointer', margin: '37px', width: '125px', height: '125px'}}
+          />
+      </div>
+    );
+  }
 
-const hasPublicResume = resumes.some(resume => resume.public);
+  const hasPublicResume = resumes.some(resume => resume.public);
 
-function capitalizeWords(str) {
-    if (typeof str !== 'string') {  // Check if the input is a string
-        return '';  // Return an empty string if the input is not a string
-    }
-    return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-};
+  function capitalizeWords(str) {
+      if (typeof str !== 'string') {  // Check if the input is a string
+          return '';  // Return an empty string if the input is not a string
+      }
+      return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+  };
+
     return (
         <div className="container">
             <div className="app-logo-container"> 
@@ -479,7 +481,8 @@ function capitalizeWords(str) {
         />
         <ZoomModal />
         </div>
-    );
-};
+      );
+  };
+  
 
 export default Profile;

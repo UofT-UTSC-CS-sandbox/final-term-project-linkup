@@ -185,8 +185,6 @@ function App() {
     setMsgLimit(10);
     checkMoreToLoad();
     scrollToBottom();
-    //fetchDmStatus(selectedUser); 
-    fetchDmStatus(selectedUser);
   }, [selectedUser]);
 
   useEffect(() => {
