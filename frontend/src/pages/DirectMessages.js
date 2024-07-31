@@ -36,7 +36,7 @@ function App() {
 
   const [userList, setUserList] = useState([]);
   const [matchedList, setMatchedList] = useState([]);
-  const [matchedListProfileColorDict, setMatchedListProfileColorDict] = useState({});
+  const [matchedListProfileColourDict, setMatchedListProfileColourDict] = useState({});
 
   const [msgList, setMsgList] = useState([]);
   const [msgLimit, setMsgLimit] = useState(10);
@@ -64,20 +64,20 @@ function App() {
   };
 
   // Profile pic background colour
-  const [bgColor, setBgColor] = useState('#D0D0D0'); // Default grey color
+  const [bgColour, setBgColour] = useState('#D0D0D0'); // Default grey colour
 
   const hslToHex = (h, s, l) => {
     l /= 100;
     const a = s * Math.min(l, 1 - l) / 100;
     const f = n => {
       const k = (n + h / 30) % 12;
-      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-      return Math.round(255 * color).toString(16).padStart(2, '0');
+      const colour = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * colour).toString(16).padStart(2, '0');
     };
     return `#${f(0)}${f(8)}${f(4)}`;
   }
 
-  const loadImageAndExtractColor = async (profilePic) => {
+  const loadImageAndExtractColour = async (profilePic) => {
     try {
       const imgSrc = profilePicDictionary[profilePic];
       if (imgSrc) {
@@ -88,23 +88,23 @@ function App() {
         return new Promise((resolve, reject) => {
           img.onload = async () => {
             try {
-              const returnedColors = await extractColors(imgSrc);
-              const colors = returnedColors.sort((a, b) => b.area - a.area); // Sorting by most prominent colors
-              if (colors.length > 0) {
-                const { hue, saturation, lightness } = colors[0];
+              const returnedColours = await extractColors(imgSrc);
+              const colours = returnedColours.sort((a, b) => b.area - a.area); // Sorting by most prominent colours
+              if (colours.length > 0) {
+                const { hue, saturation, lightness } = colours[0];
                 const adjustedSaturation = Math.min(1, saturation + 0.7);
                 const adjustedLightness = Math.min(0.85, lightness + 0.5); // Increase the brightness
-                const adjustedColor = hslToHex(
+                const adjustedColour = hslToHex(
                   hue * 360, // Convert hue to degrees
                   adjustedSaturation * 100, // Convert to percentage
                   adjustedLightness * 100 // Convert to percentage
                 );
-                resolve(adjustedColor);
+                resolve(adjustedColour);
               } else {
-                reject('No colors found');
+                reject('No colours found');
               }
             } catch (err) {
-              reject('Error extracting color:', err);
+              reject('Error extracting colour:', err);
             }
           }
         });
@@ -115,41 +115,41 @@ function App() {
     }
   };
 
-  const fetchColor = async () => {
+  const fetchColour = async () => {
     try {
-      const color = await loadImageAndExtractColor(selectedUserProfilePic);
-      setBgColor(color);
+      const colour = await loadImageAndExtractColour(selectedUserProfilePic);
+      setBgColour(colour);
     } catch (err) {
-      console.error('Error fetching color:', err);
+      console.error('Error fetching colour:', err);
     }
   };
 
-  const fetchColorOthers = async () => {
+  const fetchColourOthers = async () => {
     try {
       // Create an array of promises
-      const colorPromises = matchedList.map(async (user) => {
-        const color = await loadImageAndExtractColor(user.avatar);
-        return { username: user.anon_username, color };
+      const colourPromises = matchedList.map(async (user) => {
+        const colour = await loadImageAndExtractColour(user.avatar);
+        return { username: user.anon_username, colour };
       });
   
       // Wait for all promises to resolve
-      const userToColor = await Promise.all(colorPromises);
+      const userToColour = await Promise.all(colourPromises);
   
-      // Update the state with the color dictionary
-      const newMatchedListProfileColorDict = {};
-      userToColor.forEach(({ username, color }) => {
-        newMatchedListProfileColorDict[username] = color;
+      // Update the state with the colour dictionary
+      const newMatchedListProfileColourDict = {};
+      userToColour.forEach(({ username, colour }) => {
+        newMatchedListProfileColourDict[username] = colour;
       });
   
-      console.log(newMatchedListProfileColorDict);
-      setMatchedListProfileColorDict(newMatchedListProfileColorDict);
+      console.log(newMatchedListProfileColourDict);
+      setMatchedListProfileColourDict(newMatchedListProfileColourDict);
     } catch (err) {
-      console.error('Error fetching color:', err);
+      console.error('Error fetching colour:', err);
     }
   };
 
   useEffect(() => {
-    fetchColor();
+    fetchColour();
   }, [selectedUserProfilePic]);
 
   // Delete Conversation Modal
@@ -221,7 +221,7 @@ function App() {
   }, [msgList]);
 
   useEffect(() => {
-    fetchColorOthers();
+    fetchColourOthers();
   }, [matchedList]); 
 
   const openModal = () => {
@@ -665,7 +665,7 @@ function App() {
     let latestTimestamp;
     let outerBlockClass = 'individual-user-block';
 
-    const profilePicColor = matchedListProfileColorDict[user.anon_username];
+    const profilePicColour = matchedListProfileColourDict[user.anon_username];
 
     if (latestDm) {
       latestMessage = latestDm.message.length >= 30 ? latestDm.message.slice(0, 30) + "..." : latestDm.message;
@@ -685,14 +685,13 @@ function App() {
       { 
         markCurrMessagesAsRead();
         setTxtMsg('');
-        console.log(matchedListProfileColorDict);
         setSelectedUser(user.anon_username);
         setSelectedUserProfilePic(user.avatar);
         setMoreModalShow(false);
         checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
       }}>
       <div className={outerBlockClass}>
-        <div className="circle" style={{ backgroundColor : profilePicColor }}>
+        <div className="circle" style={{ backgroundColor : profilePicColour }}>
           {profilePicDisplay(user.avatar)}
         </div>
         <div className='individual-user-block-name'>
@@ -829,7 +828,7 @@ function App() {
         </div>
         <div className="current-selected-user-info-block">
           {selectedUser !== "" &&
-            <div className="current-select-user-info-block-name-circle" style={{ backgroundColor: bgColor}}>
+            <div className="current-select-user-info-block-name-circle" style={{ backgroundColor: bgColour}}>
               {profilePicDisplay(selectedUserProfilePic)}
             </div>}
           <div className="current-select-user-info-block-name">{selectedUser}</div>
