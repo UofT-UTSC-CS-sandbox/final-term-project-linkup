@@ -30,7 +30,6 @@ import pigTwemoji from '../images/profilePics/pigTwemoji.png';
 import tigerTwemoji from '../images/profilePics/tigerTwemoji.png';
 import { extractColors } from 'extract-colors'
 
-
 function App() {
   const [txtMsg, setTxtMsg] = useState('');
 
@@ -163,9 +162,6 @@ function App() {
   const toggleDelMsgModal = () => {
     setDelMsgModalOpen(!delMsgModalOpen);
   };
-  
-  const [showButtons, setShowButtons] = useState(false);
-  const [dmAccepted, setDmAccepted] = useState(null);
 
   // Authentication and navigation
   const navigate = useNavigate();
@@ -428,7 +424,7 @@ function App() {
       me: currentUser,
       other: selectedUser
     };
-
+    
     try {
       const response = await fetch('http://localhost:3001/delete-conversation', {
         method: 'POST',
@@ -538,7 +534,6 @@ function App() {
     }
   };
 
-  // Components
   const messageComponent = (msg, index) => {
     
     let messageContent;
@@ -548,10 +543,6 @@ function App() {
         messageContent = { text: msg.message };
     }
     const { resumeUrl, resumeId, commenter, text: messageText } = messageContent;
-    // const resumeUrl = messageContent.resumeUrl;
-    // const messageText = messageContent.text;
-
-    const isNewConversation = messageText && messageText.includes('left comments on your resume') && dmAccepted === null;
 
     const viewCommentsLink = resumeId && commenter 
         ? `/view-resume-comments/${resumeId}/${commenter}` 
@@ -576,12 +567,6 @@ function App() {
                         ) : (
                             messageText
                         )}
-                        {isNewConversation && showButtons && (
-                <div className="swipe-action-buttons">
-                  <button onClick={handleAccept}>Accept</button>
-                  <button onClick={handleDecline}>Decline</button>
-                </div>
-              )}
                     </div>
                     {msgHovered === msg._id && <div className="message-timestamp-block-unread">{msg.timestamp}</div>}
                 </div>
@@ -676,6 +661,7 @@ function App() {
       latestTimestamp = "";
     }
 
+
     if (user.anon_username === selectedUser)
     {
       outerBlockClass = 'individual-user-block-selected';
@@ -757,60 +743,6 @@ function App() {
     );
   }
 
-  const fetchDmStatus = async (otherUser) => {
-    const currUser = auth.name; // Use anon_username
-
-    try {
-      const response = await axios.get('http://localhost:3001/api/dm-status', {
-        params: { to: currUser, from: otherUser }
-      });
-
-      if (response.data.isNewConversation) {
-        setShowButtons(true);
-        setDmAccepted(null);
-      } else {
-        setDmAccepted(response.data.accepted);
-        setShowButtons(false);
-      }
-    } catch (error) {
-      console.error('Error checking DM status:', error);
-    }
-  };
-
-  const handleAccept = async () => {
-    await updateDmStatus(true);
-    setShowButtons(false);
-    setDmAccepted(true);
-  };
-
-  const handleDecline = async () => {
-    await updateDmStatus(false);
-    setShowButtons(false);
-    setDmAccepted(false);
-  };
-
-  const updateDmStatus = async (accepted) => {
-    const currUser = auth.name; // Use anon_username
-    const otherUser = userList.find(user => user.anon_username === selectedUser).anon_username;
-
-    try {
-      await axios.post('http://localhost:3001/api/dm-status/update', {
-        to: currUser,
-        from: otherUser,
-        accepted
-      });
-
-      setMsgList(prev => prev.map(msg => {
-        if (msg.to === currUser && msg.from === otherUser) {
-          return { ...msg, accepted };
-        }
-        return msg;
-      }));
-    } catch (error) {
-      console.error('Error updating DM status:', error);
-    }
-  };
-
   return (
     <div className="container">
      <div className="app-logo-container"> 
@@ -866,14 +798,8 @@ function App() {
             .slice(0, msgLimit)
             .reverse()}
         </div>
-        {showButtons && (
-              <div className="swipe-action-buttons-container">
-                <button onClick={handleAccept}>Accept</button>
-                <button onClick={handleDecline}>Decline</button>
-              </div>
-            )}
         <div className="textbox-msg-block">
-          <button onClick={() => { sendMessage(); markCurrMessagesAsRead() }} className='textbox-msg-sendbutton' disabled={isBlocked || !dmAccepted || dmAccepted===false}>
+          <button onClick={() => { sendMessage(); markCurrMessagesAsRead() }} className='textbox-msg-sendbutton' disabled={isBlocked}>
             <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
           </button>
           <input
@@ -883,44 +809,11 @@ function App() {
             onKeyDown={handleKeyDown}
             placeholder={"   Type a message"}
             className="textbox-msg-textbox"
-            disabled={dmAccepted === false || isBlocked || dmAccepted === null}
+            disabled={isBlocked}
           />
           {isBlocked && <div className="blocked-message">This user has been blocked.</div>}
-          {/* <div className="current-select-user-info-block-name-circle"></div>
-          <div className="current-select-user-info-block-name">{selectedUser}</div> */}
         </div>
 
-
-{/*         
-        <div className="direct-messages-block" ref={messagesEndRef}>
-          {existMoreToLoad && <button onClick={() => setMsgLimit(msgLimit + 10)} className="loadmore-messages-button"> Load More </button>}
-          {msgList.filter((msg) => (msg.to == auth.name && msg.from == selectedUser) || 
-                                    (msg.to == selectedUser && msg.from == auth.name))
-                  .map((msg, index) => messageComponent(msg, index))
-                  .slice(0, msgLimit)
-                  .reverse()}
-        </div>
-
-        {showButtons && (
-              <div className="swipe-action-buttons-container">
-                <button onClick={handleAccept}>Accept</button>
-                <button onClick={handleDecline}>Decline</button>
-              </div>
-            )}
-        <div className="textbox-msg-block">
-          <button onClick={() => {sendMessage();
-                                  markCurrMessagesAsRead()}} className='textbox-msg-sendbutton' disabled={dmAccepted === false || dmAccepted === null }>
-            <img className="send-msg-icon" src={sendIcon} alt="sendIcon" />
-          </button> 
-          <input 
-            type="text" 
-            value={txtMsg} 
-            onChange={handleTxtChange} 
-            placeholder={"   Type a message"}
-            className="textbox-msg-textbox"
-            disabled={dmAccepted === false || dmAccepted === null}
-          />
-        </div> */}
         <div className="select-user-block">
           {matchedList.map((user) => (userComponent(user)))}
         </div>

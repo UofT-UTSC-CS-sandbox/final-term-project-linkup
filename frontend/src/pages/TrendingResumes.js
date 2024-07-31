@@ -11,6 +11,7 @@ import Sidebar from '../components/Sidebar.js';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import HatefulCommentModal from '../components/MsgFilter';
 
 function TrendingResumes() {
     const [resumes, setResumes] = useState([]);
@@ -21,6 +22,7 @@ function TrendingResumes() {
     const auth = useAuthUser();
     const [votes, setVotes] = useState({});
     const [voteStatus, setVoteStatus] = useState({});
+    const [isModalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchResumesTrending = async () => {
@@ -61,11 +63,11 @@ function TrendingResumes() {
         if (!text) return;
 
         try {
-            const username = auth.name
+            const username = auth.name;
             const response = await axios.post('http://localhost:3001/trending/post-comments', {
                 resumeId,
                 text,
-                username: username
+                username
             });
             const updatedComments = comments[resumeId] ? [...comments[resumeId], response.data] : [response.data];
             setComments({ ...comments, [resumeId]: updatedComments });
@@ -73,31 +75,41 @@ function TrendingResumes() {
             setActiveCommentInput(null);
         } catch (error) {
             console.error('Failed to post comment:', error);
+            // Handle specific error response for inappropriate language
+            if (error.response && error.response.data.error === "Your comment contains inappropriate language.") {
+                setModalOpen(true); // Open the modal on error
+            } else {
+                console.error('Failed to post comment:', error);
+            }
         }
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
     };
 
     const handleVote = async (commentId, type) => {
         const existingVote = voteStatus[commentId];
         let delta = 0;
-    
+
         if (type === 'up') {
             delta = existingVote === 'up' ? -1 : 1; // Toggle the upvote or set an upvote
         } else if (type === 'down') {
             delta = existingVote === 'down' ? 1 : -1; // Toggle the downvote or set a downvote
         }
-    
+      
         // Update the votes count optimistically
         setVotes(prev => ({
             ...prev,
             [commentId]: (prev[commentId] || 0) + delta
         }));
-    
+
         // Update the vote status
         setVoteStatus(prev => ({
             ...prev,
             [commentId]: existingVote === type ? null : type // Toggle or set the vote type
         }));
-    
+
         // Send the vote change to the backend
         try {
             await axios.post('http://localhost:3001/api/comments/vote', {
@@ -144,7 +156,7 @@ function TrendingResumes() {
                             </div>
                         </div>
                         <div className="comments-container">
-                        <div className="comments-list">
+                            <div className="comments-list">
                                 {comments[resume._id] && comments[resume._id].map((comment, index) => (
                                     <div key={index} className="comment-item">
                                         <div className="comment-details">
@@ -171,6 +183,7 @@ function TrendingResumes() {
                                     </div>
                                 ))}
                                 {activeCommentInput === resume._id && (
+
                                 <form onSubmit={(e) => handleCommentSubmit(e, resume._id)} className="comment-input-container">
                                     <input
                                         type="text"
@@ -192,6 +205,10 @@ function TrendingResumes() {
                     </div>
                 ))}
             </div>
+            <HatefulCommentModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+            />
         </div>
     );
 }

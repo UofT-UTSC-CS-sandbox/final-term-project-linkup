@@ -1,6 +1,5 @@
 .match-container {
     font-family: 'Roboto';
-    background-color: #246072;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -8,7 +7,10 @@
     padding-top: 20px;
     width: 100%;
     position: relative;
+    margin-bottom: 100%;
+    background-color: #246072;
 }
+
 
 .pdf-item-match {
     position: relative;
@@ -23,17 +25,117 @@
     align-items: center;
     justify-content: center;
     cursor: pointer; /* Indicate that it's clickable */
+    margin: 10px;
+}
+
+
+.feedback-button-container {
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 100px;
+}
+
+.feedback-button {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+}
+
+.feedback-button .comment-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.feedback-writing {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px
+}
+
+.feedback-text {
+    font-size: 1em;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.feedback-note {
+    font-size: 0.9em;
+    color: #FFFFFF;
+    margin: 0;
 }
 
 .match-button-container{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     justify-content: space-around;
-    height: 150px;
+    height: 120px;
+    margin-top: 5vh;
 }
 
 .match-button-container button{
     font-family: 'Roboto';
-    font-weight: 700;
+    font-weight: 500;
+    font-size: 1.3em;
+    padding: 10px;
+    color:#ffffff;
+    border: 3px solid #ccc;
+    border-radius: 7px;
+    background-color: #246072;
+    width: 300px;
+}
+
+.match-button-container button .message-icon{
+    width: 34px;
+    margin-right: 10px;
+    height: auto;
+    margin-bottom: -7px;
+}
+
+.match-button-container button .swiping-icon{
+    width: 29px;
+    margin-left: -30px;
+    margin-right: 40px;
+    margin-bottom: -7px;
+    height: auto;
+}
+
+.match-title {
+    color:#ffffff;
+    font-size: 3em;
+    margin: 10px;
+}
+
+.match-desc {
+    color:#ffffff;
+    font-size: 1.2em;
+    font-weight: 300;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.match-anon-username {
+    color:#ffffff;
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 0px;
+}
+
+.pdf-and-feedback {
+  display: flex;
+  margin-left: 230px;
+  justify-content: center;
+  width: 100%;
 }

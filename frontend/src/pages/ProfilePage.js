@@ -104,6 +104,7 @@ const Profile = () => {
             console.error('Error loading image:', err);
           };
         }
+
       } catch (err) {
         console.error('Error in loadImageAndExtractColour:', err);
       }
@@ -112,7 +113,12 @@ const Profile = () => {
     loadImageAndExtractColour();
   }, [currProfilePic, profilePicDictionary]);
 
-
+    // Handle horizontal scrolling of PDF container via mouse wheel
+    useEffect(() => {
+    const container = pdfContainerRef.current;
+    const handleWheel = (e) => {
+        e.preventDefault();
+        container.scrollLeft += e.deltaX;
   // Managing profile modal state
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const toggleProfileModal = () => {setIsProfileModalOpen(!isProfileModalOpen)};

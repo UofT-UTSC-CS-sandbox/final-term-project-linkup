@@ -71,22 +71,26 @@ Users are able to highlight text and leave comments on resumes that they swipe r
 Leave comments on trending resumes (LC-31)
 As a registered user, I can write and publish public comments on trending documents so that I can leave feedback on documents that I may not have seen.
 This  allows registered users to engage with the community by writing and publishing public comments on trending documents. This feature encourages interaction and feedback on popular content, enhancing the community experience and fostering discussions on relevant topics.
+
 ![TrendResume](../../frontend/src/images/Sprint3trend.png)
 
 
 Deleting Conversations (LC-30)
 Users can delete all their messages (deleting conversation), or delete single messages
 When a user deletes a message, the other user will be shown that the message has been deleted (similar to WhatsApp). This ensures fair control for both users over their conversation
+
 ![DeleteMsg](../../frontend/src/images/delete.png)
 
 
 
 Block user in dms (LC-36)
 Users have the option to block other users to prevent further communication. When a user blocks another user, the blocked user will not be notified that they have been blocked. This feature ensures that users have full control over who can interact with them, maintaining a fair and respectful environment for all participants in the conversation.
+
 ![UserBlock](../../frontend/src/images/userblock.png)
 
 Edit Swiping Preferences (LC-32)
 Users have the option to edit their swiping preferences whenever. Navigating to the “Your Profile” page, they can click the “Edit Preferences” button to modify their preferences by clicking on an option in the dropdown for each option.
+
 ![TrendResume](../../frontend/src/images/Sprint03_profilepage_with_edit_preferences.png)
 
 #### Goals and/or tasks that were planned but not met/completed:
