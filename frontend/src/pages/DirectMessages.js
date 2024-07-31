@@ -19,16 +19,28 @@ import Sidebar from '../components/Sidebar.js';
 import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 
+// Profile Pics
+import bearTwemoji from '../images/profilePics/bearTwemoji.png';
+import bunnyTwemoji from '../images/profilePics/bunnyTwemoji.png';
+import catTwemoji from '../images/profilePics/catTwemoji.png';
+import cowTwemoji from '../images/profilePics/cowTwemoji.png';
+import dogTwemoji from '../images/profilePics/dogTwemoji.png';
+import horseTwemoji from '../images/profilePics/horseTwemoji.png';
+import pigTwemoji from '../images/profilePics/pigTwemoji.png';
+import tigerTwemoji from '../images/profilePics/tigerTwemoji.png';
+import { extractColors } from 'extract-colors'
 
 function App() {
   const [txtMsg, setTxtMsg] = useState('');
 
   const [userList, setUserList] = useState([]);
   const [matchedList, setMatchedList] = useState([]);
+  const [matchedListProfileColourDict, setMatchedListProfileColourDict] = useState({});
 
   const [msgList, setMsgList] = useState([]);
   const [msgLimit, setMsgLimit] = useState(10);
   const [selectedUser, setSelectedUser] = useState('');
+  const [selectedUserProfilePic, setSelectedUserProfilePic] = useState('');
   const [currentUser, setCurrentUser] = useState('');
   const [msgHovered, setMsgHovered] = useState('');
   const [moreModalShow, setMoreModalShow] = useState(false);
@@ -37,6 +49,107 @@ function App() {
   const [isBlocked, setIsBlocked] = useState(false);
 
   const messagesEndRef = useRef(null);
+
+  // A dictionary that maps profile picture STRINGS to IMAGES
+  const profilePicDictionary = {
+    "bearTwemoji.png": bearTwemoji,
+    "bunnyTwemoji.png": bunnyTwemoji,
+    "catTwemoji.png": catTwemoji,
+    "cowTwemoji.png": cowTwemoji,
+    "dogTwemoji.png": dogTwemoji,
+    "horseTwemoji.png": horseTwemoji,
+    "pigTwemoji.png": pigTwemoji,
+    "tigerTwemoji.png": tigerTwemoji
+  };
+
+  // Profile pic background colour
+  const [bgColour, setBgColour] = useState('#D0D0D0'); // Default grey colour
+
+  const hslToHex = (h, s, l) => {
+    l /= 100;
+    const a = s * Math.min(l, 1 - l) / 100;
+    const f = n => {
+      const k = (n + h / 30) % 12;
+      const colour = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * colour).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
+  const loadImageAndExtractColour = async (profilePic) => {
+    try {
+      const imgSrc = profilePicDictionary[profilePic];
+      if (imgSrc) {
+        const img = new Image();
+        img.src = imgSrc;
+        img.crossOrigin = 'anonymous';
+
+        return new Promise((resolve, reject) => {
+          img.onload = async () => {
+            try {
+              const returnedColours = await extractColors(imgSrc);
+              const colours = returnedColours.sort((a, b) => b.area - a.area); // Sorting by most prominent colours
+              if (colours.length > 0) {
+                const { hue, saturation, lightness } = colours[0];
+                const adjustedSaturation = Math.min(1, saturation + 0.7);
+                const adjustedLightness = Math.min(0.85, lightness + 0.5); // Increase the brightness
+                const adjustedColour = hslToHex(
+                  hue * 360, // Convert hue to degrees
+                  adjustedSaturation * 100, // Convert to percentage
+                  adjustedLightness * 100 // Convert to percentage
+                );
+                resolve(adjustedColour);
+              } else {
+                reject('No colours found');
+              }
+            } catch (err) {
+              reject('Error extracting colour:', err);
+            }
+          }
+        });
+      }
+    }
+    catch (error) {
+
+    }
+  };
+
+  const fetchColour = async () => {
+    try {
+      const colour = await loadImageAndExtractColour(selectedUserProfilePic);
+      setBgColour(colour);
+    } catch (err) {
+      console.error('Error fetching colour:', err);
+    }
+  };
+
+  const fetchColourOthers = async () => {
+    try {
+      // Create an array of promises
+      const colourPromises = matchedList.map(async (user) => {
+        const colour = await loadImageAndExtractColour(user.avatar);
+        return { username: user.anon_username, colour };
+      });
+  
+      // Wait for all promises to resolve
+      const userToColour = await Promise.all(colourPromises);
+  
+      // Update the state with the colour dictionary
+      const newMatchedListProfileColourDict = {};
+      userToColour.forEach(({ username, colour }) => {
+        newMatchedListProfileColourDict[username] = colour;
+      });
+  
+      console.log(newMatchedListProfileColourDict);
+      setMatchedListProfileColourDict(newMatchedListProfileColourDict);
+    } catch (err) {
+      console.error('Error fetching colour:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchColour();
+  }, [selectedUserProfilePic]);
 
   // Delete Conversation Modal
   const [delConvModalOpen, setDelConvModalOpen] = useState(false);
@@ -49,10 +162,6 @@ function App() {
   const toggleDelMsgModal = () => {
     setDelMsgModalOpen(!delMsgModalOpen);
   };
-
-  
-  const [currTimeStampShow, setCurrTimeStampShow] = useState('');
-  
 
   // Authentication and navigation
   const navigate = useNavigate();
@@ -76,6 +185,8 @@ function App() {
     setMsgLimit(10);
     checkMoreToLoad();
     scrollToBottom();
+    //fetchDmStatus(selectedUser); 
+    fetchDmStatus(selectedUser);
   }, [selectedUser]);
 
   useEffect(() => {
@@ -104,6 +215,10 @@ function App() {
     scrollToBottom();
     checkMoreToLoad();
   }, [msgList]);
+
+  useEffect(() => {
+    fetchColourOthers();
+  }, [matchedList]); 
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -212,6 +327,9 @@ function App() {
         console.log("retrieved messages");
         const data = await response.json();
         setMsgList(data);
+        // if (data.some(msg => msg.to === auth.name && msg.messageType === 'new_dm' && !msg.read_by_to)) {
+        //   setShowButtons(true);
+        // }
       } else {
         console.log("response was not ok");
           
@@ -306,7 +424,7 @@ function App() {
       me: currentUser,
       other: selectedUser
     };
-
+    
     try {
       const response = await fetch('http://localhost:3001/delete-conversation', {
         method: 'POST',
@@ -407,7 +525,6 @@ function App() {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
 
-
   // Component to render each message
 
   // Key listeners
@@ -416,9 +533,6 @@ function App() {
       sendMessage();
     }
   };
-
-  // // Components
-
 
   const messageComponent = (msg, index) => {
     
@@ -536,6 +650,8 @@ function App() {
     let latestTimestamp;
     let outerBlockClass = 'individual-user-block';
 
+    const profilePicColour = matchedListProfileColourDict[user.anon_username];
+
     if (latestDm) {
       latestMessage = latestDm.message.length >= 30 ? latestDm.message.slice(0, 30) + "..." : latestDm.message;
       latestTimestamp = latestDm.timestamp.slice(0, latestDm.timestamp.length - 9) +
@@ -555,14 +671,14 @@ function App() {
       { 
         markCurrMessagesAsRead();
         setTxtMsg('');
-        console.log(selectedUser);
         setSelectedUser(user.anon_username);
+        setSelectedUserProfilePic(user.avatar);
         setMoreModalShow(false);
         checkBlockedUsers(auth.name, user.anon_username); // Check blocked status when user is selected
       }}>
       <div className={outerBlockClass}>
-        <div className="circle">
-
+        <div className="circle" style={{ backgroundColor : profilePicColour }}>
+          {profilePicDisplay(user.avatar)}
         </div>
         <div className='individual-user-block-name'>
           {user.anon_username}
@@ -616,6 +732,17 @@ function App() {
     );
   }
 
+  const profilePicDisplay = (avatar) => {
+    return (
+      <div>
+        <img
+            src={profilePicDictionary[avatar]}
+            style={{ margin: '5px', width: '26px', height: '26px'}}
+          />
+      </div>
+    );
+  }
+
   return (
     <div className="container">
      <div className="app-logo-container"> 
@@ -633,7 +760,9 @@ function App() {
         </div>
         <div className="current-selected-user-info-block">
           {selectedUser !== "" &&
-            <div className="current-select-user-info-block-name-circle"></div>}
+            <div className="current-select-user-info-block-name-circle" style={{ backgroundColor: bgColour}}>
+              {profilePicDisplay(selectedUserProfilePic)}
+            </div>}
           <div className="current-select-user-info-block-name">{selectedUser}</div>
           {selectedUser !== "" &&
             <div className="dm-more-button-block" onClick={() => setMoreModalShow(!moreModalShow)}>

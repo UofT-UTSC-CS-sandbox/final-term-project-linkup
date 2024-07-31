@@ -7,7 +7,6 @@ const postTrendingComment = async (req, res) => {
     if (isBad(text)) {
         return res.status(400).json({ error: 'Your comment contains inappropriate language.' });
     }
-
     const newComment = new TrendingComment({ resumeId, text, username, parentId });
     try {
         await newComment.save();

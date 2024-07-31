@@ -273,11 +273,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(101, 128, 152, 0.5);
     display: flex;
     justify-content: center;  /* Center the modal horizontally */
     align-items: center;      /* Center the modal vertically */
-    z-index: 1050;
 }
 
 .modal-content-delete {
@@ -365,3 +364,46 @@
     color: #e0f7fa;
 }
 
+/* PROFILE PIC STUFF BELOW*/
+.profile-pic-selection-modal-block {
+    position: absolute;
+    background-color:white;
+    top: 15%;
+    left: 25%;
+    width: 50%;
+    border-radius: 20px;      /* Rounded corners */
+    overflow: auto; /* Add overflow property */
+    padding: 10px;
+    margin-bottom: 50px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+}
+
+.profile-pic-selection-pic-block {
+    display: flex;
+    flex-wrap: wrap; /* Ensures the items wrap to the next line if they overflow */
+    justify-content: center; /* Optional: Center the items horizontally */
+    align-items: flex-start; /* Align items to the top */
+    top: 35%;
+    width: auto;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+}
+
+.profile-pic-selection-title {
+    margin-top: 20px;
+    margin-bottom: 20px; /* Space between title and images */
+    font-size: 18px; /* Adjust font size as needed */
+    font-weight: bold; /* Make the title bold */
+    font: 500 25px/1.18 "Roboto", sans-serif;
+  }
+
+.profile-pic-selection-border {
+    border-radius: 100px;      /* Rounded corners */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 115px;
+    height: 115px;
+    margin: 15px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    border: 1.5px solid #363636; /* Optional: Add a border to visualize the block */; /* Optional: Add a border to visualize the block */
+}

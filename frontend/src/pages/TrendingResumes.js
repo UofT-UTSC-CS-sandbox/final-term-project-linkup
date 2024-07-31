@@ -97,7 +97,7 @@ function TrendingResumes() {
         } else if (type === 'down') {
             delta = existingVote === 'down' ? 1 : -1; // Toggle the downvote or set a downvote
         }
-
+      
         // Update the votes count optimistically
         setVotes(prev => ({
             ...prev,
@@ -164,41 +164,41 @@ function TrendingResumes() {
                                             <div className="comment-username">{comment.username}</div>
                                             <div className="comment-text">{comment.text}</div>
                                             <div className="comment-votes">
-                                                <ArrowUpwardIcon
-                                                    onClick={() => handleVote(comment._id, 'up')}
-                                                    style={{
-                                                        cursor: 'pointer',
-                                                        color: voteStatus[comment._id] === 'up' ? '#6495ED' : 'grey'
-                                                    }}
-                                                />
-                                                <span>{votes[comment._id] || 0}</span>
-                                                <ArrowDownwardIcon
-                                                    onClick={() => handleVote(comment._id, 'down')}
-                                                    style={{
-                                                        cursor: 'pointer',
-                                                        color: voteStatus[comment._id] === 'down' ? 'red' : 'grey'
-                                                    }}
-                                                />
-                                            </div>
+                                            <ArrowUpwardIcon
+                                                onClick={() => handleVote(comment._id, 'up')}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    color: voteStatus[comment._id] === 'up' ? '#6495ED' : 'grey'
+                                                }}
+                                            />
+                                            <span>{votes[comment._id] || 0}</span>
+                                            <ArrowDownwardIcon
+                                                onClick={() => handleVote(comment._id, 'down')}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    color: voteStatus[comment._id] === 'down' ? 'red' : 'grey'
+                                                }}/>
+                                        </div>
                                         </div>
                                     </div>
                                 ))}
                                 {activeCommentInput === resume._id && (
-                                    <form onSubmit={(e) => handleCommentSubmit(e, resume._id)} className="comment-input-container">
-                                        <input
-                                            type="text"
-                                            className="comment-input"
-                                            value={commentInputs[resume._id] || ''}
-                                            onChange={(e) => handleCommentChange(e.target.value, resume._id)}
-                                            placeholder="Type your comment here..."
-                                        />
-                                        <button type="submit" className="comment-submit-button">
-                                            <SendIcon />
-                                        </button>
-                                    </form>
-                                )}
+
+                                <form onSubmit={(e) => handleCommentSubmit(e, resume._id)} className="comment-input-container">
+                                    <input
+                                        type="text"
+                                        className="comment-input"
+                                        value={commentInputs[resume._id] || ''}
+                                        onChange={(e) => handleCommentChange(e.target.value, resume._id)}
+                                        placeholder="Type your comment here..."
+                                    />
+                                    <button type="submit" className="comment-submit-button">
+                                        <SendIcon/> 
+                                    </button>
+                                </form>
+                            )}
                                 <button onClick={() => handleAddCommentClick(resume._id)} className="comment-button">
-                                    <AddIcon style={{ fontSize: 25, marginRight: 5, verticalAlign: 'middle' }} /> Leave a comment
+                                <AddIcon style={{ fontSize: 25, marginRight: 5, verticalAlign: 'middle'}} /> Leave a comment
                                 </button>
                             </div>
                         </div>

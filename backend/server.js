@@ -39,6 +39,10 @@ const getUploaderName = require('./API/getUserName');
 const updateDmStatus = require('./API/updateDmStatus');
 const getDmStatus = require('./API/getDmStatus');
 
+// Profile pic API's
+const setProfilePic = require('./API/setProfilePic');
+const getProfilePic = require('./API/getProfilePic');
+
 require('dotenv').config();
 
 const MONGO_DB = "mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/linkup?retryWrites=true&w=majority&appName=Cluster20901";
@@ -189,6 +193,9 @@ app.get('/api/get-uploader-name/:userId', getUploaderName);
 // app.use('/api/resume', addComments);
 // app.use('/api/resume', getComments);
 
+// Profile Pics
+app.post('/set-profile-pic', setProfilePic);
+app.post('/get-profile-pic', getProfilePic);
 
 // Listening on Port 3001
 const PORT = 3001;

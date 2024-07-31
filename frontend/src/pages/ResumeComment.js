@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import { useParams, useNavigate } from 'react-router-dom';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import './ResumeComment.css';
@@ -26,6 +27,7 @@ const ResumeComment = () => {
     const [highlights, setHighlights] = useState([]);
     const [selectedCommentId, setSelectedCommentId] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
+
     const viewerRef = useRef(null);
     const commentBoxRef = useRef(null);
 

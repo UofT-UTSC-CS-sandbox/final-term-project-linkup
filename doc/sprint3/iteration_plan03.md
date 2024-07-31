@@ -126,25 +126,38 @@ As a registered user, I want to be able to edit my preferences so that I can mod
 **Purpose:** 
 It is focused on allowing users to have control over their preferences within the application. By enabling users to edit their preferences, they can tailor their swiping experience to better match their interests and needs, ensuring a more personalized and satisfactory user experience.
 
+![TrendResume](../../frontend/src/images/Sprint03_profilepage_with_edit_preferences.png)
+
 #### LC-30
 
  As a registered user, I want to delete conversations with users that I have matched with so that I can manage my chat history.
 **Purpose:**
 This ticket addresses the need for users to have the ability to manage their chat history by deleting conversations. This feature helps users maintain their privacy, declutter their chat interface, and remove any unwanted or outdated conversations.
+
+![DeleteMsg](../../frontend/src/images/delete.png)
+
 #### LC-36
 
 As a registered user, I can block users that I have matched with so that I can prevent users from talking to me.
 **Purpose:**
 The focus of this ticket is to provide users with the capability to block other users they have matched with. This is crucial for ensuring user safety and comfort by allowing them to prevent unwanted communication and interactions from specific users.
+
+![UserBlock](../../frontend/src/images/userblock.png)
+
 #### LC-28
 
 As a user, I want to be able to leave comments on the document of the user that I have swiped right on.
 **Purpose:**
 This enables users to leave comments on the documents of users they have shown interest in by swiping right. This feature facilitates further interaction and engagement between users, allowing them to express their thoughts or feedback directly on the documents.
+
+![TrendResume](../../frontend/src/images/addingcomments.png)
+
 #### LC-31
 As a registered user, I can write and publish public comments on trending documents so that I can leave feedback on documents that I may not have seen.
 **Purpose:**
 This  allows registered users to engage with the community by writing and publishing public comments on trending documents. This feature encourages interaction and feedback on popular content, enhancing the community experience and fostering discussions on relevant topics.
+
+![TrendResume](../../frontend/src/images/Sprint3trend.png)
 
 
 
