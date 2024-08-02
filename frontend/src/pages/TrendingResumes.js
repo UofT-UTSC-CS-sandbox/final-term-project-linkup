@@ -240,25 +240,34 @@ function TrendingResumes() {
     };          
 
     const fetchAndCheckReplies = async (commentId, resumeId) => {
-        // Find the specific comment
         const commentIndex = comments[resumeId].findIndex(c => c._id === commentId);
         if (commentIndex === -1) return; // Exit if no comment found
     
         const comment = comments[resumeId][commentIndex];
-    
-        // Check if replies have been fetched and are currently visible
+        
         if (!comment.replies || comment.replies.length === 0 || !comment.showReplies) {
-            // Fetch replies if they haven't been fetched or if you always want fresh data
             try {
                 const response = await axios.get(`http://localhost:3001/api/comments/replies/${commentId}`);
                 const replies = response.data;
-                
+    
+                // Initialize or update the vote counts for each reply
+                const newVotes = replies.reduce((acc, reply) => {
+                    acc[reply._id] = reply.votes;  // Assumes 'votes' is the total vote count returned by the backend
+                    return acc;
+                }, {});
+    
+                // Fetch vote statuses for each reply
+                replies.forEach(reply => {
+                    fetchVoteStatus(reply._id, auth.id); // Assuming 'auth.id' is available for current user ID
+                });
+    
                 // Update comments state with the new replies and set them to be visible
                 setComments(prevComments => ({
                     ...prevComments,
-                    [resumeId]: prevComments[resumeId].map((c, idx) => 
+                    [resumeId]: prevComments[resumeId].map((c, idx) =>
                         idx === commentIndex ? {...c, replies, showReplies: true} : c)
                 }));
+                setVotes(prev => ({ ...prev, ...newVotes }));
             } catch (error) {
                 console.error("Failed to fetch replies:", error);
             }
@@ -266,11 +275,13 @@ function TrendingResumes() {
             // Simply toggle the visibility if already fetched
             setComments(prevComments => ({
                 ...prevComments,
-                [resumeId]: prevComments[resumeId].map((c, idx) => 
+                [resumeId]: prevComments[resumeId].map((c, idx) =>
                     idx === commentIndex ? {...c, showReplies: !c.showReplies} : c)
             }));
         }
-    };           
+    };    
+    
+              
 
     return (
         <div className="container-trending">
@@ -354,7 +365,24 @@ function TrendingResumes() {
                                                         <div className="icon-holder"></div> 
                                                         <div className="reply-username">{reply.username}</div>
                                                         <div className="comment-text">{reply.text}</div>
-                                                    </div>
+                                                        <div className="comment-votes">
+                                                <ArrowUpwardIcon
+                                                    onClick={() => handleVote(reply._id, 'up')}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        color: voteStatus[reply._id] === 'up' ? '#6495ED' : 'grey'
+                                                    }}
+                                                />
+                                                <span>{votes[reply._id] || 0}</span>
+                                                <ArrowDownwardIcon
+                                                    onClick={() => handleVote(reply._id, 'down')}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        color: voteStatus[reply._id] === 'down' ? 'red' : 'grey'
+                                                    }}
+                                                />
+                                                </div>
+                                                </div>
                                                 </div>
                                             ))}
                                         </div>
