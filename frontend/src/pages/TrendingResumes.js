@@ -13,6 +13,17 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import HatefulCommentModal from '../components/MsgFilter';
 
+// Profile Pics
+import bearTwemoji from '../images/profilePics/bearTwemoji.png';
+import bunnyTwemoji from '../images/profilePics/bunnyTwemoji.png';
+import catTwemoji from '../images/profilePics/catTwemoji.png';
+import cowTwemoji from '../images/profilePics/cowTwemoji.png';
+import dogTwemoji from '../images/profilePics/dogTwemoji.png';
+import horseTwemoji from '../images/profilePics/horseTwemoji.png';
+import pigTwemoji from '../images/profilePics/pigTwemoji.png';
+import tigerTwemoji from '../images/profilePics/tigerTwemoji.png';
+import { extractColors } from 'extract-colors'
+
 function TrendingResumes() {
     const [resumes, setResumes] = useState([]);
     const pdfContainerRef = useRef(null);
@@ -23,12 +34,129 @@ function TrendingResumes() {
     const [votes, setVotes] = useState({});
     const [voteStatus, setVoteStatus] = useState({});
     const [isModalOpen, setModalOpen] = useState(false);
-<<<<<<< HEAD
-=======
     const [activeReplyInput, setActiveReplyInput] = useState(null);
     const [replyInputs, setReplyInputs] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
->>>>>>> feat/LC-34-reply-comments
+
+    const [matchedList, setMatchedList] = useState([]);
+    const [matchedListProfileColourDict, setMatchedListProfileColourDict] = useState({});
+    const [selectedUserProfilePic, setSelectedUserProfilePic] = useState('');
+
+      // A dictionary that maps profile picture STRINGS to IMAGES
+  const profilePicDictionary = {
+    "bearTwemoji.png": bearTwemoji,
+    "bunnyTwemoji.png": bunnyTwemoji,
+    "catTwemoji.png": catTwemoji,
+    "cowTwemoji.png": cowTwemoji,
+    "dogTwemoji.png": dogTwemoji,
+    "horseTwemoji.png": horseTwemoji,
+    "pigTwemoji.png": pigTwemoji,
+    "tigerTwemoji.png": tigerTwemoji
+  };
+
+  // Profile pic background colour
+  const [bgColour, setBgColour] = useState('#D0D0D0'); // Default grey colour
+
+  const hslToHex = (h, s, l) => {
+    l /= 100;
+    const a = s * Math.min(l, 1 - l) / 100;
+    const f = n => {
+      const k = (n + h / 30) % 12;
+      const colour = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * colour).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
+  const loadImageAndExtractColour = async (profilePic) => {
+    try {
+      const imgSrc = profilePicDictionary[profilePic];
+      if (imgSrc) {
+        const img = new Image();
+        img.src = imgSrc;
+        img.crossOrigin = 'anonymous';
+
+        return new Promise((resolve, reject) => {
+          img.onload = async () => {
+            try {
+              const returnedColours = await extractColors(imgSrc);
+              const colours = returnedColours.sort((a, b) => b.area - a.area); // Sorting by most prominent colours
+              if (colours.length > 0) {
+                const { hue, saturation, lightness } = colours[0];
+                const adjustedSaturation = Math.min(1, saturation + 0.7);
+                const adjustedLightness = Math.min(0.85, lightness + 0.5); // Increase the brightness
+                const adjustedColour = hslToHex(
+                  hue * 360, // Convert hue to degrees
+                  adjustedSaturation * 100, // Convert to percentage
+                  adjustedLightness * 100 // Convert to percentage
+                );
+                resolve(adjustedColour);
+              } else {
+                reject('No colours found');
+              }
+            } catch (err) {
+              reject('Error extracting colour:', err);
+            }
+          }
+        });
+      }
+    }
+    catch (error) {
+
+    }
+  };
+
+  const fetchColour = async () => {
+    try {
+      const colour = await loadImageAndExtractColour(selectedUserProfilePic);
+      setBgColour(colour);
+    } catch (err) {
+      console.error('Error fetching colour:', err);
+    }
+  };
+
+  const fetchColourOthers = async () => {
+    try {
+      // Create an array of promises
+      const colourPromises = matchedList.map(async (user) => {
+        const colour = await loadImageAndExtractColour(user.avatar);
+        return { username: user.anon_username, colour };
+      });
+  
+      // Wait for all promises to resolve
+      const userToColour = await Promise.all(colourPromises);
+  
+      // Update the state with the colour dictionary
+      const newMatchedListProfileColourDict = {};
+      userToColour.forEach(({ username, colour }) => {
+        newMatchedListProfileColourDict[username] = colour;
+      });
+  
+      console.log(newMatchedListProfileColourDict);
+      setMatchedListProfileColourDict(newMatchedListProfileColourDict);
+    } catch (err) {
+      console.error('Error fetching colour:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchColour();
+  }, [selectedUserProfilePic]);
+
+  useEffect(() => {
+    fetchColourOthers();
+  }, [matchedList]); 
+
+  const profilePicDisplay = (avatar) => {
+    return (
+      <div>
+        <img
+            src={profilePicDictionary[avatar]}
+            style={{ margin: '5px', width: '26px', height: '26px'}}
+          />
+      </div>
+    );
+  }
 
     useEffect(() => {
         const fetchResumesTrending = async () => {
@@ -104,12 +232,8 @@ function TrendingResumes() {
             const response = await axios.post('http://localhost:3001/trending/post-comments', {
                 resumeId,
                 text,
-<<<<<<< HEAD
-                username
-=======
                 username,
                 repliesCount: 0 
->>>>>>> feat/LC-34-reply-comments
             });
             const updatedComments = comments[resumeId] ? [...comments[resumeId], response.data] : [response.data];
             setComments({ ...comments, [resumeId]: updatedComments });
@@ -320,7 +444,9 @@ function TrendingResumes() {
                                 {comments[resume._id] && comments[resume._id].map((comment, index) => (
                                     <div key={index} className="comment-item">
                                         <div className="comment-details">
-                                            <div className="icon-holder"></div>
+                                            <div className="icon-holder" style={{ backgroundColor: bgColour}}>
+                                                {profilePicDisplay(selectedUserProfilePic)}
+                                            </div>
                                             <div className="comment-username">{comment.username}</div>
                                             <div className="comment-text">{comment.text}</div>
                                             <div className="comment-votes">
