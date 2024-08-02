@@ -38,9 +38,6 @@ function TrendingResumes() {
     const [replyInputs, setReplyInputs] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [matchedList, setMatchedList] = useState([]);
-    const [matchedListProfileColourDict, setMatchedListProfileColourDict] = useState({});
-    const [selectedUserProfilePic, setSelectedUserProfilePic] = useState('');
 
       // A dictionary that maps profile picture STRINGS to IMAGES
   const profilePicDictionary = {
@@ -55,7 +52,38 @@ function TrendingResumes() {
   };
 
   // Profile pic background colour
-  const [bgColour, setBgColour] = useState('#D0D0D0'); // Default grey colour
+  const [allUsernames, setAllUsernames] = useState([]);
+  const [matchedListProfileColourDict, setMatchedListProfileColourDict] = useState({});
+  const [userToProfilePic, setUserToProfilePic] = useState({});
+
+  // Getting all user's who currently have comments
+  useEffect(() => {
+    const uniqueUsernames = getUniqueUsernames(comments);
+    setAllUsernames(uniqueUsernames);
+  }, [comments]);
+
+  const getUniqueUsernames = (comments) => {
+    const usernames = [];
+    for (let resume of resumes) {
+      const resumeId = resume._id;
+      if (comments[resumeId]) {
+        for (let comment of comments[resumeId]) {
+          usernames.push(comment.username);
+        }
+      }
+    }
+    return [...new Set(usernames)];
+  };
+
+  useEffect(() => {
+    if(allUsernames.length > 0) {
+        fetchProfilePics();
+    }
+  }, [allUsernames]);
+
+  useEffect(() => {
+    fetchColourOthers();
+  }, [userToProfilePic]); 
 
   const hslToHex = (h, s, l) => {
     l /= 100;
@@ -106,21 +134,12 @@ function TrendingResumes() {
     }
   };
 
-  const fetchColour = async () => {
-    try {
-      const colour = await loadImageAndExtractColour(selectedUserProfilePic);
-      setBgColour(colour);
-    } catch (err) {
-      console.error('Error fetching colour:', err);
-    }
-  };
-
   const fetchColourOthers = async () => {
     try {
       // Create an array of promises
-      const colourPromises = matchedList.map(async (user) => {
-        const colour = await loadImageAndExtractColour(user.avatar);
-        return { username: user.anon_username, colour };
+      const colourPromises = allUsernames.map(async (username) => {
+        const colour = await loadImageAndExtractColour(userToProfilePic[username]);
+        return { username: username, colour };
       });
   
       // Wait for all promises to resolve
@@ -139,23 +158,49 @@ function TrendingResumes() {
     }
   };
 
-  useEffect(() => {
-    fetchColour();
-  }, [selectedUserProfilePic]);
+  const fetchProfilePics = async () => {
+    console.log(allUsernames);
+    const profilePicPromises = allUsernames.map(username => getProfilePic(username));
+    const profilePicResults = await Promise.all(profilePicPromises);
+    const profilePicsMap = {};
+    profilePicResults.forEach((result) => {
+      profilePicsMap[result.username] = result.profilePic;
+    });
+    setUserToProfilePic(profilePicsMap);
+  };
 
-  useEffect(() => {
-    fetchColourOthers();
-  }, [matchedList]); 
+    // Getting Profile Pic
+  const getProfilePic = async (username) => {
 
-  const profilePicDisplay = (avatar) => {
-    return (
-      <div>
-        <img
-            src={profilePicDictionary[avatar]}
-            style={{ margin: '5px', width: '26px', height: '26px'}}
-          />
-      </div>
-    );
+    const info = {
+      username: username
+    };
+
+    try {
+        // Return a new Promise to handle async operations
+        return new Promise((resolve, reject) => {
+          fetch('http://localhost:3001/get-profile-pic', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(info)
+          })
+          .then(async (response) => {
+            if (response.ok) {
+              const data = await response.json();
+              resolve({ username, profilePic: data.profilePic });
+            } else {
+              reject('Failed to fetch profile pic');
+            }
+          })
+          .catch((error) => {
+            reject('Error fetching profile pic:', error);
+          });
+        });
+      } catch (error) {
+        return Promise.reject('Unexpected error:', error);
+      }
   }
 
     useEffect(() => {
@@ -412,6 +457,16 @@ function TrendingResumes() {
         }
     };    
     
+    const profilePicDisplay = (username) => {
+        return (
+          <div>
+            <img
+                src={profilePicDictionary[userToProfilePic[username]]}
+                style={{ margin: '5px', width: '26px', height: '26px'}}
+              />
+          </div>
+        );
+      }
               
 
     return (
@@ -444,8 +499,8 @@ function TrendingResumes() {
                                 {comments[resume._id] && comments[resume._id].map((comment, index) => (
                                     <div key={index} className="comment-item">
                                         <div className="comment-details">
-                                            <div className="icon-holder" style={{ backgroundColor: bgColour}}>
-                                                {profilePicDisplay(selectedUserProfilePic)}
+                                            <div className="icon-holder" style={{ backgroundColor: matchedListProfileColourDict[comment.username]}}>
+                                                {profilePicDisplay(comment.username)}
                                             </div>
                                             <div className="comment-username">{comment.username}</div>
                                             <div className="comment-text">{comment.text}</div>
@@ -495,7 +550,9 @@ function TrendingResumes() {
                                             {comment.replies.map(reply => (
                                                 <div key={reply._id} className="comment-item"> 
                                                     <div className="comment-details">
-                                                        <div className="icon-holder"></div> 
+                                                        <div className="icon-holder" style={{ backgroundColor: matchedListProfileColourDict[reply.username]}}>
+                                                            {profilePicDisplay(reply.username)}
+                                                        </div> 
                                                         <div className="reply-username">{reply.username}</div>
                                                         <div className="comment-text">{reply.text}</div>
                                                         <div className="comment-votes">
