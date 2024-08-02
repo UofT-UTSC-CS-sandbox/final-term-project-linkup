@@ -42,7 +42,7 @@ function PreferencesForm() {
     const getUser = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/api/user/${userId}`);
-            const userInfo = response.data[0];
+            const userInfo = response.data;
             setUser(userInfo);
             setPreferences({
                 preferences_edu: userInfo.preferences_edu || '',

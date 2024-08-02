@@ -4,12 +4,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
     width: 100%;
     position: relative;
     margin-bottom: 100%;
     background-color: #246072;
+    overflow: hidden;
 }
+
 
 .pdf-item-match {
     position: relative;
@@ -25,6 +26,55 @@
     justify-content: center;
     cursor: pointer; /* Indicate that it's clickable */
     margin: 10px;
+}
+
+
+.feedback-button-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 100px;
+    width: 275px;
+}
+
+.feedback-button {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+}
+
+.feedback-button .comment-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.feedback-writing {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 10px
+}
+
+.feedback-text {
+    font-size: 1em;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.feedback-note {
+    font-size: 0.9em;
+    color: #FFFFFF;
+    margin: 0;
+    font-weight: 300;
 }
 
 .match-button-container{
@@ -82,4 +132,11 @@
     font-size: 1.1em;
     font-weight: 500;
     margin-bottom: 0px;
+}
+
+.pdf-and-feedback {
+  display: flex;
+  margin-left: 275px;
+  justify-content: center;
+  width: 100%;
 }

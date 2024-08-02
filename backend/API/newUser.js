@@ -138,7 +138,7 @@ const newUser = async (req, res) => {
       work_experience_level: passedUser.work_experience_level,
       education: passedUser.education,
       location: passedUser.location,
-      avatar: "",
+      avatar: "bearTwemoji.png",
       salt: generatedSalt,
       verified: false,
       verificationToken: token,

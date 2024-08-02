@@ -4,10 +4,11 @@ import axios from "axios";
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
-import { Worker, Viewer } from '@react-pdf-viewer/core';
+import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import './MatchPage.css';
 import message from '../images/match-message-icon.png';
 import swipe from '../images/match-swiping-icon.png';
+import commentIcon from '../images/comment.png';
 
 function MatchPage() {
   const {resumeId} = useParams();
@@ -53,16 +54,27 @@ function MatchPage() {
       <h1 className="match-title">Linked Up!</h1>
       <p className="match-desc">You two have swiped right on each other!</p>
       <p className="match-anon-username">{matchedUsername ? matchedUsername.anon_username : 'Loading username...'}</p>
+      <div className="pdf-and-feedback">
       <div className="pdf-item-match">
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
               <Viewer
                   fileUrl={`http://localhost:3001/bucket/files/${matchedResume.file_path}`}
-                  defaultScale={1.0}
+                  defaultScale={SpecialZoomLevel.PageWidth}
               />
           </Worker>
       </div>
+        <div className="feedback-button-container">
+          <button className="feedback-button" onClick={() => navigate(`/resume-comment/${matchedResume._id}`)}>
+            <img src={commentIcon} className="comment-icon" alt="comment-icon" />
+          </button>
+          <div className="feedback-writing">
+            <p className="feedback-text">Leave constructive feedback</p>
+            <p className="feedback-note">Note: feedback is moderated.</p>
+          </div>
+        </div>
+      </div>
       <div className="match-button-container"> 
-        <button className="start-convo-button" onClick={() => navigate(`/resume-comment/${matchedResume._id}`)}>
+        <button className="start-convo-button" onClick={() => navigate(`/direct-messages`)}>
             <img src={message} className="message-icon" alt="match-message-icon" />
             Start a Conversation
         </button>
