@@ -23,6 +23,9 @@ function TrendingResumes() {
     const [votes, setVotes] = useState({});
     const [voteStatus, setVoteStatus] = useState({});
     const [isModalOpen, setModalOpen] = useState(false);
+    const [activeReplyInput, setActiveReplyInput] = useState(null);
+    const [replyInputs, setReplyInputs] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const fetchResumesTrending = async () => {
@@ -98,7 +101,8 @@ function TrendingResumes() {
             const response = await axios.post('http://localhost:3001/trending/post-comments', {
                 resumeId,
                 text,
-                username
+                username,
+                repliesCount: 0 
             });
             const updatedComments = comments[resumeId] ? [...comments[resumeId], response.data] : [response.data];
             setComments({ ...comments, [resumeId]: updatedComments });
@@ -186,6 +190,88 @@ function TrendingResumes() {
         }
     };    
 
+    const handleAddReplyClick = (commentId) => {
+        setActiveReplyInput(commentId === activeReplyInput ? null : commentId);
+        setActiveCommentInput(null); // Ensure comment input is closed when opening reply input
+    };
+
+    const handleReplyChange = (text, commentId) => {
+        setReplyInputs(prev => ({ ...prev, [commentId]: text }));
+    };
+
+    const handleReplySubmit = async (event, commentId, resumeId) => {
+        event.preventDefault();
+        const text = replyInputs[commentId];
+        if (!text) return;
+    
+        try {
+            const username = auth.name;
+            const response = await axios.post('http://localhost:3001/trending/post-comments', {
+                resumeId,
+                text,
+                username,
+                parentId: commentId  // Ensuring this is treated as a reply
+            });
+    
+            // Assuming the response includes the newly created reply
+            const newReply = response.data;
+    
+            // Update the comments state to include the new reply and increment the replies count
+            setComments(prevComments => ({
+                ...prevComments,
+                [resumeId]: prevComments[resumeId].map(comment => {
+                    if (comment._id === commentId) {
+                        // Append the new reply to the existing replies array and increment repliesCount
+                        return { 
+                            ...comment, 
+                            replies: [...(comment.replies || []), newReply],
+                            repliesCount: (comment.repliesCount || 0) + 1 // Increment the count
+                        };
+                    }
+                    return comment;
+                })
+            }));
+    
+            setReplyInputs(prev => ({ ...prev, [commentId]: '' })); // Clear the input after submission
+            setActiveReplyInput(null); // Hide the reply input
+        } catch (error) {
+            console.error('Failed to post reply:', error);
+        }
+    };          
+
+    const fetchAndCheckReplies = async (commentId, resumeId) => {
+        // Find the specific comment
+        const commentIndex = comments[resumeId].findIndex(c => c._id === commentId);
+        if (commentIndex === -1) return; // Exit if no comment found
+    
+        const comment = comments[resumeId][commentIndex];
+    
+        // Check if replies have been fetched and are currently visible
+        if (!comment.replies || comment.replies.length === 0 || !comment.showReplies) {
+            // Fetch replies if they haven't been fetched or if you always want fresh data
+            try {
+                const response = await axios.get(`http://localhost:3001/api/comments/replies/${commentId}`);
+                const replies = response.data;
+                
+                // Update comments state with the new replies and set them to be visible
+                setComments(prevComments => ({
+                    ...prevComments,
+                    [resumeId]: prevComments[resumeId].map((c, idx) => 
+                        idx === commentIndex ? {...c, replies, showReplies: true} : c)
+                }));
+            } catch (error) {
+                console.error("Failed to fetch replies:", error);
+            }
+        } else {
+            // Simply toggle the visibility if already fetched
+            setComments(prevComments => ({
+                ...prevComments,
+                [resumeId]: prevComments[resumeId].map((c, idx) => 
+                    idx === commentIndex ? {...c, showReplies: !c.showReplies} : c)
+            }));
+        }
+    };           
+
     return (
         <div className="container-trending">
             <div className="app-logo-container">
@@ -235,9 +321,46 @@ function TrendingResumes() {
                                                         color: voteStatus[comment._id] === 'down' ? 'red' : 'grey'
                                                     }}
                                                 />
+                                                <span onClick={() => handleAddReplyClick(comment._id)} className="reply-text">
+                                                Reply
+                                            </span>
                                             </div>
                                         </div>
+                                        {activeReplyInput === comment._id && (
+                                        <form onSubmit={(e) => handleReplySubmit(e, comment._id, resume._id)} className="reply-input">
+                                            <input
+                                                type="text"
+                                                className="reply-input"
+                                                value={replyInputs[comment._id] || ''}
+                                                onChange={(e) => handleReplyChange(e.target.value, comment._id)}
+                                                placeholder="Type your reply here..."
+                                            />
+                                             <button type="submit" className="reply-submit-button">
+                                            <SendIcon />
+                                        </button>
+                                    </form>
+                                    )}
+                                    {comment.repliesCount > 0 && (
+                                        <div className="view-replies-text" onClick={() => fetchAndCheckReplies(comment._id, resume._id)}>
+                                            {comment.showReplies ? `Hide Replies` : `View ${comment.repliesCount} more replies`}
+                                        </div>
+                                    )}
+                                    {comment.showReplies && (
+                                    <div className="replies-container"> 
+                                        <div className="comments-list"> 
+                                            {comment.replies.map(reply => (
+                                                <div key={reply._id} className="comment-item"> 
+                                                    <div className="comment-details">
+                                                        <div className="icon-holder"></div> 
+                                                        <div className="reply-username">{reply.username}</div>
+                                                        <div className="comment-text">{reply.text}</div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
+                                )}
+                            </div>
                                 ))}
                                 {activeCommentInput === resume._id && (
                                     <form onSubmit={(e) => handleCommentSubmit(e, resume._id)} className="comment-input-container">
@@ -266,7 +389,7 @@ function TrendingResumes() {
                 onClose={closeModal}
             />
         </div>
-    );
+    ); 
 }
 
 export default TrendingResumes;
