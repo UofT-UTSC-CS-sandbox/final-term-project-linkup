@@ -52,7 +52,7 @@
 .profile-content {
     background-color: #FFFFFF;
     font-family: 'Roboto', sans-serif;
-    width: 75vw;
+    width: 65vw;
     min-height: 700px;
     border-radius: 15px;
     display: flex;
@@ -65,16 +65,16 @@
     padding-right: 40px;
     padding-bottom: 30px;
     box-sizing: border-box;
-    margin: 30px;
 }
 
 /* Blue header background styling */
 .blue-header {
     background-color: #26ACD6;
-    height: 180px;
-    width: 75vw;
+    height: 100px;
+    width: 65vw;
     top: 0;
     border-radius: 15px 15px 0 0;
+    position: absolute;
 }
 
 /* Profile icon and username section */
@@ -82,16 +82,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 200px;
+    width: 125px;
     position: absolute;
-    left: 50px;
-    top: 100px;
+    left: 90px;
+    top: 50px;
 }
 
 /* Placeholder for the profile icon */
 .profile-icon-placeholder {
-    width: 200px;
-    height: 200px;
+    width: 125px;
+    height: 125px;
     border-radius: 50%;
     background-color: #D0D0D0;
     border: 3px solid black;
@@ -120,6 +120,7 @@
     justify-content: center;
     gap: 10px;
     border: 2px solid black;
+    width: 175px;
 }
 
 /* Horizontal layout container for additional profile details */
@@ -127,7 +128,7 @@
     display: flex;
     align-items: flex-start;
     position: relative;
-    margin-left: 250px;
+    margin-left: 210px;
     margin-top: 30px;
 }
 
@@ -136,7 +137,9 @@
     width: 2px;
     height: 200px;
     background-color: #26ACD6;
-    position:relative;
+    position: relative;
+    margin-right: 10px;
+    top: 60px;
 }
 
 /* Container for field labels and values */
@@ -146,12 +149,14 @@
     flex-direction: column;
     align-items: flex-start;
     position: relative;
-    margin-left: 30px;
+    margin-left: 10px;
+    margin-top: 40px;
 }
 
 /* Styling for "MY INFORMATION" label */
 .profile-info {
-    padding: 20px 0;
+    margin-top: 25px;
+    padding: 10px 0;
     font-size: 1.2em;
     color: #26ACD6;
     font-weight: bold;
@@ -159,7 +164,7 @@
 
 /* Styling for individual field labels */
 .field-label {
-    font-size: 1.1em;
+    font-size: 1em;
     color: black;
     margin: 5px 0;
     font-weight: bold;
@@ -273,11 +278,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(101, 128, 152, 0.5);
     display: flex;
     justify-content: center;  /* Center the modal horizontally */
     align-items: center;      /* Center the modal vertically */
-    z-index: 1050;
 }
 
 .modal-content-delete {
@@ -365,3 +369,46 @@
     color: #e0f7fa;
 }
 
+/* PROFILE PIC STUFF BELOW*/
+.profile-pic-selection-modal-block {
+    position: absolute;
+    background-color:white;
+    top: 15%;
+    left: 25%;
+    width: 50%;
+    border-radius: 20px;      /* Rounded corners */
+    overflow: auto; /* Add overflow property */
+    padding: 10px;
+    margin-bottom: 50px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+}
+
+.profile-pic-selection-pic-block {
+    display: flex;
+    flex-wrap: wrap; /* Ensures the items wrap to the next line if they overflow */
+    justify-content: center; /* Optional: Center the items horizontally */
+    align-items: flex-start; /* Align items to the top */
+    top: 35%;
+    width: auto;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+}
+
+.profile-pic-selection-title {
+    margin-top: 20px;
+    margin-bottom: 20px; /* Space between title and images */
+    font-size: 18px; /* Adjust font size as needed */
+    font-weight: bold; /* Make the title bold */
+    font: 500 25px/1.18 "Roboto", sans-serif;
+  }
+
+.profile-pic-selection-border {
+    border-radius: 100px;      /* Rounded corners */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 115px;
+    height: 115px;
+    margin: 15px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    border: 1.5px solid #363636; /* Optional: Add a border to visualize the block */; /* Optional: Add a border to visualize the block */
+}

@@ -14,6 +14,7 @@ const getUserResumes = require('./API/getUserResumes');
 const displayResumes = require('./API/displayResumes');
 const deleteResumes = require('./API/deleteResumes');
 const updateResumePublicStatus = require('./API/updateResume');
+const getUserResumesAndComments = require('./API/getUserResumesAndComments');
 const getSwipingResumes = require('./API/getSwipingResumes');
 const addSwipe = require('./API/addSwipe');
 const checkMatch = require('./API/checkMatch');
@@ -37,6 +38,10 @@ const getComments = require('./API/getComments');
 const getUploaderName = require('./API/getUserName');
 const updateDmStatus = require('./API/updateDmStatus');
 const getDmStatus = require('./API/getDmStatus');
+
+// Profile pic API's
+const setProfilePic = require('./API/setProfilePic');
+const getProfilePic = require('./API/getProfilePic');
 
 require('dotenv').config();
 
@@ -124,6 +129,7 @@ conn.once('open', () => {
   // RESUMES
   app.post('/upload', upload.single('file'), uploadResumes);
   app.get('/resumes/:userId', getUserResumes);
+  app.get('/resumes/:userId/reviewed', getUserResumesAndComments); // Update route to use the new handler
   app.get('/bucket/files/:filename', displayResumes(gfsBucket));
   app.post('/delete-resumes', deleteResumes(gfsBucket));
   app.post('/api/update-resume', updateResumePublicStatus);
@@ -187,6 +193,9 @@ app.get('/api/get-uploader-name/:userId', getUploaderName);
 // app.use('/api/resume', addComments);
 // app.use('/api/resume', getComments);
 
+// Profile Pics
+app.post('/set-profile-pic', setProfilePic);
+app.post('/get-profile-pic', getProfilePic);
 
 // Listening on Port 3001
 const PORT = 3001;

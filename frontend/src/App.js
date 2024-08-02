@@ -20,7 +20,7 @@ import MatchPage  from "./pages/MatchPage";
 import ResumeComment from './pages/ResumeComment';
 import ViewResumeComments from './pages/ViewResumeComments';
 import TrendingResumes from './pages/TrendingResumes.js';
-
+import ReviewedResumes from './pages/ReviewedResumes.js';
 
 // React Auth Kit
 import createStore from 'react-auth-kit/createStore';
@@ -58,6 +58,7 @@ function App() {
                 <Route path="/resume-comment/:resumeId" element={<ResumeComment/>} />
                 <Route path="/view-resume-comments/:resumeId/:commenter" element={<ViewResumeComments />} />
                 <Route path="/edit-preferences" element={<PreferencesPage/>} />
+                <Route path="/reviewed-resumes" element={<ReviewedResumes/>} />
               </Routes>
           </div>
         </BrowserRouter>

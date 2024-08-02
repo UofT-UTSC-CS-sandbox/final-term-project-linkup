@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Comment = require('../schema/comments');
+const isBad = require('../Utils/CommentFilter');
 
 const addCommentHandler = async (req, res) => {
     try {
@@ -10,6 +11,11 @@ const addCommentHandler = async (req, res) => {
         // Check if resumeId is a valid ObjectId
         if (!mongoose.Types.ObjectId.isValid(resumeId)) {
             return res.status(400).json({ error: 'Invalid resume ID format' });
+        }
+
+        // Check for profanity
+        if (isBad(comment)) {
+            return res.status(400).json({ error: 'Your comment contains inappropriate language.' });
         }
 
         console.log({ resumeId, user, comment, highlightedText, position }); // Log incoming data
