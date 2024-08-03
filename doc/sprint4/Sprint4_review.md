@@ -51,7 +51,10 @@ For each resume, a user can go through comments left by others individually
 
 Profile pictures customization and display (LC-37)
 A user can change their profile picture by clicking their on the profile page
+
 ![TrendResume](../../frontend/src/images/profile.png)
+
+
 
 
 Filtering out hateful comments on trending resumes and on resume commenting page (LC-33)
@@ -60,12 +63,18 @@ Filtering out hateful comments on trending resumes and on resume commenting page
 
 
 
+
 Upvote/downvote the public comments on the trending resume page  (LC-35)
 ![TrendResume](../../frontend/src/images/upvote.png)
 
+
 Reply comments on the trending resume page (LC-34)
 ![TrendResume](../../frontend/src/images/reply.png)
+
+
+
 CI/CD Processes
+
 ![TrendResume](../../frontend/src/images/workflow.png)
 
 #### Goals and/or tasks that were planned but not met/completed:
