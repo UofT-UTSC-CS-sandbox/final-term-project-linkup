@@ -40,16 +40,24 @@ To build and run the LinkUp project, follow these steps after setting up the pre
    ```bash
    npm install
    ```
-2. **Navigate back to the frontend directory in your terminal:**
+6. **Install Redis (if not already installed)
+   ```bash
+   sudo apt-get install redis-server
+   ```
+7. ** Start the Redis server
+ ```bash
+   redis-server
+   ```
+8. **Navigate back to the frontend directory in your terminal:**
    ```bash
    cd .. & cd frontend
    ```
-6. **Start the application:**
+9. **Start the application:**
    ```bash
    npm start
    ```
 
-7. **Open your browser and visit the following URL to access the Linkup web application:**
+10. **Open your browser and visit the following URL to access the Linkup web application:**
 Once you have started the server, Visual Studio Code or your terminal should automatically open your browser. If it does not, you can manually open your browser and visit the following URL to access the Linkup web application:
 
    ```plaintext
