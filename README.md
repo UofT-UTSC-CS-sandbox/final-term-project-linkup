@@ -40,12 +40,12 @@ To build and run the LinkUp project, follow these steps after setting up the pre
    ```bash
    npm install
    ```
-6. **Install Redis (if not already installed)
+6. **Install Redis (if not already installed)**
    ```bash
    sudo apt-get install redis-server
    ```
-7. ** Start the Redis server
- ```bash
+7. ** Start the Redis server**
+   ```bash
    redis-server
    ```
 8. **Navigate back to the frontend directory in your terminal:**
