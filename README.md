@@ -44,7 +44,7 @@ To build and run the LinkUp project, follow these steps after setting up the pre
    ```bash
    sudo apt-get install redis-server
    ```
-7. ** Start the Redis server**
+7. **Start the Redis server**
    ```bash
    redis-server
    ```
