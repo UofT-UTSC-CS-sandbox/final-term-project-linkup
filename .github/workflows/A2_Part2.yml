@@ -9,7 +9,6 @@ on:
 jobs:
   deploy_and_run_automated_tests:
     runs-on: ubuntu-latest
-    needs: [build_and_push_docker_image]
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
