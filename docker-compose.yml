@@ -4,6 +4,7 @@ services: # Start with this tag. This will contain all the containers you want t
       context: ./frontend # Path to the Dockerfile
       dockerfile: Dockerfile  # Name of the Dockerfile
     container_name: frontend
+    image: cscc01-linkup_frontend:latest
     ports:
       - '80:3000'
     restart: always
@@ -20,6 +21,7 @@ services: # Start with this tag. This will contain all the containers you want t
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
+    image: cscc01-linkup_backend:latest
     environment: # Environment variables to be passed to the container
       MONGODB_URI: "mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/linkup?retryWrites=true&w=majority&appName=Cluster20901"
     ports:
