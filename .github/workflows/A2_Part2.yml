@@ -2,7 +2,7 @@ name: CD Pipeline | Pull and Deploy Docker Container & Run Automated Tests
 
 on:
   workflow_run: 
-    workflow: ["CI Pipeline | Build Docker Image"]
+    workflows: ["CI Pipeline | Build Docker Image"]
     types: 
       - completed
 
@@ -24,7 +24,6 @@ jobs:
       run: |
         docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:latest
         docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
-        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_redis:latest
 
     - name: Deploy Containers
       run: |
@@ -36,7 +35,6 @@ jobs:
         docker rm redis || true
         docker run -d --name frontend -p 80:3000 ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:latest
         docker run -d --name backend -p 5000:5000 ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
-        docker run -d --name redis -p 6379:6379 ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_redis:latest
 
     - name: Run Automated Tests for Backend
       run: |
