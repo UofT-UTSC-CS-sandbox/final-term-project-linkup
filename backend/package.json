@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage --forceExit --maxWorkers=2"
   },
   "keywords": [],
   "author": "",
