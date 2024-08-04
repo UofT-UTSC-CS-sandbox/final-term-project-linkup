@@ -37,7 +37,7 @@ jobs:
         
     - name: Run Automated Tests for Backend
       run: |
-        docker exec backend npm test  # Adjust this command to run your tests
+        docker exec backend npm test
 
     - name: Run Automated Tests for Frontend
       run: |
