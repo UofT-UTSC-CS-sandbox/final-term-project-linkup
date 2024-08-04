@@ -1,16 +1,15 @@
 name: CD Pipeline | Pull and Deploy Docker Container & Run Automated Tests
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_run: 
+    workflow: ["CI Pipeline | Build Docker Image"]
+    types: 
+      - completed
 
 jobs:
-
-  deploy:
+  deploy_and_run_automated_tests:
     runs-on: ubuntu-latest
-
+    needs: [build_and_push_docker_image]
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
