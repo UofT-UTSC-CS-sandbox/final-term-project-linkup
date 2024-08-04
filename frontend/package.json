@@ -42,7 +42,7 @@
     "server": "redis-server & cd .. && cd backend && npm install && node server.js",
     "client": "npm install && react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -64,7 +64,9 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "jest": "^27.5.1",
+    "supertest": "^7.0.0"
   },
   "description": "## Overview",
   "main": "index.js",
