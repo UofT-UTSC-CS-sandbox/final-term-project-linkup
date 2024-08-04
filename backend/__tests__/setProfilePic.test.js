@@ -5,7 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const User = require('../schema/user'); // Adjust path as necessary
-const setProfilePic = require('./API/setProfilePic');
+const setProfilePic = require('../API/setProfilePic');
 
 // Initialize express app and use the route
 const app = express();
