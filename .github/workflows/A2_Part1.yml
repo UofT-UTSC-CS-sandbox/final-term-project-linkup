@@ -38,8 +38,10 @@ jobs:
     - name: Build the Docker images 
       run: docker-compose build
       
-    - name: Push the Docker images
+    - name: Tag and push the Docker images
       run: |
+        docker tag cscc01-linkup_frontend:latest ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:latest
+        docker tag cscc01-linkup_backend:latest ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
 
