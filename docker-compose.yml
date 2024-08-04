@@ -1,0 +1,27 @@
+services: # Start with this tag. This will contain all the containers you want to run
+  frontend:
+    build: # Build the image from the Dockerfile
+      context: ./frontend # Path to the Dockerfile
+      dockerfile: Dockerfile  # Name of the Dockerfile
+    container_name: frontend
+    ports:
+      - '80:3000'
+    restart: always
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    environment: # Environment variables to be passed to the container
+      MONGODB_URI: "mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/linkup?retryWrites=true&w=majority&appName=Cluster20901"
+    ports:
+      - "5000:5000"
+    restart: always

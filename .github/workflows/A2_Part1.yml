@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Build Docker Image | CI Pipeline
 
 on:
   push:
@@ -11,6 +11,8 @@ jobs:
   build_and_push_docker_image:
 
     runs-on: ubuntu-latest
+    
+    timeout-minutes: 30
 
     steps:
     - name: Checkout code
@@ -22,10 +24,8 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
         
-    - name: Build the Docker images
-      run: |
-        docker build -t cscc01-linkup_frontend:latest ./frontend
-        docker build -t cscc01-linkup_backend:latest ./backend
+    - name: Build the Docker images 
+      run: docker-compose build
       
     - name: Tag and push the Docker images
       run: |
