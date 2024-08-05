@@ -1,0 +1,47 @@
+name: CD Pipeline | Pull and Deploy Docker Container & Run Automated Tests
+
+on:
+  workflow_run: 
+    workflows: ["CI Pipeline | Build Docker Image"]
+    types: 
+      - completed
+
+jobs:
+  deploy_and_run_automated_tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Pull Docker images
+      run: |
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:latest
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
+
+    - name: Deploy Containers
+      run: |
+        docker stop frontend || true
+        docker rm frontend || true
+        docker stop backend || true
+        docker rm backend || true
+        docker run -d --name frontend -p 80:3000 ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:latest
+        docker run -d --name backend -p 5000:5000 ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
+        
+    - name: Run Automated Tests for Backend
+      run: |
+          ls
+          cd backend
+          npm install
+          npm test
+
+    - name: Run Automated Tests for Frontend
+      run: |
+            cd frontend
+            npm install
+            npm test
