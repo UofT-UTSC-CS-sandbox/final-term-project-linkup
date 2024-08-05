@@ -37,7 +37,61 @@ p {
     align-items: center;
     justify-content: center;
     cursor: pointer; /* Indicate that it's clickable */
+    transition: none;
   }
+
+@keyframes swipe-left {
+  0% {
+      transform: translateX(0) translateY(0) rotate(0deg);
+      opacity: 1;
+  }
+  20% {
+      transform: translateX(-150%) translateY(65%) rotate(-80deg); 
+      opacity: 1;
+  }
+  40% {
+      transform: translateX(-200%) translateY(70%) rotate(-90deg); 
+      opacity: 0.7;
+  }
+  85% {
+    transform: translateY(50%) ;
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes swipe-right {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  20% {
+      transform: translateX(150%) translateY(65%) rotate(80deg); 
+      opacity: 1;
+  }
+  40% {
+      transform: translateX(300%) translateY(70%) rotate(90deg); 
+      opacity: 0.7;
+  }
+  85% {
+    transform: translateY(50%);
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.swipe-left {
+  animation: swipe-left 2s; 
+}
+
+.swipe-right {
+  animation: swipe-right 2s; 
+}
+
 
 .swiping-pdf-item embed {
   width: 100%;

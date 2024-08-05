@@ -9,4 +9,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # coverage testing
-/coverage
+coverage/

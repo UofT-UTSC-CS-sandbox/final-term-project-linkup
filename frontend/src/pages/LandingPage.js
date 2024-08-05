@@ -23,6 +23,8 @@ const LandingPage = () => {
 
     const [swipingResumes, setSwipingResumes] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [swipeDirection, setSwipeDirection] = useState(null); // 'left' or 'right'
+    const [isSwiping, setIsSwiping] = useState(false);
 
     const [openZoomModal, ZoomModal] = useZoomModal();
 
@@ -59,30 +61,40 @@ const LandingPage = () => {
         
         console.log('Current Resume:', JSON.stringify(currentResume, null, 2)); // Log current resume
     
-    if (!currentResume || !currentResume._id || !currentResume.uploader_id) {
-        console.error('Invalid current resume structure:', currentResume);
-        return;
-    }
-        
-        try {
-            let axiosConfig = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
-
-            await axios.post(`http://localhost:3001/api/swipes/${userId}`, {
-                user_id: userId,
-                resume_id: currentResume._id,
-                uploader_id: currentResume.uploader_id,
-                accept: accept
-            }, axiosConfig);
-
-            setCurrentIndex(prevIndex => prevIndex + 1);
-            await checkMatches(userId, currentResume.uploader_id._id, currentResume._id);
-        } catch (error) {
-            console.error('Failed to swipe resume', error);
+        if (!currentResume || !currentResume._id || !currentResume.uploader_id) {
+            console.error('Invalid current resume structure:', currentResume);
+            return;
         }
+
+        setSwipeDirection(accept ? 'right' : 'left');
+        setIsSwiping(true);
+        
+        setTimeout( async () => {
+            try {
+                let axiosConfig = {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+
+                await axios.post(`http://localhost:3001/api/swipes/${userId}`, {
+                    user_id: userId,
+                    resume_id: currentResume._id,
+                    uploader_id: currentResume.uploader_id,
+                    accept: accept
+                }, axiosConfig);
+
+                setCurrentIndex(prevIndex => prevIndex + 1);
+                await checkMatches(userId, currentResume.uploader_id._id, currentResume._id);
+            } catch (error) {
+                console.error('Failed to swipe resume', error);
+            } finally {
+                // Reset the animation state to prepare for the next swipe
+                setIsSwiping(false);
+                setSwipeDirection(null);
+            }
+        }, 400);
+
     };
 
     const checkMatches = async (currentUserId, swipedResumeUploaderId, swipedResumeId) => {
@@ -142,7 +154,9 @@ const LandingPage = () => {
                         </button>
                     </div>
                 </div>
-                <div className="swiping-pdf-item" onClick={() => openZoomModal(currentResume)}>
+                <div className={`swiping-pdf-item ${isSwiping ? `swipe-${swipeDirection}` : ''}`}
+                    onClick={() => openZoomModal(currentResume)}
+                >
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
                         <Viewer
                             fileUrl={`http://localhost:3001/bucket/files/${currentResume.file_path}`}
