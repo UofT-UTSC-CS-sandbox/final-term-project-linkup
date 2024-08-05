@@ -16,7 +16,7 @@ app.post('/set-profile-pic', setProfilePic);
 describe('POST /set-profile-pic', () => {
   beforeAll(async () => {
     // Connect to test database
-    await mongoose.connect('mongodb://localhost:27017/test_db', {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://Cluster20901:Yn1EcWJYZVFX@cluster20901.oyjixnu.mongodb.net/linkup?retryWrites=true&w=majority&appName=Cluster20901', {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -27,7 +27,7 @@ describe('POST /set-profile-pic', () => {
 
   afterAll(async () => {
     // Clean up database and close connection
-    await User.deleteMany({});
+    await User.deleteMany({ anon_username: 'testuser'});
     await mongoose.disconnect();
   });
 

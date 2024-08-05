@@ -25,7 +25,7 @@ const Login = () => {
     if(isAuthenticated) {
       navigate('/');
     }
-  });
+  }, [isAuthenticated, navigate]);
 
 
   // Communicating Email and password to server
