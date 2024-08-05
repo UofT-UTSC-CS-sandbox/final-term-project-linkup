@@ -23,9 +23,10 @@ const getResumebyId = require('./API/getResumebyId');
 const getUserbyId = require('./API/getUserbyId');
 const getTrendingComments = require('./API/getTrendingComments');
 const postTrendingComment = require('./API/postTrendingComment');
-const voteOnComment = require('./API/votes');
+const { voteOnComment, getVoteStatus } = require('./API/votes');
 const { blockUser, checkIfBlocked, getBlockedUsers } = require('./API/BlockingUser');
 const BlockedUser = require('./schema/blockedUsers');
+const getRepliesForComment = require('./API/getReplies');
 
 // Direct messaging API's
 const sendMessage = require('./API/sendMessage');
@@ -184,6 +185,8 @@ app.post('/block-user', blockUser);
 app.get('/api/trending/get-comments/:resumeId', getTrendingComments);
 app.post('/trending/post-comments', postTrendingComment);
 app.post('/api/comments/vote', voteOnComment);
+app.get('/comments/vote-status', getVoteStatus);
+app.get('/api/comments/replies/:commentId', getRepliesForComment);
 //app.post('/get-number-of-unread-dms', getNumberOfUnreadDms);
 app.post('/api/dm-status/update', updateDmStatus);
 app.get('/api/dm-status', getDmStatus);

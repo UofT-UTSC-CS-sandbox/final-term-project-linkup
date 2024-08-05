@@ -84,7 +84,7 @@
     align-items: center;
     width: 125px;
     position: absolute;
-    left: 90px;
+    left: 65px;
     top: 50px;
 }
 
@@ -139,7 +139,7 @@
     background-color: #26ACD6;
     position: relative;
     margin-right: 10px;
-    top: 60px;
+    top: 70px;
 }
 
 /* Container for field labels and values */
@@ -149,6 +149,7 @@
     flex-direction: column;
     align-items: flex-start;
     position: relative;
+    text-align: left;
     margin-left: 10px;
     margin-top: 40px;
 }
