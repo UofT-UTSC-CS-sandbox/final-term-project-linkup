@@ -6,6 +6,8 @@
 - The automated tests for the backend and frontend can be found in `backend/__tests__` and `frontend/__tests__` respectively
 - The `Dockerfiles` can be found in the `backend` and `frontend` directories
 - The `docker-compose` files can be found in the root directory
+- URL of deployed frontend: https://hub.docker.com/r/gerbiegoober/cscc01-linkup_frontend
+- URL of deployed backend: https://hub.docker.com/r/gerbiegoober/cscc01-linkup_backend
 
 ## Details of Implementation
 - **CI Pipeline**
