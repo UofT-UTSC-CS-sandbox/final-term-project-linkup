@@ -1,4 +1,4 @@
-name: CI Pipeline | Build Docker Image
+name: CI Pipeline | Build Docker Images
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build_and_push_docker_image:
+  build_and_push_docker_images:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -24,21 +24,35 @@ jobs:
         sudo curl -L "https://github.com/docker/compose/releases/download/v2.21.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
         docker-compose --version
-      
+
     - name: Login to Docker Hub
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-        
-    - name: Build the Docker images 
-      run: docker-compose build
-      
-    - name: Tag and push the Docker images
+
+    - name: Build and push Docker image without dependencies (Frontend)
       run: |
+        docker-compose -f docker-compose.yml -f docker-compose.master.yml build frontend
+        docker tag cscc01-linkup_frontend:master ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:master
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:master
+
+    - name: Build and push Docker image without dependencies (Backend)
+      run: |
+        docker-compose -f docker-compose.yml -f docker-compose.master.yml build backend
+        docker tag cscc01-linkup_frontend:master ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:master
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:master
+
+    - name: Build and push Docker image with dependencies (Frontend)
+      run: |
+        docker-compose -f docker-compose.yml build frontend
         docker tag cscc01-linkup_frontend:latest ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:latest
-        docker tag cscc01-linkup_backend:latest ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_frontend:latest
+
+    - name: Build and push Docker image with dependencies (Backend)
+      run: |
+        docker-compose -f docker-compose.yml build backend
+        docker tag cscc01-linkup_backend:latest ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/cscc01-linkup_backend:latest
 
     - name: List Docker images

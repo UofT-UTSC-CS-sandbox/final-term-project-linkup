@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.master
+    image: cscc01-linkup_frontend:master
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.master
+    image: cscc01-linkup_backend:master
