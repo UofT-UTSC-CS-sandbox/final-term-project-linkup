@@ -2,7 +2,7 @@ name: CD Pipeline | Pull and Deploy Docker Container & Run Automated Tests
 
 on:
   workflow_run: 
-    workflows: ["CI Pipeline | Build Docker Image"]
+    workflows: ["CI Pipeline | Build & Push Docker Images"]
     types: 
       - completed
 

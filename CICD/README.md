@@ -3,9 +3,9 @@
 - Go to the `Actions` Tab to view the status of the workflow.
 
 ## Deliverables
-- The automated tests for the backend and frontend can be found in backend/__ tests __ and frontend/__ tests __ respectively
-- The Dockerfiles can be found in the backend/ and frontend/ directories
-- The docker-compose files can be found in the root directory
+- The automated tests for the backend and frontend can be found in `backend/__tests__` and `frontend/__tests__` respectively
+- The `Dockerfiles` can be found in the `backend` and `frontend` directories
+- The `docker-compose` files can be found in the root directory
 
 ## Details of Implementation
 - **CI Pipeline**
