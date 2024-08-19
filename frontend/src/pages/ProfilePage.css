@@ -1,0 +1,415 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Container for the entire profile page */
+.profile-container {
+    background-color: #bfe7f6;
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+/* Header section styling */
+.profile-header {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+}
+
+/* Styling for the logo image */
+.profile-logo {
+    width: 200px;
+}
+
+.profile-link-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.profile-link-profile {
+    font-size: 30px;
+    color: #53D1F9;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.Trending-link-profile {
+    font-size: 30px;
+    color: #6A6A6A;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+/* Main content area styling */
+.profile-content {
+    background-color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    width: 65vw;
+    min-height: 700px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding-left: 40px; 
+    padding-right: 40px;
+    padding-bottom: 30px;
+    box-sizing: border-box;
+}
+
+/* Blue header background styling */
+.blue-header {
+    background-color: #26ACD6;
+    height: 100px;
+    width: 65vw;
+    top: 0;
+    border-radius: 15px 15px 0 0;
+    position: absolute;
+}
+
+/* Profile icon and username section */
+.profile-icon-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 125px;
+    position: absolute;
+    left: 65px;
+    top: 50px;
+}
+
+/* Placeholder for the profile icon */
+.profile-icon-placeholder {
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    background-color: #D0D0D0;
+    border: 3px solid black;
+}
+
+/* Username text styling */
+.username {
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: black;
+    font-weight: bold;
+}
+
+/* Settings button styling */
+.edit-preferences-button {
+    background-color: #81d2fd;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 2px solid black;
+    width: 175px;
+}
+
+/* Horizontal layout container for additional profile details */
+.horizontal-container {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    margin-left: 210px;
+    margin-top: 30px;
+}
+
+/* Vertical line separator */
+.vertical-line {
+    width: 2px;
+    height: 200px;
+    background-color: #26ACD6;
+    position: relative;
+    margin-right: 10px;
+    top: 70px;
+}
+
+/* Container for field labels and values */
+.fields-container {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    text-align: left;
+    margin-left: 10px;
+    margin-top: 40px;
+}
+
+/* Styling for "MY INFORMATION" label */
+.profile-info {
+    margin-top: 25px;
+    padding: 10px 0;
+    font-size: 1.2em;
+    color: #26ACD6;
+    font-weight: bold;
+}
+
+/* Styling for individual field labels */
+.field-label {
+    font-size: 1em;
+    color: black;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.value-normal {
+    font-weight: normal; 
+}
+
+/* Container for resume uploads */
+.uploads-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 990px;
+    margin-top: 60px; 
+    padding: 10px;
+}
+
+/* Label for uploads section */
+.uploads-info {
+    font-size: 25px;
+    font-weight: bold;
+    color: #26ACD6;
+    margin-left: 5px;
+}
+
+/* Styling for horizontal divider in uploads section */
+.uploads-divider {
+    width: 100%; 
+    border: none;
+    height: 2px;
+    background-color: #26ACD6;
+}
+
+/* Horizontal scroll container for resumes */
+.horizontal-scroll {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    width: 100%; 
+    white-space: nowrap; 
+    scrollbar-width: thin;
+    scrollbar-color: #26ACD6; 
+}
+
+/* Styling for each resume item */
+.pdf-item {
+    width: 200px;
+    height: 250px;
+    flex: 0 0 auto;
+    margin-right: 20px;
+}
+
+/* Public icon styling */
+.public-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+    color: #000000; 
+    cursor: pointer;
+}
+
+/* Private icon styling */
+.private-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+    color: #000000; 
+    cursor: pointer;
+}
+
+/* Delete icon styling */
+.delete-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: #ff0000; 
+    cursor: pointer;
+}
+
+.pdf-embed {
+    width: 100%;
+    height: 100%;
+}
+
+/* Styling for adding a new resume */
+.add-resume {
+    width: 200px;
+    height: 250px;
+    background-color: #f0f0f0;
+    display: flex;
+    border: 2px dashed #ccc;
+    flex-shrink: 0;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+}
+
+/* Overlay for the delete modal */
+.modal-overlay-delete {
+    font-family: 'Roboto', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(101, 128, 152, 0.5);
+    display: flex;
+    justify-content: center;  /* Center the modal horizontally */
+    align-items: center;      /* Center the modal vertically */
+}
+
+.modal-content-delete {
+    background: #e0f7fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-header-delete {
+    background-color: #237993;
+    color: white;
+    width: calc(100% + 40px);
+    margin: -20px -40px 20px -40px;
+    padding: 20px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 22px;
+    border-radius: 10px 10px 0 0;
+}
+
+.modal-content-delete p {
+    margin-top: 0px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 18px;
+    color: #333333;
+}
+
+.modal-buttons-delete {
+    display: flex;
+    justify-content: center; 
+    gap: 15px;  /* Space between buttons */
+}
+
+.modal-button-delete {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content-delete .cancel-button-delete {
+    background-color: #26ACD6;
+    color: white;
+    font-size: 18px;
+}
+
+.modal-content-delete .delete-button-delete {
+    background-color: #748D95;
+    color: white;
+    font-size: 18px;
+}
+
+.notification-buttons {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+}
+
+/* Notification Modal specific styles */
+.modal-content-notification {
+    margin-top: 0px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 18px;
+    background: #e0f7fa; /* Light background for visibility notification */
+    color: #333; /* Dark text for readability */
+}
+
+.modal-header-notification {
+    background-color: #237993; /* Green header to signify success updates */
+    color: white;
+}
+
+.modal-button-notification {
+    font-size: 18px;
+    background-color: #26ACD6; /* Matching button color to header */
+    color: #e0f7fa;
+}
+
+/* PROFILE PIC STUFF BELOW*/
+.profile-pic-selection-modal-block {
+    position: absolute;
+    background-color:white;
+    top: 15%;
+    left: 25%;
+    width: 50%;
+    border-radius: 20px;      /* Rounded corners */
+    overflow: auto; /* Add overflow property */
+    padding: 10px;
+    margin-bottom: 50px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+}
+
+.profile-pic-selection-pic-block {
+    display: flex;
+    flex-wrap: wrap; /* Ensures the items wrap to the next line if they overflow */
+    justify-content: center; /* Optional: Center the items horizontally */
+    align-items: flex-start; /* Align items to the top */
+    top: 35%;
+    width: auto;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+}
+
+.profile-pic-selection-title {
+    margin-top: 20px;
+    margin-bottom: 20px; /* Space between title and images */
+    font-size: 18px; /* Adjust font size as needed */
+    font-weight: bold; /* Make the title bold */
+    font: 500 25px/1.18 "Roboto", sans-serif;
+  }
+
+.profile-pic-selection-border {
+    border-radius: 100px;      /* Rounded corners */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 115px;
+    height: 115px;
+    margin: 15px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    border: 1.5px solid #363636; /* Optional: Add a border to visualize the block */; /* Optional: Add a border to visualize the block */
+}

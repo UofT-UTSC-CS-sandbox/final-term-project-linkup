@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+.container-trending {
+    font-family: 'Roboto', sans-serif;
+    background-color: #bfe7f6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    width: 100%;
+    position: relative;
+}
+.link-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.profile-link-trending, .Trending-link-trending {
+    font-size: 30px;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 10px;
+    color: #6A6A6A;
+}
+.Trending-link-trending {
+    color: #53D1F9;
+}
+
+.logo {
+    width: 200px;
+}
+
+.horizontal-scroll-trending {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px;
+    width: 90%;
+    margin-top: 140px;
+}
+
+.pdf-and-comments-container {
+    display: flex; /* Ensures the PDF viewer and comments are side by side */
+    align-items: stretch; /* Aligns them vertically */
+}
+
+.resume-container {
+    flex-grow: 1; /* Allows the resume container to take available space */
+    display: flex;
+    flex-direction: column; /* Stacks the header and PDF viewer vertically */
+}
+
+.resume-header {
+    display: flex;
+    align-items: flex-start; /* Changed from left to flex-start */
+    font-size: 16px;
+    padding: 10px; /* Add some padding for spacing */
+}
+
+.pdf-item-trending {
+    flex: 0 0 auto;
+    width: 600px;
+    height: 780px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: row;
+}
+
+.comments-container {
+    width: 450px; /* Adjust width as needed */
+    height: 780px; /* Set to match the PDF viewer height */
+    overflow-y: auto; /* Enables vertical scrolling when content overflows */
+    padding: 0px; /* Adjust padding as needed */
+    margin-top: 30px;
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+    display: flex;
+    flex-direction: column;
+}
+
+.comments-list {
+    height: 100px; /* Set to match the PDF viewer height */
+    padding: 20px; /* Adjust padding as needed */
+}
+
+.comment-item {
+    align-items: center;
+    background: #f7f7f7;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.comment-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.icon-holder {
+    width: 35px;  
+    height: 35px; 
+    background-color: #ccc;
+    border-radius: 50%; 
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.comment-username {
+    font-weight: bold;
+    margin-top: -27px;
+    margin-right: 10px;
+}
+
+.comment-text {
+    margin-top: 20px;
+    text-align: left;
+    color: #333;
+    margin-left: 5px;
+}
+
+.comment-votes {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.comment-votes svg {
+    margin: 0 5px; /* Spacing around icons */
+}
+
+.reply-text {
+    color: #48abe4; /* Green color to suggest interaction */
+    cursor: pointer; /* Pointer cursor to indicate clickability */
+    margin-left: 5px; /* Space from the down arrow */
+    font-size: 16px; /* Font size to match other text elements */
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.reply-input {
+    flex-grow: 1; /* Allow input to fill the space */
+    border: none;
+    border-radius: 5px 0 0 5px; /* Rounded corners on the left side */
+    padding: 10px 15px; /* Padding inside the input */
+    font-size: 16px; /* Adequate font size for readability */
+    display: flex;
+    margin-left: -8px;
+    margin-top: 10px;
+    outline: none; /* Remove focus outline */
+}
+
+.reply-submit-button {
+    padding: 10px 15px; /* Padding matching the input */
+    border: none;
+    background-color: #26ACD6; /* Vibrant color for the button */
+    color: white; /* Text color for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 0 5px 5px 0; /* Rounded corners on the right side */
+    font-size: 16px; /* Match the input text size */
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.reply-submit-button:hover {
+    background-color: #238fb5;
+}
+
+.reply-submit-button svg {
+    margin-left: 5px; /* Space between text and icon */
+}
+
+.view-replies-text {
+    margin-top: 10px;
+    margin-right: 90px;
+    cursor: pointer;
+    color: #26ACD6; /* Bootstrap primary color for consistency */
+}
+
+.view-replies-text:hover {
+    color: #238fb5; /* Darker blue on hover */
+}
+
+.replies-container {
+    width: 300px; /* Adjust width as needed */
+    height: 150px; /* Set to match the PDF viewer height */
+    overflow-y: auto; /* Enables vertical scrolling when content overflows */
+    margin-left: -20px;
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+    display: flex;
+    flex-direction: column;
+}
+
+.reply-username {
+    font-weight: bold;
+    margin-top: -27px;
+    margin-right: 10px;
+}
+
+/* Styles for the comment input and send button */
+.comment-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px; /* Space above the input form */
+    margin-bottom: 10px; /* Space above the input form */
+    background: #FFFFFF; /* Match the modal background for consistency */
+    border-radius: 5px; /* Rounded corners for the input box */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.comment-input {
+    flex-grow: 1; /* Allow input to fill the space */
+    border: none;
+    border-radius: 5px 0 0 5px; /* Rounded corners on the left side */
+    padding: 10px 15px; /* Padding inside the input */
+    font-size: 16px; /* Adequate font size for readability */
+    outline: none; /* Remove focus outline */
+}
+
+.comment-submit-button {
+    padding: 10px 15px; /* Padding matching the input */
+    border: none;
+    background-color: #26ACD6; /* Vibrant color for the button */
+    color: white; /* Text color for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 0 5px 5px 0; /* Rounded corners on the right side */
+    font-size: 16px; /* Match the input text size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-submit-button:hover {
+    background-color: #238fb5; /* Slightly darker on hover for feedback */
+}
+
+.comment-submit-button svg {
+    margin-left: 5px; /* Space between text and icon */
+}
+
+/* Ensuring that the input and button are visually connected */
+.comment-input:focus + .comment-submit-button {
+    border-color: #26ACD6; /* Highlight color when input is focused */
+}
+
+.comment-button {
+    display: inline-flex; /* Aligns icon and text within the button */
+    align-items: center; /* Centers items vertically */
+    justify-content: center; /* Centers content horizontally */
+    padding: 15px 20px; /* Adjust padding to increase the button's size */
+    background-color: #bfe7f6;
+    color: black;
+    font-size: 18px; /* Adjust font size as needed */
+    font-weight: bold; /* Make text bold */
+    border: 2px solid black;
+    border-radius: 15px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    outline: none; /* Remove outline */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.comment-button:hover {
+    background-color: #48abe4; /* Slightly darker blue on hover */
+}

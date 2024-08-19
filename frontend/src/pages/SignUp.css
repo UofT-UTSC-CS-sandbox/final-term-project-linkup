@@ -1,0 +1,465 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900);
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap);
+
+.slogan {
+    position: absolute;
+    top: 5%;
+    left: 30%;
+    width: 40%;
+    height: 15%;
+    color: rgb(42, 46, 53);
+    font: 300 22px/1.18 "Roboto", sans-serif;
+}
+
+.signup-block {
+    position: absolute;
+    background-color: white;
+    top: 16%;
+    left: 30%;
+    width: 40%;
+    height: 65%;
+    border-radius: 15px;
+}
+
+.email-text-pos {
+    position: absolute;
+    top: 4%;
+    left: 5%;
+    width: 12%;
+    height: 8%;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.email-custom-textbox {
+    position: absolute;
+    top: 13%;
+    left: 7%;
+    width: 85%;
+    height: 43px;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.email-custom-textbox:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.password-text-pos {
+    position: absolute;
+    top: 25%;
+    left: 5%;
+    width: 12%;
+    height: 8%;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.password-custom-textbox {
+    position: absolute;
+    top: 34%;
+    left: 7%;
+    width: 85%;
+    height: 43px;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.password-custom-textbox:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.confirmpassword-text-pos {
+    position: absolute;
+    top: 48%;
+    left: 4%;
+    width: 30%;
+    height: 8%;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.confirmpassword-custom-textbox {
+    position: absolute;
+    top: 57%;
+    left: 7%;
+    width: 85%;
+    height: 43px;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.confirmpassword-custom-textbox:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.signup-button {
+    position: absolute;
+    top: 74%;
+    left: 7%;
+    width: 85%;
+    height: 43px;
+    color: white;
+    font: 500 15px/1.18 "Inter", sans-serif;
+    background-color: #26ACD6; /* White background */
+    border: 0px;
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.signup-button:hover{
+    background-color: #2298bc; /* White background */
+}
+
+.signup-button:active{
+    background-color: #0e3e4d; /* White background */
+}
+
+.login-prompt {
+    position: absolute;
+    top: 88%;
+    left: 23.5%;
+    width: 50%;
+    height: 6%;
+    font: 500 14px/1.18 "Inter", sans-serif;
+    color: rgb(42, 46, 53);
+    padding: 5px;
+}
+
+.signup-validation-error-block-pos {
+    position: absolute;
+    top: 40%;
+    left: 1%;
+    width: 95%;
+}
+
+.signup-validation-error0 {
+    position: relative;
+    color: #AC4747;
+    font: 500 12px/1.18 "Roboto", sans-serif;
+    text-align: left;
+    left: 6%;
+    width: 80%;
+    height: 5%;
+    line-height: 8px;
+}
+
+.signup-block-valerr {
+    position: absolute;
+    background-color: white;
+    top: 16%;
+    left: 30%;
+    width: 40%;
+    height: 81%;
+    border-radius: 15px;
+}
+
+.email-text-pos-valerr {
+    position: absolute;
+    top: 3%;
+    left: 5%;
+    width: 12%;
+    height: 8%;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.email-custom-textbox-valerr {
+    position: absolute;
+    top: 10%;
+    left: 7%;
+    width: 85%;
+    height: 10%;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.email-custom-textbox-valerr:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.password-text-pos-valerr {
+    position: absolute;
+    top: 20%;
+    left: 5%;
+    width: 12%;
+    height: 8%;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.password-custom-textbox-valerr {
+    position: absolute;
+    top: 27%;
+    left: 7%;
+    width: 85%;
+    height: 10%;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.password-custom-textbox-valerr:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.confirmpassword-text-pos-valerr {
+    position: absolute;
+    top: 59%;
+    left: 4%;
+    width: 30%;
+    height: 8%;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.confirmpassword-custom-textbox-valerr {
+    position: absolute;
+    top: 66%;
+    left: 7%;
+    width: 85%;
+    height: 10%;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.confirmpassword-custom-textbox-valerr:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.signup-button-valerr {
+    position: absolute;
+    top: 78%;
+    left: 7%;
+    width: 85%;
+    height: 12%;
+    color: white;
+    font: 500 15px/1.18 "Inter", sans-serif;
+    background-color: #26ACD6; /* White background */
+    border: 0px;
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.signup-button-valerr:hover{
+    background-color: #2298bc; /* White background */
+}
+
+.signup-button-valerr:active{
+    background-color: #0e3e4d; /* White background */
+}
+
+.login-prompt-valerr {
+    position: absolute;
+    top: 91%;
+    left: 23.5%;
+    width: 50%;
+    height: 6%;
+    font: 500 14px/1.18 "Inter", sans-serif;
+    color: rgb(42, 46, 53);
+    padding: 5px;
+}
+
+.signup-block-matcherr {
+    position: absolute;
+    background-color: white;
+    top: 16%;
+    left: 30%;
+    width: 40%;
+    height: 70%;
+    border-radius: 15px;
+}
+
+.email-text-pos-matcherr {
+    position: absolute;
+    top: 3%;
+    left: 5%;
+    width: 12%;
+    height: 8%;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.email-custom-textbox-matcherr {
+    position: absolute;
+    top: 12%;
+    left: 7%;
+    width: 85%;
+    height: 43px;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.email-custom-textbox-matcherr:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.password-text-pos-matcherr {
+    position: absolute;
+    top: 23%;
+    left: 5%;
+    width: 12%;
+    height: 8%;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.password-custom-textbox-matcherr {
+    position: absolute;
+    top: 32%;
+    left: 7%;
+    width: 85%;
+    height: 43px;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.password-custom-textbox-matcherr:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.confirmpassword-text-pos-matcherr {
+    position: absolute;
+    top: 44%;
+    left: 4%;
+    width: 30%;
+    height: 43px;
+    color: rgb(42, 46, 53);
+    font: 500 15px/1.18 "Roboto", sans-serif;
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.confirmpassword-custom-textbox-matcherr {
+    position: absolute;
+    top: 53%;
+    left: 7%;
+    width: 85%;
+    height: 43px;
+    color: rgb(42, 46, 53);
+    background-color: white; /* White background */
+    border: 1px solid #7F989A;  /* Grey border */
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.confirmpassword-custom-textbox-matcherr:focus {
+    border-color: rgb(74, 85, 104);  /* Change border color on focus for better visibility */
+}
+
+.signup-button-matcherr {
+    position: absolute;
+    top: 77%;
+    left: 7%;
+    width: 85%;
+    height: 12%;
+    color: white;
+    font: 500 15px/1.18 "Inter", sans-serif;
+    background-color: #26ACD6; /* White background */
+    border: 0px;
+    border-radius: 10px;      /* Rounded corners */
+    padding: 10px;           /* Some padding for better appearance */
+    outline: none;           /* Remove default outline on focus */
+    box-sizing: border-box;  /* Include border and padding in the element's width and height */
+}
+
+.signup-button-matcherr:hover{
+    background-color: #2298bc; /* White background */
+}
+
+.signup-button-matcherr:active{
+    background-color: #0e3e4d; /* White background */
+}
+
+
+.login-prompt-matcherr {
+    position: absolute;
+    top: 91%;
+    left: 23.5%;
+    width: 50%;
+    height: 6%;
+    font: 500 14px/1.18 "Inter", sans-serif;
+    color: rgb(42, 46, 53);
+    padding: 5px;
+}
+
+.signup-passwordMatch-err0 {
+    position: absolute;
+    color: #AC4747;
+    font: 500 12px/1.18 "Roboto", sans-serif;
+    top: 69.5%;
+    right: 31%;
+    width: 80%;
+    height: 5%;
+    line-height: 8px;
+}

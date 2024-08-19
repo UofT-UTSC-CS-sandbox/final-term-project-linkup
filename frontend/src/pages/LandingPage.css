@@ -1,0 +1,166 @@
+.swiping {
+  display: flex;
+  align-items: flex-start;
+  justify-content: right;
+  gap: 20px;
+}
+
+p {
+  font-size: 1.2em;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.roboto-condensed{
+  font-family: 'Roboto Condensed',sans-serif;
+  font-weight: 300;
+}
+
+.text-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  width: 300px;
+}
+
+.swiping-pdf-item {
+    position: relative;
+    width: 35vw; /* Fixed width for each PDF item */
+    height: 80vh; /* Fixed height for each PDF item to represent a page */
+    overflow: hidden; /* Prevent overflow */
+    border: 1px solid #ccc; /* Optional: Add a border for visual separation */
+    border-radius: 5px; /* Optional: Add some rounding to corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for some depth */
+    background-color: #f9f9f9; /* Optional: Background color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* Indicate that it's clickable */
+    transition: none;
+  }
+
+@keyframes swipe-left {
+  0% {
+      transform: translateX(0) translateY(0) rotate(0deg);
+      opacity: 1;
+  }
+  20% {
+      transform: translateX(-150%) translateY(65%) rotate(-80deg); 
+      opacity: 1;
+  }
+  40% {
+      transform: translateX(-200%) translateY(70%) rotate(-90deg); 
+      opacity: 0.7;
+  }
+  85% {
+    transform: translateY(50%) ;
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes swipe-right {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  20% {
+      transform: translateX(150%) translateY(65%) rotate(80deg); 
+      opacity: 1;
+  }
+  40% {
+      transform: translateX(300%) translateY(70%) rotate(90deg); 
+      opacity: 0.7;
+  }
+  85% {
+    transform: translateY(50%);
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.swipe-left {
+  animation: swipe-left 2s; 
+}
+
+.swipe-right {
+  animation: swipe-right 2s; 
+}
+
+
+.swiping-pdf-item embed {
+  width: 100%;
+  height: 100%;
+  overflow:hidden;
+  object-fit: contain; /* Ensure the PDF content fits within the container */
+  pointer-events: none; /* Disable interaction to prevent scrolling */
+}
+
+.accept-reject-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 150px;
+}
+
+.accept-reject-container button {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 500;
+    width: 150px;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.accept-reject-container button:hover:last-child {
+  background-color: #d4432c;
+  color: #ffffff;
+}
+.accept-reject-container button:hover .unlink-img {
+  filter: brightness(0) invert(1);
+}
+.accept-reject-container button:hover .link-img {
+  filter: brightness(0) invert(1);
+}
+
+.accept-reject-container button:hover:first-child {
+  background-color: #42b570;
+  color: #ffffff;
+}
+
+.unlink-img {
+  width: 40px;
+  height: auto;
+  margin-left: 10px;  
+}
+
+.link-img {
+  width: 45px;
+  height: auto;
+  margin-left: 20px;  
+}
+  
+.no-results {
+  margin: 50px;
+} 
+
+.no-results p:last-child{
+  font-weight: 300;
+  font-size: 1.3em;
+  margin: 1px;
+}
+
+.no-results p:first-child{
+  font-weight: 500;
+  font-size: 1.8em;
+  margin: 1px;
+}

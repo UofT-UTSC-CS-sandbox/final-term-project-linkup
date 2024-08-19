@@ -1,0 +1,12 @@
+.sidebar-link.active {
+    color: #53D1F9; /* Corrected missing semicolon */
+}
+
+.sidebar-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
